@@ -50,7 +50,7 @@ public class InsertElement {
             arr[i] = arr[i-1];
         }
                 arr[index] = element;
-        
+                
         // Print the array after insertion
         System.out.println(MessageFormat.format("Array after insertion: {0}", arr));
         System.out.println("Array after insertion:");
