@@ -1,6 +1,6 @@
 import java.util.Scanner;
 import java.text.MessageFormat;
-
+// import java.util.InputMismatchException;
 
 /**
  * LinearSearchWithFrequency - Performs linear search and counts occurrences.
