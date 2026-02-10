@@ -1,5 +1,6 @@
 import java.text.MessageFormat;
 import java.util.Scanner;
+import java.util.Arrays;
 /**
  * BinarySearch - Implements the binary search algorithm.
  * 
@@ -40,10 +41,15 @@ public class BinarySearch {
         System.out.print("Enter the number of elements: ");
         int n = scanner.nextInt();
         int[] arr = new int[n];
-        System.out.println("Enter " + n + " sorted integers:");
+        System.out.println("Enter " + n + " integers:");
         for (int i = 0; i < n; i++) {
             arr[i] = scanner.nextInt();
         }
+
+        // Sort the array to ensure Binary Search works
+        Arrays.sort(arr);
+        System.out.println("Array has been sorted: " + Arrays.toString(arr));
+
         System.out.print("Enter the target value to search for: ");
         int target = scanner.nextInt();
         int index = binarySearch(arr, target);

@@ -36,11 +36,14 @@ To find the position of a specific target element within a **sorted** array usin
 ```java
 import java.text.MessageFormat;
 import java.util.Scanner;
+import java.util.Arrays;
+
 /**
  * BinarySearch - Implements the binary search algorithm.
  */
 public class BinarySearch {
     public static int binarySearch(int[] arr, int target) {
+        // ... binary search logic ...
         int left = 0;
         int right = arr.length - 1;
         while (left <= right) {
@@ -53,9 +56,19 @@ public class BinarySearch {
                 right = mid - 1;
             }
         }
-        return -1; 
+        return -1;
     }
-    // ... main method omitted for brevity ...
+
+    public static void main(String[] args) {
+        // ... input reading ...
+        // Sort the array to ensure Binary Search works
+        Arrays.sort(arr);
+        System.out.println("Array has been sorted: " + Arrays.toString(arr));
+        
+        // ... perform search ...
+        int index = binarySearch(arr, target);
+        // ... output ...
+    }
 }
 ```
 
