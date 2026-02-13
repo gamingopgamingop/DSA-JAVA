@@ -7,14 +7,17 @@ import java.text.MessageFormat;
  * This class reads an array from the user, then asks for an index to remove.
  * It shifts subsequent elements to the left to fill the gap.
  */
+
 public class RemoveElement {
+
     /**
      * Main method to execute the removal logic.
      * @param args Command line arguments (not used).
      */
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
+
         // Read array size
         System.out.print("Enter array size: ");
         int size = scanner.nextInt();
