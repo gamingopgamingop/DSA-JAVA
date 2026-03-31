@@ -14,7 +14,7 @@ public class InsertionSort {
      *
      * @param args Command line arguments (not used).
      */
-    public static void insertionSort(String[] args) {
+    public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
