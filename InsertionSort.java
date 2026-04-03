@@ -54,6 +54,7 @@ public class InsertionSort {
         for (int i = 0; i < size; i++) {
             System.out.print(MessageFormat.format("{0} ", arr[i]));
         }
+        System.out.println();
 
         scanner.close();
     }
