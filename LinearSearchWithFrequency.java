@@ -29,49 +29,47 @@ public class LinearSearchWithFrequency {
         return count;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        try (Formatter formatter = new Formatter()) {
-
-        // Input array size
-        System.out.print("Enter the number of elements: ");
-        while (!scanner.hasNextInt()) {
-            System.out.print("Invalid input. Please enter an integer: ");
-            scanner.next(); // consume the invalid token
-        }
-        int n = scanner.nextInt();
-        int[] array = new int[n];
-
-        // Input array elements
-        System.out.println(MessageFormat.format("Enter {0} elements:", n));
-        for (int i = 0; i < n; i++) {
-            System.out.print(MessageFormat.format("Element {0}: ", i));
-            while (!scanner.hasNextInt()) {
-                System.out.print("Invalid input. Please enter an integer: ");
+    private static int readInt(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
                 scanner.next(); // consume the invalid token
             }
-            array[i] = scanner.nextInt();
         }
-
-        // Input target element
-        System.out.print("Enter the element to search for: ");
-        while (!scanner.hasNextInt()) {
-            System.out.print("Invalid input. Please enter an integer: ");
-            scanner.next(); // consume the invalid token
-        }
-        int target = scanner.nextInt();
-
-        // Perform linear search and get frequency
-        int frequency = linearSearchFrequency(array, target);
-
-        // Output result
-        if (frequency > 0) {
-            formatter.format("Element %d found %d time(s) in the array.%n", target, frequency);
-        } else {
-            formatter.format("Element %d not found in the array.%n", target);
-        }
-
-        scanner.close();
     }
-}
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(System.in);
+             Formatter formatter = new Formatter(System.out)) {
+            // Input array size
+            int n = readInt(scanner, "Enter the number of elements: ");
+            int[] array = new int[n];
+            System.out.println(formatter.format("Array size: %d%n", n));
+
+            // Input array elements
+            // formatter already declared in try-with-resources
+            formatter.format("Enter %d elements:%n", n)                                 ;
+            for (int i = 0; i < n; i++) {
+                array[i] = readInt(scanner, String.format("Element %d: ", i));
+            }
+
+            // Input target element
+            int target = readInt(scanner, "Enter the element to search for: ");
+
+            // Perform linear search and get frequency
+            int frequency = linearSearchFrequency(array, target);
+
+            // Output result
+            if (frequency > 0) {
+                System.out.println(formatter.format("Element %d found %d time(s) in the array.%n", target, frequency));
+            } else {
+                System.out.println(formatter.format("Element %d not found in the array.%n", target));
+            }
+
+            System.out.println(formatter.format("Array: %s%n", Arrays.toString(array)));
+        }
+    }
 }
