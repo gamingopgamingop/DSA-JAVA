@@ -54,7 +54,7 @@ public class LinearSearchWithFrequency {
             
             // Input array elements
             // formatter already declared in try-with-resources
-//Replace the formatter.format() call with MessageFormat.format()
+            //Replace the formatter.format() call with MessageFormat.format()
             System.out.println(MessageFormat.format("Enter {0} elements:", n));
             for (int i = 0; i < n; i++) {
                 array[i] = readInt(scanner, String.format("Element %d: ", i));
