@@ -72,7 +72,7 @@ public class LinearSearchWithFrequency {
                 System.out.println(formatter.format("Element %d not found in the array.%n", target));
             }
 
-            System.out.println(formatter.format("Array: %s%n", Arrays.toString(array)));
+            System.out.println(MessageFormat.format("Array: {0}", Arrays.toString(array)));
         }
     }
 }
