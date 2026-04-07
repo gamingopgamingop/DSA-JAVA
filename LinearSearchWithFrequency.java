@@ -36,6 +36,8 @@ public class LinearSearchWithFrequency {
                 return scanner.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter an integer.");
+                // Clear the invalid input
+
                 scanner.next(); // consume the invalid token
             }
         }
@@ -48,7 +50,8 @@ public class LinearSearchWithFrequency {
             int n = readInt(scanner, "Enter the number of elements: ");
             int[] array = new int[n];
             System.out.println(formatter.format("Array size: %d%n", n));
-
+            System.out.println(MessageFormat.format("Enter {0} elements:", n));
+            
             // Input array elements
             // formatter already declared in try-with-resources
             formatter.format("Enter %d elements:%n", n)                                 ;
