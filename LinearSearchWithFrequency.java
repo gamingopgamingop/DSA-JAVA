@@ -49,12 +49,13 @@ public class LinearSearchWithFrequency {
             // Input array size
             int n = readInt(scanner, "Enter the number of elements: ");
             int[] array = new int[n];
-            System.out.println(formatter.format("Array size: %d%n", n));
+            System.out.println(MessageFormat.format("Array size: {0}", n));
             System.out.println(MessageFormat.format("Enter {0} elements:", n));
             
             // Input array elements
             // formatter already declared in try-with-resources
-            formatter.format("Enter %d elements:%n", n)                                 ;
+//Replace the formatter.format() call with MessageFormat.format()
+            System.out.println(MessageFormat.format("Enter {0} elements:", n));
             for (int i = 0; i < n; i++) {
                 array[i] = readInt(scanner, String.format("Element %d: ", i));
             }
@@ -67,12 +68,13 @@ public class LinearSearchWithFrequency {
 
             // Output result
             if (frequency > 0) {
-                System.out.println(formatter.format("Element %d found %d time(s) in the array.%n", target, frequency));
+                System.out.println(MessageFormat.format("Element {0} found {1} time(s) in the array.", target, frequency));
             } else {
-                System.out.println(formatter.format("Element %d not found in the array.%n", target));
+                System.out.println(MessageFormat.format("Element {0} not found in the array.", target));
             }
 
             System.out.println(MessageFormat.format("Array: {0}", Arrays.toString(array)));
+            formatter.close();
         }
     }
 }
