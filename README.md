@@ -14,7 +14,9 @@ This document contains the Objective, Algorithm, Code, and Dry Run analysis for 
 9.  [Selection Sort](#selection-sort)
 10. [Smallest & Largest](#smallest--largest)
 11. [Traversal](#traversal)
-12. [Sample (Hello World)](#sample-hello-world)
+12. [Merge Sort](#merge-sort)
+13. [Quick Sort](#quick-sort)
+14. [Sample (Hello World)](#sample-hello-world)
 
 ---
 
@@ -470,30 +472,229 @@ public class Traversal {
 
 ---
 
-## Sample (Hello World)
+## Merge Sort
 
 ### Objective
-To demonstrate a basic Java program structure.
+To sort an array of integers in ascending order using the Divide and Conquer strategy of the Merge Sort algorithm.
 
 ### Algorithm
-1.  Define a class `sample`.
-2.  Define `main` method.
-3.  Call `printHello()`.
-4.  Print "Hello World!".
+1.  **Divide**: If the array has more than one element, divide it into two halves.
+2.  **Conquer**: Recursively sort each half.
+3.  **Combine**: Merge the two sorted halves back into a single sorted array.
+    a. Create temporary arrays `L` and `R`.
+    b. Copy data to `L` and `R`.
+    c. Merge `L` and `R` back into the original array, comparing elements and placing the smaller one first.
+    d. Copy any remaining elements of `L` or `R` (if any).
 
 ### Code
 ```java
-public class sample {
-    public static void main(String[] args) {
-        printHello();
+import java.util.Scanner;
+import java.text.MessageFormat;
+import java.util.InputMismatchException;
+import java.util.Arrays;
+
+/**
+ * MergeSort - Implements the Merge Sort algorithm.
+ * 
+ * This class allows the user to input an array of integers,
+ * sorts it using the Merge Sort algorithm, and then prints the sorted array.
+ */
+public class MergeSort {
+
+    private static int readInt(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // consume the invalid token
+            }
+        }
     }
-    public static void printHello(){
-        System.out.println("Hello World!");
+
+    public static void mergeSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
+    }
+
+    public static void merge(int[] arr, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+        for (int i = 0; i < n1; i++) {
+            L[i] = arr[left + i];
+        }
+        for (int j = 0; j < n2; j++) {
+            R[j] = arr[mid + 1 + j];
+        }
+
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            int n = readInt(scanner, "Enter the number of elements: ");
+            int[] array = new int[n];
+            System.out.println(MessageFormat.format("Array size: {0}", n));
+            
+            System.out.println(MessageFormat.format("Enter {0} elements:", n));
+            for (int i = 0; i < n; i++) {
+                array[i] = readInt(scanner, MessageFormat.format("Element {0}: ", i));
+            }
+
+            System.out.println(MessageFormat.format("Original Array: {0}", Arrays.toString(array)));
+
+            mergeSort(array, 0, array.length - 1);
+
+            System.out.println(MessageFormat.format("Sorted Array: {0}", Arrays.toString(array)));
+        }
     }
 }
 ```
 
 ### Dry Run
-1.  Program starts at `main`.
-2.  Calls `printHello`.
-3.  Console outputs "Hello World!".
+**Input**: `arr = [38, 27, 43, 3, 9, 82, 10]`
+1.  **Divide**: Array is split recursively until single-element arrays are formed.
+    *   `[38, 27, 43, 3]` and `[9, 82, 10]`
+    *   `[38, 27]`, `[43, 3]` and `[9, 82]`, `[10]`
+    *   `[38]`, `[27]`, `[43]`, `[3]`, `[9]`, `[82]`, `[10]`
+2.  **Merge**: Subarrays are merged in sorted order.
+    *   `[27, 38]`, `[3, 43]` -> `[3, 27, 38, 43]`
+    *   `[9, 82]`, `[10]` -> `[9, 10, 82]`
+    *   `[3, 27, 38, 43]`, `[9, 10, 82]` -> `[3, 9, 10, 27, 38, 43, 82]`
+3.  **Result**: `[3, 9, 10, 27, 38, 43, 82]`
+
+---
+
+## Quick Sort
+
+### Objective
+To sort an array of integers in ascending order using the Quick Sort algorithm, which is a divide-and-conquer algorithm that picks an element as a pivot and partitions the given array around the picked pivot.
+
+### Algorithm
+1.  **Choose Pivot**: Select an element from the array as the pivot (e.g., the last element).
+2.  **Partition**: Rearrange the array such that all elements smaller than the pivot come before it, and all elements greater than the pivot come after it. Elements equal to the pivot can go on either side. This step places the pivot in its final sorted position.
+3.  **Recurse**: Recursively apply the above steps to the sub-array of elements with smaller values and separately to the sub-array of elements with greater values.
+
+### Code
+```java
+import java.util.Scanner;
+import java.text.MessageFormat;
+import java.util.InputMismatchException;
+import java.util.Arrays;
+
+/**
+ * QuickSort - Implements the Quick Sort algorithm.
+ * 
+ * This class allows the user to input an array of integers,
+ * sorts it using the Quick Sort algorithm, and then prints the sorted array.
+ */
+public class QuickSort {
+
+    private static int readInt(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // consume the invalid token
+            }
+        }
+    }
+
+    public static void quickSort(int[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = (low - 1); // index of smaller element
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        return i + 1;
+    }
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            int n = readInt(scanner, "Enter the number of elements: ");
+            int[] array = new int[n];
+            System.out.println(MessageFormat.format("Array size: {0}", n));
+            
+            System.out.println(MessageFormat.format("Enter {0} elements:", n));
+            for (int i = 0; i < n; i++) {
+                array[i] = readInt(scanner, MessageFormat.format("Element {0}: ", i));
+            }
+
+            System.out.println(MessageFormat.format("Original Array: {0}", Arrays.toString(array)));
+
+            quickSort(array, 0, array.length - 1);
+
+            System.out.println(MessageFormat.format("Sorted Array: {0}", Arrays.toString(array)));
+        }
+    }
+}
+```
+
+### Dry Run
+**Input**: `arr = [10, 80, 30, 90, 40, 50, 70]`
+1.  **Initial Call**: `quickSort(arr, 0, 6)`
+2.  **Partition (pivot=70)**:
+    *   Array becomes `[10, 40, 30, 50, 70, 90, 80]` (pivot 70 is at index 4)
+    *   `pi = 4`
+3.  **Recursive Calls**:
+    *   `quickSort(arr, 0, 3)` (for `[10, 40, 30, 50]`)
+    *   `quickSort(arr, 5, 6)` (for `[90, 80]`)
+4.  ... (further recursive calls and partitions) ...
+5.  **Result**: `[10, 30, 40, 50, 70, 80, 90]`
+
+---
+
+## Sample (Hello World)
