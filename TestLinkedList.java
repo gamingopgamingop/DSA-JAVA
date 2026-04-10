@@ -3,10 +3,10 @@ public class TestLinkedList {
         SinglyLinkedList list = new SinglyLinkedList();
         
         System.out.println("Inserting 10, 20, 30, 40...");
-        list.insert(10);
-        list.insert(20);
-        list.insert(30);
-        list.insert(40);
+        list.insertAtStart(10);
+        list.insertAtEnd(20);
+        list.insertAtEnd(30);
+        list.insertAtEnd(40);
         list.display(); // Expected: 10 -> 20 -> 30 -> 40 -> null
 
         System.out.println("Deleting by position 2 (value 20)...");
