@@ -171,7 +171,7 @@ class SinglyLinkedList {
     }
 
     // Search element
-    void search(int value) {
+    boolean search(int value) {
 
         Node temp = start;
         int pos = 1;
@@ -180,14 +180,15 @@ class SinglyLinkedList {
 
             if (temp.data == value) {
                 System.out.println("Found at position " + pos);
-                return;
-            }
+                return true;
+            }  
 
             temp = temp.next;
             pos++;
         }
 
         System.out.println("Value not found");
+        return false;
     }
 
     // Traverse list
@@ -230,7 +231,7 @@ class SinglyLinkedList {
                     break;
 
                 case 2:
-                    System.out.print("Enter value: ");
+                    System.out.print("Enter value: ");  
                     value = sc.nextInt();
                     list.insertAtEnd(value);
                     break;
@@ -270,7 +271,11 @@ class SinglyLinkedList {
                 case 9:
                     System.out.print("Enter value to search: ");
                     value = sc.nextInt();
-                    list.search(value);
+                    if (list.search(value)) {
+                        System.out.println("Value found in the list.");
+                    } else {
+                        System.out.println("Value not found in the list.");
+                    }
                     break;
 
                 case 10:
@@ -288,6 +293,8 @@ class SinglyLinkedList {
                 default:
                     System.out.println("Invalid choice");
             }
+        sc.close();
+
         }
     }
 }
