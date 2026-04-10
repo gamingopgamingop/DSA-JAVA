@@ -97,6 +97,28 @@ class SinglyLinkedList {
         }
         System.out.println("null");
     }
+    // Function to clear the list
+    void clear() {
+        start = null;
+        System.out.println("List cleared.");
+    }
+    // Function to search for a value in the list
+    boolean search(int value) {
+        if (start == null) {
+            System.out.println("List is empty.");
+            return false;
+        }
+        Node temp = start;
+        while (temp != null) {
+            if (temp.data == value) {
+                System.out.println("Value " + value + " found in the list.");
+                return true;
+            }
+            temp = temp.next;
+        }
+        System.out.println("Value " + value + " not found in the list.");
+        return false;
+       }
 
     public static void main(String[] args) {
         SinglyLinkedList list = new SinglyLinkedList();
@@ -109,6 +131,8 @@ class SinglyLinkedList {
             System.out.println("2. Delete by Item");
             System.out.println("3. Delete by Position");
             System.out.println("4. Display");
+            System.out.println("6. Clear");
+            System.out.println("7. Search");
             System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
             choice = sc.nextInt();
@@ -136,6 +160,20 @@ class SinglyLinkedList {
                     System.out.println("Exiting...");
                     sc.close();
                     System.exit(0);
+                    break;
+                case 6:
+                    list.clear();
+                    System.out.println("List cleared.");
+                    break;
+                case 7:
+                    System.out.print("Enter value to search: ");
+                    value = sc.nextInt();
+                    if (list.search(value)) {
+                        System.out.println("Value " + value + " found in the list.");
+                    } else {
+                        System.out.println("Value " + value + " not found in the list.");
+                    }
+                    break;
                 default:
                     System.out.println("Invalid choice!");
             }
