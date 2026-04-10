@@ -11,38 +11,103 @@ class Node {
 }
 
 class SinglyLinkedList {
+
     Node start = null;
 
-    // Function to add a node at the end
-    void insert(int data) {
+    // Insert at start
+    void insertAtStart(int data) {
         Node newNode = new Node(data);
-        if (start == null) {
-            start = newNode;
-        } else {
-            Node temp = start;
-            while (temp.next != null) {
-                temp = temp.next;
-            }
-            temp.next = newNode;
-        }
+        newNode.next = start;
+        start = newNode;
     }
 
-    // Function to delete a node by its item (value)
-    void deleteByItem(int item) {
+    // Insert at end
+    void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+
         if (start == null) {
-            System.out.println("List is empty.");
+            start = newNode;
             return;
         }
 
-        // Case 1: Item is at the start
+        Node temp = start;
+        while (temp.next != null)
+            temp = temp.next;
+
+        temp.next = newNode;
+    }
+
+    // Insert at position
+    void insertAtPosition(int data, int pos) {
+
+        if (pos == 1) {
+            insertAtStart(data);
+            return;
+        }
+
+        Node newNode = new Node(data);
+        Node temp = start;
+
+        for (int i = 1; i < pos - 1 && temp != null; i++)
+            temp = temp.next;
+
+        if (temp == null) {
+            System.out.println("Invalid Position");
+            return;
+        }
+
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    // Delete at start
+    void deleteAtStart() {
+
+        if (start == null) {
+            System.out.println("List empty");
+            return;
+        }
+
+        start = start.next;
+    }
+
+    // Delete at end
+    void deleteAtEnd() {
+
+        if (start == null) {
+            System.out.println("List empty");
+            return;
+        }
+
+        if (start.next == null) {
+            start = null;
+            return;
+        }
+
+        Node temp = start;
+
+        while (temp.next.next != null)
+            temp = temp.next;
+
+        temp.next = null;
+    }
+
+    // Delete by item
+    void deleteByItem(int item) {
+
+        if (start == null) {
+            System.out.println("List empty");
+            return;
+        }
+
         if (start.data == item) {
             start = start.next;
             return;
         }
 
-        // Case 2: Search for the item
         Node q = start;
         Node p = start.next;
+
         while (p != null) {
             if (p.data == item) {
                 q.next = p.next;
@@ -51,131 +116,177 @@ class SinglyLinkedList {
             q = p;
             p = p.next;
         }
-        System.out.println("Item " + item + " not found in the list.");
+
+        System.out.println("Item not found");
     }
 
-    // Function to delete a node by its position (1-based index)
-    void deleteByPosition(int position) {
+    // Delete by position
+    void deleteByPosition(int pos) {
+
         if (start == null) {
-            System.out.println("List is empty.");
+            System.out.println("List empty");
             return;
         }
 
-        // Case 1: Position is 1
-        if (position == 1) {
+        if (pos == 1) {
             start = start.next;
             return;
         }
 
-        // Case 2: Traverse to the position
-        Node q = start;
-        Node p = start.next;
-        int count = 2; // Since p is at position 2
-        
-        while (p != null) {
-            if (count == position) {
-                q.next = p.next;
-                return;
-            }
-            q = p;
-            p = p.next;
-            count++;
-        }
-        System.out.println("Position " + position + " is out of bounds.");
-    }
+        Node temp = start;
 
-    // Function to display the list
-    void display() {
-        if (start == null) {
-            System.out.println("List is empty.");
+        for (int i = 1; i < pos - 1 && temp.next != null; i++)
+            temp = temp.next;
+
+        if (temp.next == null) {
+            System.out.println("Invalid position");
             return;
         }
+
+        temp.next = temp.next.next;
+    }
+
+    // Display list
+    void display() {
+
+        if (start == null) {
+            System.out.println("List empty");
+            return;
+        }
+
         Node temp = start;
+
         while (temp != null) {
             System.out.print(temp.data + " -> ");
             temp = temp.next;
         }
+
         System.out.println("null");
     }
-    // Function to clear the list
+
+    // Clear list
     void clear() {
         start = null;
-        System.out.println("List cleared.");
+        System.out.println("List cleared");
     }
-    // Function to search for a value in the list
-    boolean search(int value) {
-        if (start == null) {
-            System.out.println("List is empty.");
-            return false;
-        }
+
+    // Search element
+    void search(int value) {
+
         Node temp = start;
+        int pos = 1;
+
         while (temp != null) {
+
             if (temp.data == value) {
-                System.out.println("Value " + value + " found in the list.");
-                return true;
+                System.out.println("Found at position " + pos);
+                return;
             }
+
             temp = temp.next;
+            pos++;
         }
-        System.out.println("Value " + value + " not found in the list.");
-        return false;
-       }
+
+        System.out.println("Value not found");
+    }
+
+    // Traverse list
+    void traverse() {
+        display();
+    }
 
     public static void main(String[] args) {
-        SinglyLinkedList list = new SinglyLinkedList();
+
         Scanner sc = new Scanner(System.in);
+        SinglyLinkedList list = new SinglyLinkedList();
+
         int choice, value, pos;
 
         while (true) {
-            System.out.println("\n--- Linked List Operations ---");
-            System.out.println("1. Insert");
-            System.out.println("2. Delete by Item");
-            System.out.println("3. Delete by Position");
-            System.out.println("4. Display");
-            System.out.println("6. Clear");
-            System.out.println("7. Search");
-            System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
+
+            System.out.println("\n---- Linked List Menu ----");
+            System.out.println("1 Insert at Start");
+            System.out.println("2 Insert at End");
+            System.out.println("3 Insert at Position");
+            System.out.println("4 Delete at Start");
+            System.out.println("5 Delete at End");
+            System.out.println("6 Delete by Item");
+            System.out.println("7 Delete by Position");
+            System.out.println("8 Display");
+            System.out.println("9 Search");
+            System.out.println("10 Traverse");
+            System.out.println("11 Clear");
+            System.out.println("12 Exit");
+
+            System.out.print("Enter choice: ");
             choice = sc.nextInt();
 
             switch (choice) {
+
                 case 1:
-                    System.out.print("Enter value to insert: ");
+                    System.out.print("Enter value: ");
                     value = sc.nextInt();
-                    list.insert(value);
+                    list.insertAtStart(value);
                     break;
+
                 case 2:
-                    System.out.print("Enter value to delete: ");
+                    System.out.print("Enter value: ");
+                    value = sc.nextInt();
+                    list.insertAtEnd(value);
+                    break;
+
+                case 3:
+                    System.out.print("Enter position: ");
+                    pos = sc.nextInt();
+                    System.out.print("Enter value: ");
+                    value = sc.nextInt();
+                    list.insertAtPosition(value, pos);
+                    break;
+
+                case 4:
+                    list.deleteAtStart();
+                    break;
+
+                case 5:
+                    list.deleteAtEnd();
+                    break;
+
+                case 6:
+                    System.out.print("Enter item to delete: ");
                     value = sc.nextInt();
                     list.deleteByItem(value);
                     break;
-                case 3:
-                    System.out.print("Enter position to delete: ");
+
+                case 7:
+                    System.out.print("Enter position: ");
                     pos = sc.nextInt();
                     list.deleteByPosition(pos);
                     break;
-                case 4:
+
+                case 8:
                     list.display();
                     break;
-                case 5:
-                    System.out.println("Exiting...");
-                    sc.close();
-                    System.exit(0);
-                    break;
-                case 6:
-                    list.clear();
-                    System.out.println("List cleared.");
-                    break;
-                case 7:
+
+                case 9:
                     System.out.print("Enter value to search: ");
                     value = sc.nextInt();
-                    if (list.search(value)) {
-                        System.out.println("Value " + value + " found in the list.");
-                    } else {
-                        System.out.println("Value " + value + " not found in the list.");
-                    }
+                    list.search(value);
                     break;
+
+                case 10:
+                    list.traverse();
+                    break;
+
+                case 11:
+                    list.clear();
+                    break;
+
+                case 12:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+
                 default:
-                    System.out.println("Invalid choice!");
+                    System.out.println("Invalid choice");
             }
         }
     }
