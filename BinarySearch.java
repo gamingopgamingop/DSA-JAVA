@@ -1,6 +1,11 @@
 import java.text.MessageFormat;
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.Formatter;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /**
  * BinarySearch - Implements the binary search algorithm.
  * 
@@ -17,6 +22,7 @@ public class BinarySearch {
      */
     public static int binarySearch(int[] arr, int target) {
         int left = 0;
+        System.out.println("Left: " + left);
         int right = arr.length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
@@ -38,27 +44,54 @@ public class BinarySearch {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the number of elements: ");
-        int n = scanner.nextInt();
-        int[] arr = new int[n];
-        System.out.println("Enter " + n + " integers:");
-        for (int i = 0; i < n; i++) {
-            arr[i] = scanner.nextInt();
-        }
+        try {
+            System.out.print("Enter the number of elements: ");
+            int n = scanner.nextInt();
+            int[] arr = new int[n];
+            System.out.println("Enter " + n + " integers:");
+            for (int i = 0; i < n; i++) {
+                arr[i] = scanner.nextInt();
+            }
 
-        // Sort the array to ensure Binary Search works
-        Arrays.sort(arr);
-        System.out.println("Array has been sorted: " + Arrays.toString(arr));
+            // Sort the array to ensure Binary Search works
+            Arrays.sort(arr);
+            System.out.print("Array has been sorted: [");
+            Iterator<Integer> it = Arrays.stream(arr).boxed().iterator();
+            while (it.hasNext()) {
+                System.out.print(it.next());
+                if (it.hasNext()) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println("]");
 
-        System.out.print("Enter the target value to search for: ");
-        int target = scanner.nextInt();
-        int index = binarySearch(arr, target);
-        if (index != -1) {
-            System.out.println(MessageFormat.format("Element found at index: {0}", index));
-        } else {
-            System.out.println(MessageFormat.format("Element {0} not found", target));
+            System.out.print("Enter the target value to search for: ");
+            int target = scanner.nextInt();
+            int index = binarySearch(arr, target);
+            
+            // Using Formatter for formatted output
+            StringBuilder sb = new StringBuilder();
+            Formatter formatter = new Formatter(sb);
+            if (index != -1) {
+                // Using MessageFormat for complex message construction
+                String result = MessageFormat.format("Element found at index: {0}", index);
+                formatter.format("%s", result);
+                System.out.println(sb.toString());
+            } else {
+                // Using MessageFormat for complex message construction
+                String result = MessageFormat.format("Element {0} not found", target);
+                formatter.format("%s", result);
+                System.out.println(sb.toString());
+            }
+            formatter.close();
+
+        } catch (InputMismatchException e) {
+            System.err.println("Error: Please enter valid integers.");
+        } catch (NoSuchElementException e) {
+            System.err.println("Error: No input provided.");
+        } finally {
+            scanner.close();
         }
-        scanner.close();
     }
 
 }
