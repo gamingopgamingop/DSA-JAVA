@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Formatter;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
+import java.util.List;
 /**
  * BinarySearch - Implements the binary search algorithm.
  * 
@@ -38,6 +38,29 @@ public class BinarySearch {
     }
 
     /**
+     * Performs binary search on a sorted List of integers.
+     * 
+     * @param list The sorted list of integers.
+     * @param target The integer value to search for.
+     * @return The index of the target element if found, or -1 if not found.
+     */
+    public static int binarySearch(List<Integer> list, int target) {
+        int left = 0;
+        int right = list.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (list.get(mid) == target) {
+                return mid;
+            } else if (list.get(mid) < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Main method to test the binary search implementation.
      * 
      * @param args Command line arguments (not used).
@@ -55,8 +78,12 @@ public class BinarySearch {
 
             // Sort the array to ensure Binary Search works
             Arrays.sort(arr);
-            System.out.print("Array has been sorted: [");
-            Iterator<Integer> it = Arrays.stream(arr).boxed().iterator();
+            
+            // Create a List from the array for demonstration
+            List<Integer> list = Arrays.stream(arr).boxed().toList();
+            
+            System.out.print("Array has been sorted and converted to List: [");
+            Iterator<Integer> it = list.iterator();
             while (it.hasNext()) {
                 System.out.print(it.next());
                 if (it.hasNext()) {
@@ -67,7 +94,9 @@ public class BinarySearch {
 
             System.out.print("Enter the target value to search for: ");
             int target = scanner.nextInt();
-            int index = binarySearch(arr, target);
+            
+            // Using the List-based binarySearch
+            int index = binarySearch(list, target);
             
             // Using Formatter for formatted output
             StringBuilder sb = new StringBuilder();
