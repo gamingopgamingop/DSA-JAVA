@@ -245,11 +245,15 @@ class SinglyLinkedList implements Iterable<Integer> {
         
         System.out.print("Traversing: ");
         Iterator<Integer> it = this.iterator();
-        Formatter fmt = new Formatter();
+        try (Formatter fmt = new Formatter()) {
         while (it.hasNext()) {
             fmt.format("[%d] -> ", it.next());
         }
         System.out.println(fmt.toString() + "null");
+        }
+        catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
