@@ -1,11 +1,5 @@
-import java.util.Scanner;
-import java.text.MessageFormat; 
-import java.util.InputMismatchException;
-import java.util.Formatter;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.List;
-import java.util.Arrays;
+import java.util.*;
+import java.text.*; 
 
 /**
  * BubbleSort - A program to sort an array using Bubble Sort algorithm.
