@@ -1,8 +1,6 @@
-import java.util.Scanner;
-import java.text.MessageFormat;
-import java.util.InputMismatchException;
-import java.util.Arrays;
-import java.util.Formatter;
+import java.util.*;
+import java.text.*;
+
 // import java.util.InputMismatchException;
 
 /**
