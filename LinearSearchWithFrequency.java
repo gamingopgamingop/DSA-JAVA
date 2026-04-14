@@ -27,6 +27,19 @@ public class LinearSearchWithFrequency {
         return count;
     }
 
+    public static int linearSearchFrequency(List<Integer> arr, int target) {
+        int count = 0;
+        for (Integer num : arr) {
+            if (num == target) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+    
+
     private static int readInt(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -46,7 +59,7 @@ public class LinearSearchWithFrequency {
              Formatter formatter = new Formatter(System.out)) {
             // Input array size
             int n = readInt(scanner, "Enter the number of elements: ");
-            int[] array = new int[n];
+            List<Integer> array = new ArrayList<>();
             System.out.println(MessageFormat.format("Array size: {0}", n));
             System.out.println(MessageFormat.format("Enter {0} elements:", n));
             
@@ -55,14 +68,18 @@ public class LinearSearchWithFrequency {
             //Replace the formatter.format() call with MessageFormat.format()
             System.out.println(MessageFormat.format("Enter {0} elements:", n));
             for (int i = 0; i < n; i++) {
-                array[i] = readInt(scanner, String.format("Element %d: ", i));
+                array.add(readInt(scanner, String.format("Element %d: ", i)));
             }
 
             // Input target element
             int target = readInt(scanner, "Enter the element to search for: ");
 
             // Perform linear search and get frequency
-            int frequency = linearSearchFrequency(array, target);
+            List<Integer> arrayList = new ArrayList<>();
+            for (int num : array) {
+                arrayList.add(num);
+            }
+            int frequency = linearSearchFrequency(arrayList, target);
 
             // Output result
             if (frequency > 0) {
@@ -71,7 +88,7 @@ public class LinearSearchWithFrequency {
                 System.out.println(MessageFormat.format("Element {0} not found in the array.", target));
             }
 
-            System.out.println(MessageFormat.format("Array: {0}", Arrays.toString(array)));
+            System.out.println(MessageFormat.format("Array: {0}", arrayList));
             formatter.close();
         }
     }
