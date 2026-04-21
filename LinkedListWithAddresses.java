@@ -10,13 +10,13 @@ import java.util.Stack;
 import java.util.ArrayList;
 
 /**
- * LLNode - Represents a node in a custom Singly Linked List for address demonstration.
+ * Node - Represents a node in a custom Singly Linked List.
  */
-class LLNode {
+class Node {
     int data;
-    LLNode next;
+    Node next;
 
-    LLNode(int data) {
+    Node(int data) {
         this.data = data;
         this.next = null;
     }
@@ -29,7 +29,7 @@ class LLNode {
  * interface to insert elements and display the list with memory addresses (hash codes).
  */
 public class LinkedListWithAddresses {
-    private LLNode head;
+    private Node head;
 
     /**
      * Inserts a new node at the end of the linked list.
@@ -37,11 +37,11 @@ public class LinkedListWithAddresses {
      * @param data The integer value to be inserted.
      */
     public void insert(int data) {
-        LLNode newNode = new LLNode(data);
+        Node newNode = new Node(data);
         if (head == null) {
             head = newNode;
         } else {
-            LLNode temp = head;
+            Node temp = head;
             while (temp.next != null) {
                 temp = temp.next;
             }
@@ -60,7 +60,7 @@ public class LinkedListWithAddresses {
         }
 
         System.out.println("\n--- Linked List Elements with Addresses ---");
-        LLNode temp = head;
+        Node temp = head;
         while (temp != null) {
             // Using System.identityHashCode to simulate memory address display
             String address = Integer.toHexString(System.identityHashCode(temp));
@@ -81,7 +81,7 @@ public class LinkedListWithAddresses {
 
         // Stack demonstration (tracking node data for reversal)
         Stack<Integer> stack = new Stack<>();
-        LLNode temp = head;
+        Node temp = head;
         int count = 0;
         while (temp != null) {
             stack.push(temp.data);
