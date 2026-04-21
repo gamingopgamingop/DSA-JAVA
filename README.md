@@ -18,6 +18,10 @@ This document contains the Objective, Algorithm, Code, and Dry Run analysis for 
 13. [Quick Sort](#quick-sort)
 14. [Sample (Hello World)](#sample-hello-world)
 15. [Stack Operations](#stack-operations)
+16. [Linear Queue](#linear-queue)
+17. [Circular Queue](#circular-queue)
+18. [Deque Operations](#deque-operations)
+19. [Priority Queue](#priority-queue)
 
 ---
 
@@ -759,4 +763,52 @@ public class stackoperations {
 4.  **Push(40)**: size (3) == capacity (3). **Overflow** reported.
 5.  **Pop()**: Returns 30. Stack = [10, 20].
 6.  **Display()**: Output: 10 20.
+
+---
+
+## Linear Queue
+
+### Objective
+To implement a Linear Queue data structure using an array, supporting Enqueue, Dequeue, Peek, and Display operations through a menu-driven interface.
+
+### Algorithm
+1.  **Enqueue(item)**: If `rear == capacity - 1`, Overflow. Else, `rear++`, `arr[rear] = item`. If `front == -1`, `front = 0`.
+2.  **Dequeue()**: If `front == -1`, Underflow. Else, `item = arr[front]`. If `front == rear`, reset `front = rear = -1`. Else, `front++`.
+
+---
+
+## Circular Queue
+
+### Objective
+To implement a Circular Queue to overcome the limitation of space wastage in Linear Queues.
+
+### Algorithm
+1.  **Enqueue(item)**: If `(rear + 1) % capacity == front`, Overflow. Else, `rear = (rear + 1) % capacity`, `arr[rear] = item`. If `front == -1`, `front = 0`.
+2.  **Dequeue()**: If `front == -1`, Underflow. Else, `item = arr[front]`. If `front == rear`, reset `front = rear = -1`. Else, `front = (front + 1) % capacity`.
+
+---
+
+## Deque Operations
+
+### Objective
+To implement a Double Ended Queue (Deque) allowing insertions and deletions from both ends.
+
+### Algorithm
+1.  **InsertFront(item)**: Decrement `front` circularly and insert.
+2.  **InsertRear(item)**: Increment `rear` circularly and insert.
+3.  **DeleteFront()**: Increment `front` circularly and remove.
+4.  **DeleteRear()**: Decrement `rear` circularly and remove.
+
+---
+
+## Priority Queue
+
+### Objective
+To implement a Priority Queue using the `java.util.PriorityQueue` collection, where elements are dequeued based on their natural ordering or a custom comparator.
+
+### Algorithm
+1.  **Insert(item)**: Uses `pq.offer(item)` to add element.
+2.  **Delete()**: Uses `pq.poll()` to remove and return the element with the highest priority (lowest value by default).
+3.  **Peek()**: Uses `pq.peek()` to view the highest priority element.
+
 
