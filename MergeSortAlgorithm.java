@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * MergeSort - Implements the Merge Sort algorithm.
+ * MergeSortAlgorithm - Implements the Merge Sort algorithm.
  * 
  * This class allows the user to input an array of integers,
  * sorts it using the Merge Sort algorithm, and then prints the sorted array.
  */
-public class MergeSortAlgorithm {
+public class MergeSortAlgorithm implements Runnable {
 
     /**
      * Reads an integer from the console with input validation.
@@ -106,8 +106,8 @@ public class MergeSortAlgorithm {
             k++;
         }
     }
-
-    public static void main(String[] args) {
+    @Override
+    public void run() {
         try (Scanner scanner = new Scanner(System.in)) {
             // Input array size
             int n = readInt(scanner, "Enter the number of elements: ");
@@ -122,7 +122,7 @@ public class MergeSortAlgorithm {
 
             System.out.println(MessageFormat.format("Original Array: {0}", Arrays.toString(array)));
 
-            Stack<Integer> recursionStack = new Stack<>();
+                Stack<Integer> recursionStack = new Stack<>();
             mergeSort(array, 0, array.length - 1, recursionStack);
 
             // Using List and Iterator for demonstration of imports
