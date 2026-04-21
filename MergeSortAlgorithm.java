@@ -1,7 +1,12 @@
-import java.util.Scanner;
 import java.text.MessageFormat;
-import java.util.InputMismatchException;
+import java.util.Scanner;
 import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.Formatter;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * MergeSort - Implements the Merge Sort algorithm.
@@ -9,7 +14,7 @@ import java.util.Arrays;
  * This class allows the user to input an array of integers,
  * sorts it using the Merge Sort algorithm, and then prints the sorted array.
  */
-public class MergeSort {
+public class MergeSortAlgorithm {
 
     /**
      * Reads an integer from the console with input validation.
@@ -26,6 +31,9 @@ public class MergeSort {
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter an integer.");
                 scanner.next(); // consume the invalid token
+            } catch (NoSuchElementException e) {
+                System.err.println("Error: Required input was not found.");
+                System.exit(1);
             }
         }
     }
@@ -36,13 +44,16 @@ public class MergeSort {
      * @param arr The array to be sorted.
      * @param left The starting index of the subarray.
      * @param right The ending index of the subarray.
+     * @param recursionStack A stack to track recursion depth (for demonstration).
      */
-    public static void mergeSort(int[] arr, int left, int right) {
+    public static void mergeSort(int[] arr, int left, int right, Stack<Integer> recursionStack) {
         if (left < right) {
+            recursionStack.push(left); // Track recursion depth for demonstration
             int mid = (left + right) / 2;
-            mergeSort(arr, left, mid);
-            mergeSort(arr, mid + 1, right);
+            mergeSort(arr, left, mid, recursionStack);
+            mergeSort(arr, mid + 1, right, recursionStack);
             merge(arr, left, mid, right);
+            recursionStack.pop();
         }
     }
 
@@ -111,9 +122,26 @@ public class MergeSort {
 
             System.out.println(MessageFormat.format("Original Array: {0}", Arrays.toString(array)));
 
-            mergeSort(array, 0, array.length - 1);
+            Stack<Integer> recursionStack = new Stack<>();
+            mergeSort(array, 0, array.length - 1, recursionStack);
 
-            System.out.println(MessageFormat.format("Sorted Array: {0}", Arrays.toString(array)));
+            // Using List and Iterator for demonstration of imports
+            List<Integer> sortedList = new java.util.ArrayList<>();
+            for (int val : array) sortedList.add(val);
+            
+            System.out.print("Sorted Array (via Iterator): ");
+            Iterator<Integer> it = sortedList.iterator();
+            while (it.hasNext()) {
+                System.out.print(it.next() + " ");
+            }
+            System.out.println();
+
+            // Using Formatter for final summary
+            Formatter formatter = new Formatter();
+            formatter.format("Summary: Merge Sort completed on %d elements. Sorted Array: %s", 
+                            n, Arrays.toString(array));
+            System.out.println(formatter.toString());
+            formatter.close();
         }
     }
 }

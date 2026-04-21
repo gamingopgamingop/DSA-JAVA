@@ -738,9 +738,8 @@ public class stackoperations {
     public void push(int x) {
         if (stack.size() == capacity) {
             System.out.println(" Stack Overflow!");
- return;
- }
- stack.push(x);
+        }
+        stack.push(x);
  }
 
  public int pop() {
