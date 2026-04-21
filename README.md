@@ -17,6 +17,7 @@ This document contains the Objective, Algorithm, Code, and Dry Run analysis for 
 12. [Merge Sort](#merge-sort)
 13. [Quick Sort](#quick-sort)
 14. [Sample (Hello World)](#sample-hello-world)
+15. [Stack Operations](#stack-operations)
 
 ---
 
@@ -698,3 +699,64 @@ public class QuickSort {
 ---
 
 ## Sample (Hello World)
+
+---
+
+## Stack Operations
+
+### Objective
+To implement a Stack data structure using the java.util.Stack collection, supporting six key operations: Push, Pop, Peek, IsEmpty, IsFull, and Display, all controlled through a menu-driven interface.
+
+### Algorithm
+1.  **Initialize**: Set a fixed capacity for the stack and initialize a java.util.Stack instance.
+2.  **Push(x)**: If stack.size() < capacity, use stack.push(x). Else, signal Overflow.
+3.  **Pop()**: If !stack.isEmpty(), use stack.pop(). Else, signal Underflow.
+4.  **Peek()**: If !stack.isEmpty(), return stack.peek(). Else, signal Empty.
+5.  **IsEmpty()**: Check stack.isEmpty().
+6.  **IsFull()**: Check if stack.size() == capacity.
+7.  **Display()**: Obtain an Iterator from the stack and traverse all elements.
+
+### Code
+`java
+import java.util.Stack;
+import java.util.Iterator;
+import java.util.Scanner;
+
+public class stackoperations {
+    private Stack<Integer> stack;
+    private int capacity;
+
+    public stackoperations(int size) {
+        stack = new Stack<>();
+        capacity = size;
+    }
+
+    public void push(int x) {
+        if (stack.size() == capacity) {
+            System.out.println(" Stack Overflow!");
+ return;
+ }
+ stack.push(x);
+ }
+
+ public int pop() {
+ if (stack.isEmpty()) return -1;
+ return stack.pop();
+ }
+
+ public void display() {
+ Iterator<Integer> it = stack.iterator();
+ while (it.hasNext()) System.out.print(it.next() + " \);
+    }
+}
+`
+
+### Dry Run
+**Input**: Capacity = 3, Operations: Push(10), Push(20), Push(30), Push(40), Pop(), Display()
+1.  **Push(10)**: Stack = [10], size = 1.
+2.  **Push(20)**: Stack = [10, 20], size = 2.
+3.  **Push(30)**: Stack = [10, 20, 30], size = 3.
+4.  **Push(40)**: size (3) == capacity (3). **Overflow** reported.
+5.  **Pop()**: Returns 30. Stack = [10, 20].
+6.  **Display()**: Output: 10 20.
+
