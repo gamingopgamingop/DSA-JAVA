@@ -22,6 +22,10 @@ This document contains the Objective, Algorithm, Code, and Dry Run analysis for 
 17. [Circular Queue](#circular-queue)
 18. [Deque Operations](#deque-operations)
 19. [Priority Queue](#priority-queue)
+20. [Merge Sort Algorithm](#merge-sort-algorithm)
+21. [Quick Sort Algorithm](#quick-sort-algorithm)
+22. [Linked List with Addresses](#linked-list-with-addresses)
+23. [Singly Linked List Operations](#singly-linked-list-operations)
 
 ---
 
@@ -704,6 +708,28 @@ public class QuickSort {
 
 ## Sample (Hello World)
 
+### Objective
+To verify the development environment and demonstrate basic Java program structure and output.
+
+### Algorithm
+1.  Define a class named `sample`.
+2.  Implement the `main` method.
+3.  Use `System.out.println` to display "Hello, World!".
+
+### Code
+```java
+public class sample {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+
+### Dry Run
+1.  **Execution**: `main` method starts.
+2.  **Statement**: `System.out.println("Hello, World!")` is called.
+3.  **Result**: "Hello, World!" is printed to the console.
+
 ---
 
 ## Stack Operations
@@ -721,47 +747,48 @@ To implement a Stack data structure using the java.util.Stack collection, suppor
 7.  **Display()**: Obtain an Iterator from the stack and traverse all elements.
 
 ### Code
-`java
+```java
 import java.util.Stack;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class stackoperations {
+public class StackOperations {
     private Stack<Integer> stack;
     private int capacity;
 
-    public stackoperations(int size) {
+    public StackOperations(int size) {
         stack = new Stack<>();
         capacity = size;
     }
 
     public void push(int x) {
         if (stack.size() == capacity) {
-            System.out.println(" Stack Overflow!");
+            System.out.println("Stack Overflow!");
+            return;
         }
         stack.push(x);
- }
+    }
 
- public int pop() {
- if (stack.isEmpty()) return -1;
- return stack.pop();
- }
+    public int pop() {
+        if (stack.isEmpty()) return -1;
+        return stack.pop();
+    }
 
- public void display() {
- Iterator<Integer> it = stack.iterator();
- while (it.hasNext()) System.out.print(it.next() + " \);
+    public void display() {
+        Iterator<Integer> it = stack.iterator();
+        while (it.hasNext()) System.out.print(it.next() + " ");
     }
 }
-`
+```
 
 ### Dry Run
 **Input**: Capacity = 3, Operations: Push(10), Push(20), Push(30), Push(40), Pop(), Display()
-1.  **Push(10)**: Stack = [10], size = 1.
-2.  **Push(20)**: Stack = [10, 20], size = 2.
-3.  **Push(30)**: Stack = [10, 20, 30], size = 3.
+1.  **Push(10)**: Stack = `[10]`, size = 1.
+2.  **Push(20)**: Stack = `[10, 20]`, size = 2.
+3.  **Push(30)**: Stack = `[10, 20, 30]`, size = 3.
 4.  **Push(40)**: size (3) == capacity (3). **Overflow** reported.
-5.  **Pop()**: Returns 30. Stack = [10, 20].
-6.  **Display()**: Output: 10 20.
+5.  **Pop()**: Returns 30. Stack = `[10, 20]`.
+6.  **Display()**: Output: `10 20`.
 
 ---
 
@@ -774,6 +801,36 @@ To implement a Linear Queue data structure using an array, supporting Enqueue, D
 1.  **Enqueue(item)**: If `rear == capacity - 1`, Overflow. Else, `rear++`, `arr[rear] = item`. If `front == -1`, `front = 0`.
 2.  **Dequeue()**: If `front == -1`, Underflow. Else, `item = arr[front]`. If `front == rear`, reset `front = rear = -1`. Else, `front++`.
 
+### Code
+```java
+public class LinearQueue {
+    private int[] queue;
+    private int front = -1, rear = -1;
+
+    public void enqueue(int item) {
+        if (rear == capacity - 1) return;
+        if (front == -1) front = 0;
+        queue[++rear] = item;
+    }
+
+    public int dequeue() {
+        if (front == -1) return -1;
+        int item = queue[front];
+        if (front >= rear) front = rear = -1;
+        else front++;
+        return item;
+    }
+}
+```
+
+### Dry Run
+**Input**: Capacity = 2, Operations: Enqueue(10), Enqueue(20), Enqueue(30), Dequeue()
+1.  **Enqueue(10)**: `front=0, rear=0`. Queue: `[10]`.
+2.  **Enqueue(20)**: `rear=1`. Queue: `[10, 20]`.
+3.  **Enqueue(30)**: `rear=1 == capacity-1`. **Overflow**.
+4.  **Dequeue()**: Returns 10. `front=1`. Queue: `[20]`.
+5.  **Result**: `front=1, rear=1, elements=[20]`.
+
 ---
 
 ## Circular Queue
@@ -784,6 +841,33 @@ To implement a Circular Queue to overcome the limitation of space wastage in Lin
 ### Algorithm
 1.  **Enqueue(item)**: If `(rear + 1) % capacity == front`, Overflow. Else, `rear = (rear + 1) % capacity`, `arr[rear] = item`. If `front == -1`, `front = 0`.
 2.  **Dequeue()**: If `front == -1`, Underflow. Else, `item = arr[front]`. If `front == rear`, reset `front = rear = -1`. Else, `front = (front + 1) % capacity`.
+
+### Code
+```java
+public class CircularQueue {
+    public void enqueue(int item) {
+        if ((rear + 1) % capacity == front) return;
+        if (front == -1) front = 0;
+        rear = (rear + 1) % capacity;
+        queue[rear] = item;
+    }
+
+    public int dequeue() {
+        if (front == -1) return -1;
+        int item = queue[front];
+        if (front == rear) front = rear = -1;
+        else front = (front + 1) % capacity;
+        return item;
+    }
+}
+```
+
+### Dry Run
+**Input**: Capacity = 3, Operations: Enqueue(1), Enqueue(2), Enqueue(3), Dequeue(), Enqueue(4)
+1.  **Enqueue(1,2,3)**: `front=0, rear=2`. Queue: `[1, 2, 3]`.
+2.  **Dequeue()**: Returns 1. `front=1`.
+3.  **Enqueue(4)**: `rear = (2+1)%3 = 0`. Queue: `[4, 2, 3]` (circular).
+4.  **Result**: `front=1, rear=0`.
 
 ---
 
@@ -798,6 +882,25 @@ To implement a Double Ended Queue (Deque) allowing insertions and deletions from
 3.  **DeleteFront()**: Increment `front` circularly and remove.
 4.  **DeleteRear()**: Decrement `rear` circularly and remove.
 
+### Code
+```java
+public class DequeOperations {
+    public void insertFront(int item) {
+        if (isFull()) return;
+        if (front == -1) { front = 0; rear = 0; }
+        else if (front == 0) front = capacity - 1;
+        else front--;
+        deque[front] = item;
+    }
+}
+```
+
+### Dry Run
+**Input**: Capacity = 5, InsertRear(10), InsertFront(20)
+1.  **InsertRear(10)**: `front=0, rear=0`. `[10]`.
+2.  **InsertFront(20)**: `front` becomes 4. `[10, _, _, _, 20]`.
+3.  **Result**: `front=4, rear=0`.
+
 ---
 
 ## Priority Queue
@@ -809,5 +912,183 @@ To implement a Priority Queue using the `java.util.PriorityQueue` collection, wh
 1.  **Insert(item)**: Uses `pq.offer(item)` to add element.
 2.  **Delete()**: Uses `pq.poll()` to remove and return the element with the highest priority (lowest value by default).
 3.  **Peek()**: Uses `pq.peek()` to view the highest priority element.
+
+### Code
+```java
+import java.util.PriorityQueue;
+
+public class PriorityQueueOperations {
+    PriorityQueue<Integer> pq = new PriorityQueue<>();
+    public void insert(int item) { pq.offer(item); }
+    public int delete() { return pq.poll(); }
+}
+```
+
+### Dry Run
+**Input**: Insert(30), Insert(10), Insert(20), Delete()
+1.  **Insert(30, 10, 20)**: Internal heap stores elements.
+2.  **Delete()**: Returns 10 (smallest value has highest priority).
+3.  **Result**: 10 removed.
+
+---
+
+## Merge Sort Algorithm
+
+### Objective
+To implement the Merge Sort algorithm, a divide-and-conquer strategy that recursively splits the array into halves, sorts them, and merges them back together.
+
+### Algorithm
+1.  **Split**: Find the middle point `mid = (left + right) / 2`.
+2.  **Recursively Sort**: Call `mergeSort` for the left half and right half.
+3.  **Merge**: Combine the two sorted halves into a single sorted array.
+
+### Code
+```java
+public void mergeSort(int[] arr, int left, int right) {
+    if (left < right) {
+        int mid = (left + right) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+```
+
+### Dry Run
+**Input**: `[3, 1, 2]`
+1.  Split to `[3]` and `[1, 2]`.
+2.  Split `[1, 2]` to `[1]` and `[2]`.
+3.  Merge `[1]` and `[2]` -> `[1, 2]`.
+4.  Merge `[3]` and `[1, 2]` -> `[1, 2, 3]`.
+
+---
+
+## Quick Sort Algorithm
+
+### Objective
+To implement the Quick Sort algorithm, a divide-and-conquer strategy that picks an element as a 'pivot' and partitions the array around it.
+
+### Algorithm
+1.  **Pivot Selection**: Choose an element (e.g., the last element) as the pivot.
+2.  **Partitioning**: Rearrange the array so elements smaller than the pivot are on the left and larger elements are on the right.
+3.  **Recursively Sort**: Call `quickSort` for the left and right partitions.
+
+### Code
+```java
+public void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+```
+
+### Dry Run
+**Input**: `[10, 80, 30]`, Pivot=30
+1.  Partition: `10 < 30`, `80 > 30`. Swap 80 and 30. Array: `[10, 30, 80]`.
+2.  `pi = 1`.
+3.  Recurse `[10]` and `[80]`.
+
+---
+
+## Linked List with Addresses
+
+### Objective
+To implement a custom Singly Linked List and display each node's data alongside its memory address (hash code) to visualize how nodes are stored in memory.
+
+### Algorithm
+1.  **Insert**: Create a new `Node` and traverse to the end of the list to link it.
+2.  **Display**: Traverse the list from `head`, printing `node.data` and `System.identityHashCode(node)`.
+3.  **Utilities**: Use `Stack` and `ArrayList` to demonstrate data conversion and reversal.
+
+### Code
+```java
+public void displayWithAddresses() {
+    Node temp = head;
+    while (temp != null) {
+        String addr = Integer.toHexString(System.identityHashCode(temp));
+        System.out.println(temp.data + " at " + addr);
+        temp = temp.next;
+    }
+}
+```
+
+### Dry Run
+**Input**: List with nodes `10` and `20`.
+1.  Node 10: data=10, addr=@1a2b3c.
+2.  Node 20: data=20, addr=@4d5e6f.
+3.  **Output**: `10 at @1a2b3c`, `20 at @4d5e6f`.
+
+
+---
+
+## Singly Linked List Operations
+
+### Objective
+To implement insertion and deletion operations in a Singly Linked List, including insertion at the beginning and at a specific position, and deletion from the beginning, end, and specific positions.
+
+### Algorithm
+1.  **Insert at Beginning**: Create a new node, point its `next` to the current `head`, and update `head`.
+2.  **Insert at Position**: Traverse to `position - 1`, link the new node to the current node’s `next`, and update the current node’s `next`.
+3.  **Delete from Beginning**: Point `head` to `head.next`.
+4.  **Delete from End**: Traverse to the second-to-last node and set its `next` to `null`.
+5.  **Delete at Position**: Traverse to `position - 1` and update its `next` to `temp.next.next`.
+
+### Code
+```java
+class Node {
+    int data;
+    Node next;
+    Node(int data) { this.data = data; this.next = null; }
+}
+
+public class SinglyLinkedListOperations {
+    private Node head;
+
+    public void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    public void insertAtPosition(int data, int position) {
+        if (position == 1) { insertAtBeginning(data); return; }
+        Node newNode = new Node(data);
+        Node temp = head;
+        for (int i = 1; i < position - 1 && temp != null; i++) temp = temp.next;
+        if (temp != null) { newNode.next = temp.next; temp.next = newNode; }
+    }
+
+    public void deleteFromBeginning() {
+        if (head != null) head = head.next;
+    }
+
+    public void deleteFromEnd() {
+        if (head == null || head.next == null) { head = null; return; }
+        Node temp = head;
+        while (temp.next.next != null) temp = temp.next;
+        temp.next = null;
+    }
+
+    public void deleteAtPosition(int position) {
+        if (position == 1) { deleteFromBeginning(); return; }
+        Node temp = head;
+        for (int i = 1; i < position - 1 && temp != null; i++) temp = temp.next;
+        if (temp != null && temp.next != null) temp.next = temp.next.next;
+    }
+}
+```
+
+### Dry Run
+**Operations**: InsertBeginning(10), InsertBeginning(20), InsertAtPosition(15, 2), DeleteFromEnd()
+1.  **InsertBeginning(10)**: `head` -> `[10|null]`.
+2.  **InsertBeginning(20)**: `newNode(20).next` = `head(10)`. `head` -> `[20] -> [10|null]`.
+3.  **InsertAtPosition(15, 2)**: `temp` stops at position 1 (`node 20`). `newNode(15).next` = `temp.next(10)`. `temp.next` = `newNode(15)`. List: `[20] -> [15] -> [10|null]`.
+4.  **DeleteFromEnd()**: `temp` stops at `node 15`. `temp.next` = `null`. List: `[20] -> [15|null]`.
+5.  **Result**: `20 -> 15 -> null`.
+
+
+
 
 

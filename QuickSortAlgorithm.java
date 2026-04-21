@@ -127,4 +127,8 @@ public class QuickSortAlgorithm implements Runnable {
             formatter.close();
         }
     }
+
+    public static void main(String[] args) {
+        new QuickSortAlgorithm().run();
+    }
 }

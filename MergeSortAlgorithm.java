@@ -144,4 +144,8 @@ public class MergeSortAlgorithm implements Runnable {
             formatter.close();
         }
     }
+
+    public static void main(String[] args) {
+        new MergeSortAlgorithm().run();
+    }
 }
