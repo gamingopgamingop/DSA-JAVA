@@ -134,16 +134,16 @@ public class QueueUsingArray_Test {
         int front = -1, rear = -1;
         
         // Test insertion
-        boolean insert1 = enqueue(queue, &front, &rear, 10);
-        boolean insert2 = enqueue(queue, &front, &rear, 20);
-        boolean insert3 = enqueue(queue, &front, &rear, 30);
+        boolean insert1 = enqueue(queue, front, rear, 10);
+        boolean insert2 = enqueue(queue, front, rear, 20);
+        boolean insert3 = enqueue(queue, front, rear, 30);
         
         // Test peek (front element)
         int peekResult = peek(queue, front);
         boolean peekSuccess = peekResult == 10;
         
         // Test deletion
-        int deleteResult = dequeue(queue, &front, rear);
+        int deleteResult = dequeue(queue, front, rear);
         boolean deleteSuccess = deleteResult == 10;
         
         // Test new front after deletion
@@ -177,16 +177,16 @@ public class QueueUsingArray_Test {
         int emptyFront = -1, emptyRear = -1;
         
         int emptyPeek = peek(emptyQueue, emptyFront);
-        int emptyDelete = dequeue(emptyQueue, &emptyFront, emptyRear);
+        int emptyDelete = dequeue(emptyQueue, emptyFront, emptyRear);
         boolean emptyIsEmpty = isEmpty(emptyFront);
         
         // Test single element operations
         int[] singleQueue = new int[10];
         int singleFront = -1, singleRear = -1;
         
-        enqueue(singleQueue, &singleFront, &singleRear, 100);
+        enqueue(singleQueue, singleFront, singleRear, 100);
         int singlePeek = peek(singleQueue, singleFront);
-        int singleDelete = dequeue(singleQueue, &singleFront, singleRear);
+        int singleDelete = dequeue(singleQueue, singleFront, singleRear);
         boolean singleIsEmptyAfter = isEmpty(singleFront);
         
         // Test queue wraparound (circular behavior)
@@ -195,25 +195,25 @@ public class QueueUsingArray_Test {
         
         // Fill queue to capacity
         for (int i = 0; i < 5; i++) {
-            enqueue(circularQueue, &circularFront, &circularRear, i + 1);
+            enqueue(circularQueue, circularFront, circularRear, i + 1);
         }
         
         // Remove some elements
-        dequeue(circularQueue, &circularFront, circularRear);
-        dequeue(circularQueue, &circularFront, circularRear);
+        dequeue(circularQueue, circularFront, circularRear);
+        dequeue(circularQueue, circularFront, circularRear);
         
         // Add more elements to test wraparound
-        boolean wrapInsert1 = enqueue(circularQueue, &circularFront, &circularRear, 6);
-        boolean wrapInsert2 = enqueue(circularQueue, &circularFront, &circularRear, 7);
+        boolean wrapInsert1 = enqueue(circularQueue, circularFront, circularRear, 6);
+        boolean wrapInsert2 = enqueue(circularQueue, circularFront, circularRear, 7);
         
         // Test full queue
         int[] fullQueue = new int[3];
         int fullFront = -1, fullRear = -1;
         
-        boolean fullInsert1 = enqueue(fullQueue, &fullFront, &fullRear, 1);
-        boolean fullInsert2 = enqueue(fullQueue, &fullFront, &fullRear, 2);
-        boolean fullInsert3 = enqueue(fullQueue, &fullFront, &fullRear, 3);
-        boolean fullInsert4 = enqueue(fullQueue, &fullFront, &fullRear, 4); // Should fail
+        boolean fullInsert1 = enqueue(fullQueue, fullFront, fullRear, 1);
+        boolean fullInsert2 = enqueue(fullQueue, fullFront, fullRear, 2);
+        boolean fullInsert3 = enqueue(fullQueue, fullFront, fullRear, 3);
+        boolean fullInsert4 = enqueue(fullQueue, fullFront, fullRear, 4); // Should fail
         
         writer.printf("Edge Case Tests:%n");
         writer.printf("  Empty queue peek: %d (Expected: -1)%n", emptyPeek);
@@ -245,7 +245,7 @@ public class QueueUsingArray_Test {
             // Test insert performance
             long insertStart = System.nanoTime();
             for (int i = 0; i < size; i++) {
-                enqueue(queue, &front, &rear, i);
+                enqueue(queue, front, rear, i);
             }
             long insertEnd = System.nanoTime();
             long insertTime = insertEnd - insertStart;
@@ -253,7 +253,7 @@ public class QueueUsingArray_Test {
             // Test delete performance
             long deleteStart = System.nanoTime();
             for (int i = 0; i < size; i++) {
-                dequeue(queue, &front, rear);
+                dequeue(queue, front, rear);
             }
             long deleteEnd = System.nanoTime();
             long deleteTime = deleteEnd - deleteStart;
@@ -261,7 +261,7 @@ public class QueueUsingArray_Test {
             // Test peek performance
             // Refill queue for peek test
             for (int i = 0; i < size; i++) {
-                enqueue(queue, &front, &rear, i);
+                enqueue(queue, front, rear, i);
             }
             
             long peekStart = System.nanoTime();
@@ -296,13 +296,13 @@ public class QueueUsingArray_Test {
         int[] fifoQueue = new int[10];
         int fifoFront = -1, fifoRear = -1;
         
-        enqueue(fifoQueue, &fifoFront, &fifoRear, 10);
-        enqueue(fifoQueue, &fifoFront, &fifoRear, 20);
-        enqueue(fifoQueue, &fifoFront, &fifoRear, 30);
+        enqueue(fifoQueue, fifoFront, fifoRear, 10);
+        enqueue(fifoQueue, fifoFront, fifoRear, 20);
+        enqueue(fifoQueue, fifoFront, fifoRear, 30);
         
-        int delete1 = dequeue(fifoQueue, &fifoFront, fifoRear);
-        int delete2 = dequeue(fifoQueue, &fifoFront, fifoRear);
-        int delete3 = dequeue(fifoQueue, &fifoFront, fifoRear);
+        int delete1 = dequeue(fifoQueue, fifoFront, fifoRear);
+        int delete2 = dequeue(fifoQueue, fifoFront, fifoRear);
+        int delete3 = dequeue(fifoQueue, fifoFront, fifoRear);
         
         boolean fifoProperty = (delete1 == 10) && (delete2 == 20) && (delete3 == 30);
         
@@ -312,21 +312,21 @@ public class QueueUsingArray_Test {
         
         // Fill and partially empty to test circular behavior
         for (int i = 0; i < 5; i++) {
-            enqueue(circularQueue, &circularFront, &circularRear, i + 1);
+            enqueue(circularQueue, circularFront, circularRear, i + 1);
         }
         
         // Remove first two elements
-        dequeue(circularQueue, &circularFront, circularRear);
-        dequeue(circularQueue, &circularFront, circularRear);
+        dequeue(circularQueue, circularFront, circularRear);
+        dequeue(circularQueue, circularFront, circularRear);
         
         // Add two more elements
-        enqueue(circularQueue, &circularFront, &circularRear, 6);
-        enqueue(circularQueue, &circularFront, &circularRear, 7);
+        enqueue(circularQueue, circularFront, circularRear, 6);
+        enqueue(circularQueue, circularFront, circularRear, 7);
         
         // Check if elements are in correct order
-        int circularDelete1 = dequeue(circularQueue, &circularFront, circularRear);
-        int circularDelete2 = dequeue(circularQueue, &circularFront, circularRear);
-        int circularDelete3 = dequeue(circularQueue, &circularFront, circularRear);
+        int circularDelete1 = dequeue(circularQueue, circularFront, circularRear);
+        int circularDelete2 = dequeue(circularQueue, circularFront, circularRear);
+        int circularDelete3 = dequeue(circularQueue, circularFront, circularRear);
         
         boolean circularProperty = (circularDelete1 == 3) && (circularDelete2 == 4) && (circularDelete3 == 5);
         
@@ -336,12 +336,12 @@ public class QueueUsingArray_Test {
         List<Integer> original = Arrays.asList(50, 20, 40, 10, 30);
         
         for (int val : original) {
-            enqueue(completeQueue, &completeFront, &completeRear, val);
+            enqueue(completeQueue, completeFront, completeRear, val);
         }
         
         List<Integer> extracted = new ArrayList<>();
         while (!isEmpty(completeFront)) {
-            extracted.add(dequeue(completeQueue, &completeFront, completeRear));
+            extracted.add(dequeue(completeQueue, completeFront, completeRear));
         }
         
         boolean completeness = extracted.containsAll(original) && original.containsAll(extracted);
@@ -364,22 +364,22 @@ public class QueueUsingArray_Test {
         
         long insertStart = System.nanoTime();
         for (int i = 0; i < largeSize; i++) {
-            enqueue(largeQueue, &front, &rear, i);
+            enqueue(largeQueue, front, rear, i);
         }
         long insertEnd = System.nanoTime();
         long insertDuration = insertEnd - insertStart;
         
         // Test FIFO ordering for first few elements
-        int delete1 = dequeue(largeQueue, &front, rear);
-        int delete2 = dequeue(largeQueue, &front, rear);
-        int delete3 = dequeue(largeQueue, &front, rear);
+        int delete1 = dequeue(largeQueue, front, rear);
+        int delete2 = dequeue(largeQueue, front, rear);
+        int delete3 = dequeue(largeQueue, front, rear);
         
         boolean fifoOrdering = (delete1 == 0) && (delete2 == 1) && (delete3 == 2);
         
         // Test delete performance on remaining elements
         long deleteStart = System.nanoTime();
         for (int i = 3; i < largeSize; i++) {
-            dequeue(largeQueue, &front, rear);
+            dequeue(largeQueue, front, rear);
         }
         long deleteEnd = System.nanoTime();
         long deleteDuration = deleteEnd - deleteStart;
@@ -413,7 +413,7 @@ public class QueueUsingArray_Test {
             
             // Fill the queue
             for (int i = 0; i < size; i++) {
-                enqueue(queue, &front, &rear, i);
+                enqueue(queue, front, rear, i);
             }
             
             // Calculate memory usage
@@ -445,7 +445,7 @@ public class QueueUsingArray_Test {
         
         long bulkInsertStart = System.nanoTime();
         for (int i = 0; i < 50; i++) {
-            enqueue(bulkQueue, &bulkFront, &bulkRear, i * 2);
+            enqueue(bulkQueue, bulkFront, bulkRear, i * 2);
         }
         long bulkInsertEnd = System.nanoTime();
         long bulkInsertTime = bulkInsertEnd - bulkInsertStart;
@@ -454,7 +454,7 @@ public class QueueUsingArray_Test {
         List<Integer> extracted = new ArrayList<>();
         long bulkDeleteStart = System.nanoTime();
         for (int i = 0; i < 25; i++) {
-            extracted.add(dequeue(bulkQueue, &bulkFront, bulkRear));
+            extracted.add(dequeue(bulkQueue, bulkFront, bulkRear));
         }
         long bulkDeleteEnd = System.nanoTime();
         long bulkDeleteTime = bulkDeleteEnd - bulkDeleteStart;
@@ -465,23 +465,23 @@ public class QueueUsingArray_Test {
         
         // Fill to capacity
         for (int i = 0; i < 10; i++) {
-            enqueue(wrapQueue, &wrapFront, &wrapRear, i + 1);
+            enqueue(wrapQueue, wrapFront, wrapRear, i + 1);
         }
         
         // Remove half
         for (int i = 0; i < 5; i++) {
-            dequeue(wrapQueue, &wrapFront, wrapRear);
+            dequeue(wrapQueue, wrapFront, wrapRear);
         }
         
         // Add more to test wraparound
         for (int i = 0; i < 5; i++) {
-            enqueue(wrapQueue, &wrapFront, &wrapRear, i + 11);
+            enqueue(wrapQueue, wrapFront, wrapRear, i + 11);
         }
         
         // Verify wraparound worked correctly
         boolean wraparoundSuccess = true;
         for (int i = 0; i < 5; i++) {
-            int deleted = dequeue(wrapQueue, &wrapFront, wrapRear);
+            int deleted = dequeue(wrapQueue, wrapFront, wrapRear);
             if (deleted != i + 6) {
                 wraparoundSuccess = false;
                 break;
@@ -493,13 +493,13 @@ public class QueueUsingArray_Test {
         int mixedFront = -1, mixedRear = -1;
         
         for (int i = 0; i < 10; i++) {
-            enqueue(mixedQueue, &mixedFront, &mixedRear, i);
+            enqueue(mixedQueue, mixedFront, mixedRear, i);
         }
         for (int i = 0; i < 5; i++) {
-            dequeue(mixedQueue, &mixedFront, mixedRear);
+            dequeue(mixedQueue, mixedFront, mixedRear);
         }
         for (int i = 0; i < 5; i++) {
-            enqueue(mixedQueue, &mixedFront, &mixedRear, i + 10);
+            enqueue(mixedQueue, mixedFront, mixedRear, i + 10);
         }
         
         boolean mixedSuccess = !isEmpty(mixedFront);
@@ -521,9 +521,9 @@ public class QueueUsingArray_Test {
         int[] positiveQueue = new int[10];
         int positiveFront = -1, positiveRear = -1;
         
-        enqueue(positiveQueue, &positiveFront, &positiveRear, 10);
-        enqueue(positiveQueue, &positiveFront, &positiveRear, 20);
-        enqueue(positiveQueue, &positiveFront, &positiveRear, 5);
+        enqueue(positiveQueue, positiveFront, positiveRear, 10);
+        enqueue(positiveQueue, positiveFront, positiveRear, 20);
+        enqueue(positiveQueue, positiveFront, positiveRear, 5);
         int positivePeek = peek(positiveQueue, positiveFront);
         boolean positiveSuccess = positivePeek == 5;
         
@@ -531,9 +531,9 @@ public class QueueUsingArray_Test {
         int[] negativeQueue = new int[10];
         int negativeFront = -1, negativeRear = -1;
         
-        enqueue(negativeQueue, &negativeFront, &negativeRear, -10);
-        enqueue(negativeQueue, &negativeFront, &negativeRear, -20);
-        enqueue(negativeQueue, &negativeFront, &negativeRear, -5);
+        enqueue(negativeQueue, negativeFront, negativeRear, -10);
+        enqueue(negativeQueue, negativeFront, negativeRear, -20);
+        enqueue(negativeQueue, negativeFront, negativeRear, -5);
         int negativePeek = peek(negativeQueue, negativeFront);
         boolean negativeSuccess = negativePeek == -20;
         
@@ -541,11 +541,11 @@ public class QueueUsingArray_Test {
         int[] mixedQueue = new int[10];
         int mixedFront = -1, mixedRear = -1;
         
-        enqueue(mixedQueue, &mixedFront, &mixedRear, 10);
-        enqueue(mixedQueue, &mixedFront, &mixedRear, -5);
-        enqueue(mixedQueue, &mixedFront, &mixedRear, 0);
-        enqueue(mixedQueue, &mixedFront, &mixedRear, 15);
-        enqueue(mixedQueue, &mixedFront, &mixedRear, -10);
+        enqueue(mixedQueue, mixedFront, mixedRear, 10);
+        enqueue(mixedQueue, mixedFront, mixedRear, -5);
+        enqueue(mixedQueue, mixedFront, mixedRear, 0);
+        enqueue(mixedQueue, mixedFront, mixedRear, 15);
+        enqueue(mixedQueue, mixedFront, mixedRear, -10);
         int mixedPeek = peek(mixedQueue, mixedFront);
         boolean mixedSuccess = mixedPeek == 10; // First inserted
         
@@ -553,10 +553,10 @@ public class QueueUsingArray_Test {
         int[] zeroQueue = new int[10];
         int zeroFront = -1, zeroRear = -1;
         
-        enqueue(zeroQueue, &zeroFront, &zeroRear, 0);
-        enqueue(zeroQueue, &zeroFront, &zeroRear, 10);
-        enqueue(zeroQueue, &zeroFront, &zeroRear, -10);
-        enqueue(zeroQueue, &zeroFront, &zeroRear, 0);
+        enqueue(zeroQueue, zeroFront, zeroRear, 0);
+        enqueue(zeroQueue, zeroFront, zeroRear, 10);
+        enqueue(zeroQueue, zeroFront, zeroRear, -10);
+        enqueue(zeroQueue, zeroFront, zeroRear, 0);
         int zeroPeek = peek(zeroQueue, zeroFront);
         boolean zeroSuccess = zeroPeek == 0;
         
@@ -564,11 +564,11 @@ public class QueueUsingArray_Test {
         int[] largeQueue = new int[10];
         int largeFront = -1, largeRear = -1;
         
-        enqueue(largeQueue, &largeFront, &largeRear, Integer.MAX_VALUE);
-        enqueue(largeQueue, &largeFront, &largeRear, Integer.MIN_VALUE);
-        enqueue(largeQueue, &largeFront, &largeRear, 0);
-        enqueue(largeQueue, &largeFront, &largeRear, 1);
-        enqueue(largeQueue, &largeFront, &largeRear, -1);
+        enqueue(largeQueue, largeFront, largeRear, Integer.MAX_VALUE);
+        enqueue(largeQueue, largeFront, largeRear, Integer.MIN_VALUE);
+        enqueue(largeQueue, largeFront, largeRear, 0);
+        enqueue(largeQueue, largeFront, largeRear, 1);
+        enqueue(largeQueue, largeFront, largeRear, -1);
         int largePeek = peek(largeQueue, largeFront);
         boolean largeSuccess = largePeek == Integer.MAX_VALUE;
         
@@ -599,10 +599,10 @@ public class QueueUsingArray_Test {
         
         long arrayStart = System.nanoTime();
         for (int i = 0; i < testDataSize; i++) {
-            enqueue(arrayQueue, &arrayFront, &arrayRear, i);
+            enqueue(arrayQueue, arrayFront, arrayRear, i);
         }
         for (int i = 0; i < testDataSize; i++) {
-            dequeue(arrayQueue, &arrayFront, arrayRear);
+            dequeue(arrayQueue, arrayFront, arrayRear);
         }
         long arrayEnd = System.nanoTime();
         long arrayTime = arrayEnd - arrayStart;
@@ -648,12 +648,12 @@ public class QueueUsingArray_Test {
         int fifoFront = -1, fifoRear = -1;
         
         for (int i = 0; i < 5; i++) {
-            enqueue(fifoQueue, &fifoFront, &fifoRear, i + 1);
+            enqueue(fifoQueue, fifoFront, fifoRear, i + 1);
         }
         
         boolean fifoOrdering = true;
         for (int i = 1; i <= 5; i++) {
-            int deleted = dequeue(fifoQueue, &fifoFront, fifoRear);
+            int deleted = dequeue(fifoQueue, fifoFront, fifoRear);
             if (deleted != i) {
                 fifoOrdering = false;
                 break;
@@ -679,17 +679,17 @@ public class QueueUsingArray_Test {
         int emptyFront = -1, emptyRear = -1;
         
         int emptyPeek = peek(emptyQueue, emptyFront);
-        int emptyDelete = dequeue(emptyQueue, &emptyFront, emptyRear);
+        int emptyDelete = dequeue(emptyQueue, emptyFront, emptyRear);
         boolean emptyIsEmpty = isEmpty(emptyFront);
         
         // Test operations on full queue
         int[] fullQueue = new int[3];
         int fullFront = -1, fullRear = -1;
         
-        enqueue(fullQueue, &fullFront, &fullRear, 1);
-        enqueue(fullQueue, &fullFront, &fullRear, 2);
-        enqueue(fullQueue, &fullFront, &fullRear, 3);
-        boolean fullInsert = enqueue(fullQueue, &fullFront, &fullRear, 4); // Should fail
+        enqueue(fullQueue, fullFront, fullRear, 1);
+        enqueue(fullQueue, fullFront, fullRear, 2);
+        enqueue(fullQueue, fullFront, fullRear, 3);
+        boolean fullInsert = enqueue(fullQueue, fullFront, fullRear, 4); // Should fail
         
         // Test with invalid indices (simulated)
         int[] invalidQueue = new int[10];
@@ -704,7 +704,7 @@ public class QueueUsingArray_Test {
             int largeFront = -1, largeRear = -1;
             
             for (int i = 0; i < 1000; i++) {
-                enqueue(largeQueue, &largeFront, &largeRear, i);
+                enqueue(largeQueue, largeFront, largeRear, i);
             }
             boolean largeTest = !isEmpty(largeFront);
             writer.printf("Large queue test: %s (Expected: true)%n", largeTest);
@@ -717,9 +717,9 @@ public class QueueUsingArray_Test {
             int[] overflowQueue = new int[10];
             int overflowFront = -1, overflowRear = -1;
             
-            enqueue(overflowQueue, &overflowFront, &overflowRear, Integer.MAX_VALUE);
-            enqueue(overflowQueue, &overflowFront, &overflowRear, Integer.MIN_VALUE);
-            enqueue(overflowQueue, &overflowFront, &overflowRear, 0);
+            enqueue(overflowQueue, overflowFront, overflowRear, Integer.MAX_VALUE);
+            enqueue(overflowQueue, overflowFront, overflowRear, Integer.MIN_VALUE);
+            enqueue(overflowQueue, overflowFront, overflowRear, 0);
             boolean overflowTest = true;
             writer.printf("Integer overflow test: %s (Expected: true)%n", overflowTest);
         } catch (Exception e) {
@@ -743,39 +743,39 @@ public class QueueUsingArray_Test {
         int[] singleQueue = new int[10];
         int singleFront = -1, singleRear = -1;
         
-        enqueue(singleQueue, &singleFront, &singleRear, 42);
+        enqueue(singleQueue, singleFront, singleRear, 42);
         int singlePeek = peek(singleQueue, singleFront);
-        int singleDelete = dequeue(singleQueue, &singleFront, singleRear);
+        int singleDelete = dequeue(singleQueue, singleFront, singleRear);
         boolean singleIsEmptyAfter = isEmpty(singleFront);
         
         // Test two element queue
         int[] twoQueue = new int[10];
         int twoFront = -1, twoRear = -1;
         
-        enqueue(twoQueue, &twoFront, &twoRear, 20);
-        enqueue(twoQueue, &twoFront, &twoRear, 10);
+        enqueue(twoQueue, twoFront, twoRear, 20);
+        enqueue(twoQueue, twoFront, twoRear, 10);
         int twoPeek = peek(twoQueue, twoFront);
-        int twoDelete = dequeue(twoQueue, &twoFront, twoRear);
+        int twoDelete = dequeue(twoQueue, twoFront, twoRear);
         int twoPeekAfter = peek(twoQueue, twoFront);
         
         // Test maximum capacity queue
         int[] maxQueue = new int[5];
         int maxFront = -1, maxRear = -1;
         
-        boolean maxInsert1 = enqueue(maxQueue, &maxFront, &maxRear, 1);
-        boolean maxInsert2 = enqueue(maxQueue, &maxFront, &maxRear, 2);
-        boolean maxInsert3 = enqueue(maxQueue, &maxFront, &maxRear, 3);
-        boolean maxInsert4 = enqueue(maxQueue, &maxFront, &maxRear, 4);
-        boolean maxInsert5 = enqueue(maxQueue, &maxFront, &maxRear, 5);
-        boolean maxInsert6 = enqueue(maxQueue, &maxFront, &maxRear, 6); // Should fail
+        boolean maxInsert1 = enqueue(maxQueue, maxFront, maxRear, 1);
+        boolean maxInsert2 = enqueue(maxQueue, maxFront, maxRear, 2);
+        boolean maxInsert3 = enqueue(maxQueue, maxFront, maxRear, 3);
+        boolean maxInsert4 = enqueue(maxQueue, maxFront, maxRear, 4);
+        boolean maxInsert5 = enqueue(maxQueue, maxFront, maxRear, 5);
+        boolean maxInsert6 = enqueue(maxQueue, maxFront, maxRear, 6); // Should fail
         
         // Test with boundary values
         int[] boundaryQueue = new int[10];
         int boundaryFront = -1, boundaryRear = -1;
         
-        enqueue(boundaryQueue, &boundaryFront, &boundaryRear, Integer.MAX_VALUE);
-        enqueue(boundaryQueue, &boundaryFront, &boundaryRear, Integer.MIN_VALUE);
-        enqueue(boundaryQueue, &boundaryFront, &boundaryRear, 0);
+        enqueue(boundaryQueue, boundaryFront, boundaryRear, Integer.MAX_VALUE);
+        enqueue(boundaryQueue, boundaryFront, boundaryRear, Integer.MIN_VALUE);
+        enqueue(boundaryQueue, boundaryFront, boundaryRear, 0);
         int boundaryPeek = peek(boundaryQueue, boundaryFront);
         
         // Test wraparound at boundary
@@ -783,13 +783,13 @@ public class QueueUsingArray_Test {
         int wrapFront = -1, wrapRear = -1;
         
         // Fill to capacity
-        enqueue(wrapBoundaryQueue, &wrapFront, &wrapRear, 1);
-        enqueue(wrapBoundaryQueue, &wrapFront, &wrapRear, 2);
-        enqueue(wrapBoundaryQueue, &wrapFront, &wrapRear, 3);
+        enqueue(wrapBoundaryQueue, wrapFront, wrapRear, 1);
+        enqueue(wrapBoundaryQueue, wrapFront, wrapRear, 2);
+        enqueue(wrapBoundaryQueue, wrapFront, wrapRear, 3);
         
         // Remove one and add one to test wraparound
-        dequeue(wrapBoundaryQueue, &wrapFront, wrapRear);
-        boolean wrapInsert = enqueue(wrapBoundaryQueue, &wrapFront, &wrapRear, 4);
+        dequeue(wrapBoundaryQueue, wrapFront, wrapRear);
+        boolean wrapInsert = enqueue(wrapBoundaryQueue, wrapFront, wrapRear, 4);
         
         writer.printf("Boundary conditions test:%n");
         writer.printf("  Single element peek: %d (Expected: 42)%n", singlePeek);
@@ -821,10 +821,10 @@ public class QueueUsingArray_Test {
             
             long arrayStart = System.nanoTime();
             for (int i = 0; i < size; i++) {
-                enqueue(arrayQueue, &arrayFront, &arrayRear, i);
+                enqueue(arrayQueue, arrayFront, arrayRear, i);
             }
             for (int i = 0; i < size; i++) {
-                dequeue(arrayQueue, &arrayFront, arrayRear);
+                dequeue(arrayQueue, arrayFront, arrayRear);
             }
             long arrayEnd = System.nanoTime();
             long arrayTime = arrayEnd - arrayStart;
@@ -881,31 +881,31 @@ public class QueueUsingArray_Test {
     /**
      * Helper methods for queue operations
      */
-    private static boolean enqueue(int[] queue, int* front, int* rear, int item) {
-        if ((*(rear) + 1) % queue.length == *front) {
+    private static boolean enqueue(int[] queue, int front, int rear, int item) {
+        if ((rear + 1) % queue.length == front) {
             return false; // Queue is full
         }
         
-        if (*front == -1) {
-            *front = 0;
+        if (front == -1) {
+            front = 0;
         }
         
-        *rear = (*(rear) + 1) % queue.length;
-        queue[*rear] = item;
+        rear = (rear + 1) % queue.length;
+        queue[rear] = item;
         return true;
     }
     
-    private static int dequeue(int[] queue, int* front, int rear) {
-        if (*front == -1) {
+    private static int dequeue(int[] queue, int front, int rear) {
+        if (front == -1) {
             return -1; // Queue is empty
         }
         
-        int item = queue[*front];
+        int item = queue[front];
         
-        if (*front == rear) {
-            *front = -1;
+        if (front == rear) {
+            front = -1;
         } else {
-            *front = (*front + 1) % queue.length;
+            front = (front + 1) % queue.length;
         }
         
         return item;
@@ -970,10 +970,10 @@ class QueueUsingArrayPerformanceComparison {
             
             long arrayStart = System.nanoTime();
             for (int i = 0; i < size; i++) {
-                new QueueUsingArray_Test().enqueue(arrayQueue, &arrayFront, &arrayRear, i);
+                new QueueUsingArray_Test().enqueue(arrayQueue, arrayFront, arrayRear, i);
             }
             for (int i = 0; i < size; i++) {
-                new QueueUsingArray_Test().dequeue(arrayQueue, &arrayFront, arrayRear);
+                new QueueUsingArray_Test().dequeue(arrayQueue, arrayFront, arrayRear);
             }
             long arrayEnd = System.nanoTime();
             long arrayTime = arrayEnd - arrayStart;

@@ -288,7 +288,7 @@ public class Traversal_Test {
         long bstBFSStart = System.nanoTime();
         levelOrderTraversal(bst, bstBFS::add);
         long bstBFSEnd = System.nanoTime();
-        // long bstBFSTime = bstBFSE - bstBFSStart;
+        // long bstBFSTime = bstBFSEnd - bstBFSStart;
         long bstBFSTime = bstBFSEnd - bstBFSStart;
         
         writer.printf("Different Data Structures Test:%n");
