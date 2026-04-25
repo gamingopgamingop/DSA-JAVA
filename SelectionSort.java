@@ -39,6 +39,27 @@ import java.awt.print.PrinterJob;
 import java.awt.print.PageFormat;
 import java.awt.print.Book;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.IntUnaryOperator;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntPredicate;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
+import java.util.function.DoubleFunction;
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoublePredicate;
+import java.util.function.DoubleConsumer;
+import java.util.function.DoubleFunction;
+import java.util.function.LongFunction;
+import java.util.function.LongUnaryOperator;
+import java.util.function.LongBinaryOperator;
+import java.io.StreamTokenizer;
+
 /**
  * SelectionSort - A program to sort an array using Selection Sort algorithm.
  * 
