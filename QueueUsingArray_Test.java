@@ -134,24 +134,28 @@ public class QueueUsingArray_Test {
         int front = -1, rear = -1;
         
         // Test insertion
-        boolean insert1 = enqueue(queue, front, rear, 10);
-        boolean insert2 = enqueue(queue, front, rear, 20);
-        boolean insert3 = enqueue(queue, front, rear, 30);
+        QueueResult result1 = enqueue(queue, front, rear, 10);
+        front = result1.front; rear = result1.rear;
+        QueueResult result2 = enqueue(queue, front, rear, 20);
+        front = result2.front; rear = result2.rear;
+        QueueResult result3 = enqueue(queue, front, rear, 30);
+        front = result3.front; rear = result3.rear;
         
         // Test peek (front element)
         int peekResult = peek(queue, front);
         boolean peekSuccess = peekResult == 10;
         
         // Test deletion
-        int deleteResult = dequeue(queue, front, rear);
-        boolean deleteSuccess = deleteResult == 10;
+        QueueResult deleteResult = dequeue(queue, front, rear);
+        front = deleteResult.front; rear = deleteResult.rear;
+        boolean deleteSuccess = deleteResult.value == 10;
         
         // Test new front after deletion
         int newPeekResult = peek(queue, front);
         boolean newPeekSuccess = newPeekResult == 20;
         
         // Test queue size
-        int size = getQueueSize(front, rear);
+        int size = getQueueSize(front, rear, queue.length);
         boolean sizeSuccess = size == 2;
         
         writer.printf("Basic Functionality Test:%n");
@@ -879,57 +883,124 @@ public class QueueUsingArray_Test {
     }
     
     /**
+     * Helper class to hold queue pointers (simulates pass-by-reference)
+     */
+    private static class QueuePointers {
+        int front;
+        int rear;
+        
+        QueuePointers() {
+            this.front = -1;
+            this.rear = -1;
+        }
+    }
+    
+    /**
      * Helper methods for queue operations
      */
-    private static boolean enqueue(int[] queue, int front, int rear, int item) {
-        if ((rear + 1) % queue.length == front) {
+    private static boolean enqueue(int[] queue, QueuePointers ptr, int item) {
+        if ((ptr.rear + 1) % queue.length == ptr.front) {
             return false; // Queue is full
         }
         
-        if (front == -1) {
-            front = 0;
+        if (ptr.front == -1) {
+            ptr.front = 0;
         }
         
-        rear = (rear + 1) % queue.length;
-        queue[rear] = item;
+        ptr.rear = (ptr.rear + 1) % queue.length;
+        queue[ptr.rear] = item;
         return true;
     }
     
-    private static int dequeue(int[] queue, int front, int rear) {
-        if (front == -1) {
+    private static int dequeue(int[] queue, QueuePointers ptr) {
+        if (ptr.front == -1) {
             return -1; // Queue is empty
         }
         
-        int item = queue[front];
+        int item = queue[ptr.front];
         
-        if (front == rear) {
-            front = -1;
+        if (ptr.front == ptr.rear) {
+            ptr.front = -1;
+            ptr.rear = -1;
         } else {
-            front = (front + 1) % queue.length;
+            ptr.front = (ptr.front + 1) % queue.length;
         }
         
         return item;
     }
     
-    private static int peek(int[] queue, int front) {
+    // Helper class to return updated front and rear values
+    private static class QueueResult {
+        boolean success;
+        int front;
+        int rear;
+        int value;
+        
+        QueueResult(boolean success, int front, int rear, int value) {
+            this.success = success;
+            this.front = front;
+            this.rear = rear;
+            this.value = value;
+        }
+    }
+    
+    // Overloaded methods for backward compatibility with existing calls
+    public static QueueResult enqueue(int[] queue, int front, int rear, int item) {
+        if ((rear + 1) % queue.length == front) {
+            return new QueueResult(false, front, rear, -1); // Queue is full
+        }
+        
+        int newFront = front;
+        int newRear = rear;
+        
+        if (newFront == -1) {
+            newFront = 0;
+        }
+        
+        newRear = (newRear + 1) % queue.length;
+        queue[newRear] = item;
+        
+        return new QueueResult(true, newFront, newRear, -1);
+    }
+    
+    public static QueueResult dequeue(int[] queue, int front, int rear) {
+        if (front == -1) {
+            return new QueueResult(false, front, rear, -1); // Queue is empty
+        }
+        
+        int item = queue[front];
+        int newFront = front;
+        int newRear = rear;
+        
+        if (newFront == newRear) {
+            newFront = -1;
+            newRear = -1;
+        } else {
+            newFront = (newFront + 1) % queue.length;
+        }
+        
+        return new QueueResult(true, newFront, newRear, item);
+    }
+    
+    public static int peek(int[] queue, int front) {
         if (front == -1) {
             return -1; // Queue is empty
         }
         return queue[front];
     }
     
-    private static boolean isEmpty(int front) {
+    public static boolean isEmpty(int front) {
         return front == -1;
     }
     
-    private static int getQueueSize(int front, int rear) {
+    private static int getQueueSize(int front, int rear, int queueLength) {
         if (front == -1) {
             return 0;
         }
         if (rear >= front) {
             return rear - front + 1;
         } else {
-            return (rear + 1) + (queue.length - front);
+            return (rear + 1) + (queueLength - front);
         }
     }
     
