@@ -100,15 +100,15 @@ public class QuickSortAlgorithm implements Runnable {
      * @param high The ending index of the subarray.
      * @param recursionStack A stack to track recursion depth (for demonstration).
      */
-    public static void quickSort(int[] arr, int low, int high, Stack<Integer> recursionStack) {
-        if (low < high) {
-            recursionStack.push(low); // Track recursion for demonstration
-            int pi = partition(arr, low, high);
-            quickSort(arr, low, pi - 1, recursionStack);
-            quickSort(arr, pi + 1, high, recursionStack);
-            recursionStack.pop();
-        }
-    }
+    // public static void quickSort(int[] arr, int low, int high, Stack<Integer> recursionStack) {
+    //     if (low < high) {
+    //         recursionStack.push(low); // Track recursion for demonstration
+    //         int pi = partition(arr, low, high);
+    //         quickSort(arr, low, pi - 1, recursionStack);
+    //         quickSort(arr, pi + 1, high, recursionStack);
+    //         recursionStack.pop();
+    //     }
+    // }
     
     public void quickSort(int[] arr, int low, int high, Stack<Integer> recursionStack) {
         if (low < high) {
