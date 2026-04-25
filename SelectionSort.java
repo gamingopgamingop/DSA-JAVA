@@ -49,15 +49,16 @@ import java.util.function.IntBinaryOperator;
 import java.util.function.IntPredicate;
 import java.util.function.IntConsumer;
 import java.util.function.IntFunction;
-import java.util.function.DoubleFunction;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoublePredicate;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleFunction;
 import java.util.function.LongFunction;
+import java.util.function.LongFunction;
 import java.util.function.LongUnaryOperator;
-import java.util.function.LongBinaryOperator;
+import java.util.function.LongPredicate;
+import java.util.function.LongConsumer;
 import java.io.StreamTokenizer;
 
 /**
@@ -313,7 +314,7 @@ public class SelectionSort {
             summaryFormatter.format("  - MessageFormat (Template)%n");
             summaryFormatter.format("  - DecimalFormat (Numbers)%n");
             summaryFormatter.format("  - SimpleDateFormat (Date/Time)%n");
-            summaryFormatter.format("  - String formatting (%, %s, %d)%n");
+            summaryFormatter.format("  - String formatting (%%, %%s, %%d)%n");
             summaryFormatter.format("=".repeat(60) + "%n");
             System.out.println(summaryFormatter.toString());
             summaryFormatter.close();
