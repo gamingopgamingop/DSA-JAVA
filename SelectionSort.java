@@ -110,7 +110,17 @@ public class SelectionSort {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
-            // Read array size
+        // Input validation for positive integers
+        if (value <= 0) {
+                    throw new InputMismatchException("Array elements must be positive integers");
+                }
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input: " + e.getMessage());
+            scanner.nextLine(); // Clear invalid input
+            return;
+        }
+                            // Read array size
             System.out.print("Enter the number of elements: ");
             int size = scanner.nextInt();
 
