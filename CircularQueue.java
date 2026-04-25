@@ -85,6 +85,24 @@ public class CircularQueue {
         front = -1;
         rear = -1;
     }
+    
+    /**
+     * Gets the capacity of the circular queue.
+     * 
+     * @return The maximum number of elements the queue can hold.
+     */
+    public int getCapacity() {
+        return capacity;
+    }
+    
+    /**
+     * Gets the capacity of the circular queue (alias for getCapacity()).
+     * 
+     * @return The maximum number of elements the queue can hold.
+     */
+    public int capacity() {
+        return capacity;
+    }
 
     /**
      * Inserts an element into the circular queue.

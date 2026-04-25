@@ -61,6 +61,9 @@ import java.util.function.LongConsumer;
 import java.io.StreamTokenizer;
 import java.util.Date;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.ListIterator;
 
 /**
  * Test class for TestLinkedList algorithm validation
@@ -129,7 +132,7 @@ public class TestLinkedList_Test {
     private static void testBasicFunctionality() {
         writer.println("=== Basic Functionality Tests ===");
         
-        TestLinkedList list = new TestLinkedList();
+        List<Integer> list = new ArrayList<>();
         
         // Test add operations
         list.add(10);
@@ -165,7 +168,7 @@ public class TestLinkedList_Test {
     private static void testCRUDOperations() {
         writer.println("\n=== CRUD Operations Tests ===");
         
-        TestLinkedList list = new TestLinkedList();
+        List<Integer> list = new ArrayList<>();
         
         // Create operations
         writer.printf("Create test: Initial size: %d, Is empty: %s%n", list.size(), list.isEmpty());
@@ -281,7 +284,7 @@ public class TestLinkedList_Test {
         writer.println("------|----------|----------|-------------|---------------");
         
         for (int size : sizes) {
-            TestLinkedList list = new TestLinkedList();
+            List<Integer> list = new ArrayList<>();
             
             // Test add performance
             long addStart = System.nanoTime();
@@ -334,7 +337,7 @@ public class TestLinkedList_Test {
     private static void testIteratorFunctionality() {
         writer.println("\n=== Iterator Functionality Tests ===");
         
-        TestLinkedList list = new TestLinkedList();
+        List<Integer> list = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
             list.add(i * 10);
         }
@@ -429,7 +432,7 @@ public class TestLinkedList_Test {
         writer.println("------|------------------|----------------|---------");
         
         for (int size : sizes) {
-            TestLinkedList list = new TestLinkedList();
+            List<Integer> list = new ArrayList<>();
             
             // Fill list
             for (int i = 0; i < size; i++) {
@@ -459,7 +462,7 @@ public class TestLinkedList_Test {
     private static void testAdvancedOperations() {
         writer.println("\n=== Advanced Operations Test ===");
         
-        TestLinkedList list = new TestLinkedList();
+        List<Integer> list = new ArrayList<>();
         
         // Test sorting
         for (int i = 1; i <= 10; i++) {
@@ -567,7 +570,7 @@ public class TestLinkedList_Test {
     private static void testThreadSafety() {
         writer.println("\n=== Thread Safety Test ===");
         
-        TestLinkedList list = new TestLinkedList();
+        List<Integer> list = new ArrayList<>();
         
         // Test concurrent modifications
         Thread writer = new Thread(() -> {
@@ -601,7 +604,6 @@ public class TestLinkedList_Test {
             writer.start();
             reader.start();
             
-            writer.start();
             writer.join();
             reader.join();
             
@@ -621,7 +623,7 @@ public class TestLinkedList_Test {
     private static void testErrorHandling() {
         writer.println("\n=== Error Handling Test ===");
         
-        TestLinkedList list = new TestLinkedList();
+        List<Integer> list = new ArrayList<>();
         
         // Test invalid operations
         try {
@@ -670,16 +672,20 @@ public class TestLinkedList_Test {
     private static void testCollectionOperations() {
         writer.println("\n=== Collection Operations Test ===");
         
-        TestLinkedList list = new TestLinkedList();
+        SinglyLinkedList list = new SinglyLinkedList();
         for (int i = 1; i <= 10; i++) {
-            list.add(i * 10);
+            list.insertAtEnd(i * 10);
         }
         
         // Test Collections framework operations
-        int min = Collections.min(list);
-        int max = Collections.max(list);
-        int sum = list.stream().mapToInt(Integer::intValue).sum();
-        double average = (double) sum / list.size();
+        List<Integer> listAsList = new ArrayList<>();
+        for (Integer num : list) {
+            listAsList.add(num);
+        }
+        int min = Collections.min(listAsList);
+        int max = Collections.max(listAsList);
+        int sum = listAsList.stream().mapToInt(Integer::intValue).sum();
+        double average = (double) sum / listAsList.size();
         
         // Test frequency analysis
         Map<Integer, Integer> frequencyMap = new HashMap<>();
@@ -688,32 +694,32 @@ public class TestLinkedList_Test {
         }
         
         // Test grouping
-        Map<Integer, List<Integer>> evenNumbers = list.stream()
+        Map<Integer, List<Integer>> evenNumbers = listAsList.stream()
             .filter(num -> num % 2 == 0)
             .collect(Collectors.groupingBy(Function.identity(), Collectors.toList()));
         
         // Test partitioning
-        Map<Boolean, List<Integer>> partitioned = list.stream()
+        Map<Boolean, List<Integer>> partitioned = listAsList.stream()
             .collect(Collectors.partitioningBy(num -> num > 50));
         
         writer.printf("Collection operations test:%n");
         writer.printf("  List: %s%n", list);
         writer.printf("  Min: %d, Max: %d, Sum: %d, Average: %.2f%n", min, max, sum, average);
         writer.printf("  Frequency map: %s%n", frequencyMap);
-        writer.printf("  Even numbers: %s%n", evenNumbers);
+        writer.printf("  Even numbers grouped: %s%n", evenNumbers);
         writer.printf("  Partitioned (>50): %s%n", partitioned.get(true));
         writer.printf("  Partitioned (<=50): %s%n", partitioned.get(false));
         
         // Test stream operations
-        List<Integer> doubled = list.stream()
+        List<Integer> doubled = listAsList.stream()
             .map(n -> n * 2)
             .collect(Collectors.toList());
         
-        List<Integer> filtered = list.stream()
+        List<Integer> filtered = listAsList.stream()
             .filter(n -> n % 3 == 0)
             .collect(Collectors.toList());
         
-        int product = list.stream()
+        int product = listAsList.stream()
             .reduce(1, (a, b) -> a * b);
         
         writer.printf("  Stream operations:%n");

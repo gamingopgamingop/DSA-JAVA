@@ -257,7 +257,7 @@ public class SelectionSort {
         
         // Printing utilities
         PrintStream printStream = System.out;
-        PrintWriter printWriter = new PrintWriter(new BufferedOutputStream(System.out));
+        PrintWriter printWriter = new PrintWriter(new BufferedOutputStream(System.out), true);
         DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

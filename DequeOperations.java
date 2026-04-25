@@ -85,6 +85,24 @@ public class DequeOperations {
         front = -1;
         rear = -1;
     }
+    
+    /**
+     * Gets the capacity of the deque.
+     * 
+     * @return The maximum number of elements the deque can hold.
+     */
+    public int getCapacity() {
+        return capacity;
+    }
+    
+    /**
+     * Gets the capacity of the deque (alias for getCapacity()).
+     * 
+     * @return The maximum number of elements the deque can hold.
+     */
+    public int capacity() {
+        return capacity;
+    }
 
     /**
      * Inserts an element at the front of the deque.

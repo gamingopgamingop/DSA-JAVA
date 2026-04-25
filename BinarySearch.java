@@ -210,7 +210,7 @@ public class BinarySearch {
             
             // I/O Operations
             PrintStream printStream = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream("demo_output.txt")), true);
+                new FileOutputStream("demo_output.txt"), true), true);
             printStream.println("Demo output using PrintStream");
             printStream.close();
             
@@ -370,7 +370,7 @@ public class BinarySearch {
             // Demonstrate file operations
             try {
                 PrintWriter writer = new PrintWriter(new BufferedOutputStream(
-                    new FileOutputStream("binary_search_results.txt", false)), true);
+                    new FileOutputStream("binary_search_results.txt", false), true), true);
                 writer.println("Binary Search Results - " + new Date());
                 writer.println("Target: " + target);
                 writer.println("Array index: " + arrayIndex);

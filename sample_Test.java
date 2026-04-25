@@ -61,6 +61,8 @@ import java.util.function.LongConsumer;
 import java.io.StreamTokenizer;
 import java.util.Date;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Test class for sample algorithm validation
@@ -331,7 +333,7 @@ public class sample_Test {
             for (int i = 0; i < size; i++) {
                 streamList.add(i);
             }
-            streamList.stream().map(x -> x * 2).collect(Collectors.toList());
+            List<Integer> streamResult = streamList.stream().map(x -> x * 2).collect(Collectors.toList());
             long streamEnd = System.nanoTime();
             long streamTime = streamEnd - streamStart;
             
