@@ -194,7 +194,7 @@ public class BinarySearch {
         try {
             // Advanced Collections
             Set<Integer> linkedHashSet = new LinkedHashSet<>(Arrays.asList(3, 1, 4, 1, 5));
-            Set<Integer> enumSet = EnumSet.noneOf(java.lang.Thread.State.class);
+            Set<java.lang.Thread.State> enumSet = EnumSet.noneOf(java.lang.Thread.State.class);
             Map<String, Integer> linkedHashMap = new LinkedHashMap<>();
             linkedHashMap.put("first", 1);
             linkedHashMap.put("second", 2);
@@ -235,6 +235,8 @@ public class BinarySearch {
                 PageFormat pageFormat = printerJob.defaultPage();
                 Book book = new Book();
                 System.out.println("Printing system available: " + printerJob.printDialog());
+                // This method actually throws PrinterException
+                printerJob.print();
             } catch (PrinterException e) {
                 System.out.println("Printing system error: " + e.getMessage());
             }
@@ -244,13 +246,13 @@ public class BinarySearch {
             IntBinaryOperator multiply = (a, b) -> a * b;
             IntPredicate isPositive = x -> x > 0;
             IntConsumer printInt = x -> System.out.println("Int: " + x);
-            IntFunction<String> intToString = Object::toString;
+            IntFunction<String> intToString = Integer::toString;
             
             DoubleUnaryOperator doubleSquare = x -> x * x;
             DoubleBinaryOperator doubleMultiply = (a, b) -> a * b;
             DoublePredicate isDoublePositive = x -> x > 0.0;
             DoubleConsumer printDouble = x -> System.out.println("Double: " + x);
-            DoubleFunction<String> doubleToString = Object::toString;
+            DoubleFunction<String> doubleToString = Double::toString;
             
             LongUnaryOperator longSquare = x -> x * x;
             LongPredicate isLongPositive = x -> x > 0L;

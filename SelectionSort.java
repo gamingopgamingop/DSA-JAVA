@@ -103,7 +103,7 @@ public class SelectionSort {
             Set<Integer> hashSet = new HashSet<>(Arrays.asList(1, 2, 3, 2, 1));
             Set<Integer> linkedHashSet = new LinkedHashSet<>(Arrays.asList(3, 1, 4, 1, 5));
             Set<Integer> treeSet = new TreeSet<>(Arrays.asList(5, 2, 8, 1, 9));
-            Set<Integer> enumSet = EnumSet.noneOf(java.lang.Thread.State.class);
+            Set<java.lang.Thread.State> enumSet = EnumSet.noneOf(java.lang.Thread.State.class);
             
             // Map operations
             Map<String, Integer> hashMap = new HashMap<>();
@@ -146,6 +146,8 @@ public class SelectionSort {
                 PageFormat pageFormat = printerJob.defaultPage();
                 Book book = new Book();
                 System.out.println("Printing system available: " + printerJob.printDialog());
+                // This method actually throws PrinterException
+                printerJob.print();
             } catch (PrinterException e) {
                 System.out.println("Printing system error: " + e.getMessage());
             }
@@ -166,13 +168,13 @@ public class SelectionSort {
             IntBinaryOperator multiply = (a, b) -> a * b;
             IntPredicate isPositive = x -> x > 0;
             IntConsumer printInt = x -> System.out.println("Int: " + x);
-            IntFunction<String> intToString = Object::toString;
+            IntFunction<String> intToString = Integer::toString;
             
             DoubleUnaryOperator doubleSquare = x -> x * x;
             DoubleBinaryOperator doubleMultiply = (a, b) -> a * b;
             DoublePredicate isDoublePositive = x -> x > 0.0;
             DoubleConsumer printDouble = x -> System.out.println("Double: " + x);
-            DoubleFunction<String> doubleToString = Object::toString;
+            DoubleFunction<String> doubleToString = Double::toString;
             
             LongUnaryOperator longSquare = x -> x * x;
             LongPredicate isLongPositive = x -> x > 0L;
