@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.LinkedList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * SelectionSort - A program to sort an array using Selection Sort algorithm.
@@ -28,6 +34,10 @@ public class SelectionSort {
         Scanner scanner = new Scanner(System.in);
         List<Integer> numberList = new ArrayList<>();
         Vector<Integer> numberVector = new Vector<>();
+        LinkedList<Integer> numberLinkedList = new LinkedList<>();
+        Set<Integer> numberHashSet = new HashSet<>();
+        Set<Integer> numberTreeSet = new TreeSet<>();
+        Map<Integer, String> numberMap = new HashMap<>();
         Stack<Integer> sortStack = new Stack<>();
         Formatter formatter = new Formatter();
 
@@ -44,6 +54,10 @@ public class SelectionSort {
                 arr[i] = scanner.nextInt();
                 numberList.add(arr[i]);
                 numberVector.add(arr[i]);
+                numberLinkedList.add(arr[i]);
+                numberHashSet.add(arr[i]);
+                numberTreeSet.add(arr[i]);
+                numberMap.put(arr[i], "Number_" + arr[i]);
             }
 
             // Print array before sorting using Iterator
@@ -61,6 +75,35 @@ public class SelectionSort {
             }
             System.out.println();
             System.out.println("Vector size: " + numberVector.size() + ", Capacity: " + numberVector.capacity());
+            
+            // Display LinkedList elements
+            System.out.print("Elements in LinkedList: ");
+            for (Integer num : numberLinkedList) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            System.out.println("LinkedList first: " + numberLinkedList.getFirst() + ", last: " + numberLinkedList.getLast());
+            
+            // Display HashSet elements (no duplicates, unordered)
+            System.out.print("Elements in HashSet: ");
+            for (Integer num : numberHashSet) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            System.out.println("HashSet size (unique elements): " + numberHashSet.size());
+            
+            // Display TreeSet elements (sorted, no duplicates)
+            System.out.print("Elements in TreeSet (auto-sorted): ");
+            for (Integer num : numberTreeSet) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            
+            // Display HashMap elements
+            System.out.println("HashMap entries:");
+            for (Map.Entry<Integer, String> entry : numberMap.entrySet()) {
+                System.out.println("  Key: " + entry.getKey() + " -> Value: " + entry.getValue());
+            }
 
             // Use Formatter for formatted output
             formatter.format("Total elements to sort: %d%n", size);
