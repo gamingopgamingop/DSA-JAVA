@@ -86,6 +86,10 @@ public class LinearSearchWithFrequency {
         return count;
     }
 
+    public static int linearSearchFrequency(Set<Integer> set, int target) {
+        return set.contains(target) ? 1 : 0;
+    }
+
     public static int linearSearchFrequency(List<Integer> arr, int target) {
         int count = 0;
         for (Integer num : arr) {

@@ -73,7 +73,7 @@ public class StackOperations_Test {
     public static void main(String[] args) {
         try {
             writer = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream(TEST_RESULTS_FILE), true);
+                new FileOutputStream(TEST_RESULTS_FILE, true)));
             
             writer.println("=== StackOperations Test Results ===");
             writer.println("Timestamp: " + new Date());

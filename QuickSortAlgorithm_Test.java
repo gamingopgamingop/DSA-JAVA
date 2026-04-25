@@ -728,7 +728,7 @@ public class QuickSortAlgorithm_Test {
         return i + 1;
     }
     
-    private static void bubbleSort(int[] arr) {
+    public static void bubbleSort(int[] arr) {
         int n = arr.length;
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
@@ -741,7 +741,7 @@ public class QuickSortAlgorithm_Test {
         }
     }
     
-    private static void selectionSort(int[] arr) {
+    public static void selectionSort(int[] arr) {
         int n = arr.length;
         for (int i = 0; i < n - 1; i++) {
             int minIdx = i;

@@ -105,6 +105,10 @@ public class BinarySearch {
      * @param target The integer value to search for.
      * @return The index of the target element if found, or -1 if not found.
      */
+    public static int binarySearch(int[] array, int target) {
+        return Arrays.binarySearch(array, target);
+    }
+    
     public static int binarySearch(List<Integer> list, int target) {
         int left = 0;
         int right = list.size() - 1;
@@ -210,7 +214,7 @@ public class BinarySearch {
             
             // I/O Operations
             PrintStream printStream = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream("demo_output.txt"), true), true);
+                new FileOutputStream("demo_output.txt", true)), true);
             printStream.println("Demo output using PrintStream");
             printStream.close();
             
@@ -370,7 +374,7 @@ public class BinarySearch {
             // Demonstrate file operations
             try {
                 PrintWriter writer = new PrintWriter(new BufferedOutputStream(
-                    new FileOutputStream("binary_search_results.txt", false), true), true);
+                    new FileOutputStream("binary_search_results.txt", false)), true);
                 writer.println("Binary Search Results - " + new Date());
                 writer.println("Target: " + target);
                 writer.println("Array index: " + arrayIndex);
