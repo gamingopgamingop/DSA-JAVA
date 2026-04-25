@@ -83,11 +83,11 @@ jobs:
     - name: Run algorithm tests
       run: |
         echo "Running all algorithm tests..."
-        find . -name "*_Test.java" -exec javac -cp ".:src/main/java" {} \;
+        find . -name "*_Test.java" -exec javac {} \;
         for test_file in $(find . -name "*_Test.java"); do
           test_class=$(basename "$test_file" .java)
           echo "Running $test_class..."
-          java -cp ".:src/main/java" "$test_class"
+          java -cp "." "$test_class"
         done
     
     - name: Check code formatting
@@ -195,7 +195,7 @@ jobs:
       run: |
         echo "Running performance benchmarks..."
         # Compile and run a simple performance test
-        javac -cp "src/main/java" src/main/java/QuickSortAlgorithm.java
+        javac QuickSortAlgorithm.java
         echo "Performance test completed"
     
     - name: Generate performance report
