@@ -37,13 +37,14 @@ jobs:
     - name: Run performance benchmarks
       run: |
         echo "Locating QuickSort file..."
-        QS_FILE=$(find src/main/java -name "QuickSortAlgorithm.java" | head -n 1)
+        QS_FILE=$(find . -name "QuickSortAlgorithm.java" | head -n 1)
         if [ -z "$QS_FILE" ]; then
           echo "Error: QuickSortAlgorithm.java not found!"
           exit 1
         fi
-        javac -cp "src/main/java" "$QS_FILE"
-        echo "Performance test completed"
+        echo "Found QuickSort file at: $QS_FILE"
+        javac "$QS_FILE"
+        echo "QuickSort compilation completed successfully"
 
     - name: Validate Gradle wrapper (retry)
       run: |
