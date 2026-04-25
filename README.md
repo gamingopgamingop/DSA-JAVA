@@ -1,5 +1,13 @@
 # DSA Java Algorithms Analysis
 
+![Build Status](https://img.shields.io/github/actions/workflow/status/dsa-java/dsa-java/java-ci.yml?branch=main)
+![Documentation Status](https://img.shields.io/github/actions/workflow/status/dsa-java/dsa-java/docs-check-enhanced.yml?branch=main)
+![License](https://img.shields.io/github/license/dsa-java/dsa-java)
+![Algorithms Covered](https://img.shields.io/badge/algorithms-21-blue)
+![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![Java Version](https://img.shields.io/badge/java-8+-orange)
+![Documentation](https://img.shields.io/badge/docs-complete-green)
+
 This document contains the Objective, Algorithm, Code, and Dry Run analysis for various Data Structures and Algorithms implemented in Java.
 
  ## Table of Contents

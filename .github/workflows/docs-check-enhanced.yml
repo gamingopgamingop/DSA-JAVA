@@ -1,0 +1,464 @@
+name: Documentation Quality Checks
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'docs/**'
+      - '**.md'
+      - '.github/workflows/docs-check-enhanced.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - '**.md'
+      - '.github/workflows/docs-check-enhanced.yml'
+
+jobs:
+  markdown-lint:
+    runs-on: ubuntu-latest
+    name: Markdown Linting
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install markdownlint
+      run: |
+        npm install -g markdownlint-cli
+        npm install -g markdownlint-rule-titlecase
+        
+    - name: Create markdownlint config
+      run: |
+        cat > .markdownlint.json << 'EOF'
+        {
+          "default": true,
+          "MD013": {
+            "line_length": 120,
+            "heading_line_length": 80,
+            "code_block_line_length": 120,
+            "code_blocks": true,
+            "tables": true,
+            "headings": true,
+            "strict": false,
+            "stern": false
+          },
+          "MD033": {
+            "allowed_elements": ["img", "a", "br", "details", "summary"],
+            "allowed_attributes": ["href", "src", "alt", "title", "id", "class"]
+          },
+          "MD041": false,
+          "MD046": {
+            "style": "fenced"
+          },
+          "MD007": {
+            "indent": 4
+          },
+          "MD029": {
+            "style": "ordered"
+          },
+          "MD048": {
+            "style": "backtick"
+          },
+          "MD034": false,
+          "MD036": {
+            "punctuation": ".,;:!。，；：！"
+          },
+          "MD040": {
+            "fence": "```",
+            "language_only": false
+          },
+          "MD044": {
+            "names": [
+              "See also",
+              "See also:",
+              "See also:",
+              "Implementation",
+              "Usage",
+              "Examples",
+              "Parameters",
+              "Returns",
+              "Throws",
+              "Since",
+              "Deprecated",
+              "Todo",
+              "Example"
+            ]
+          }
+        }
+        EOF
+        
+    - name: Run markdownlint
+      run: |
+        echo "🔍 Running markdownlint on all markdown files..."
+        markdownlint "**/*.md" --config .markdownlint.json || {
+          echo "❌ Markdown linting failed. Please fix the above issues."
+          echo "📖 For markdownlint rules, see: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md"
+          exit 1
+        }
+        echo "✅ Markdown linting passed!"
+
+  link-check:
+    runs-on: ubuntu-latest
+    name: Link Checking
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check for broken links
+      uses: lycheeverse/lychee-action@v1.8.0
+      with:
+        args: --verbose --no-progress --exclude-mail --exclude 'http://localhost' --exclude 'https://localhost'
+        fail: true
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        
+    - name: Check internal links
+      run: |
+        echo "🔍 Checking internal documentation links..."
+        
+        # Create a script to check internal links
+        cat > check-links.sh << 'EOF'
+        #!/bin/bash
+        
+        broken_links=0
+        total_links=0
+        
+        # Find all markdown files
+        find docs -name "*.md" | while read file; do
+          echo "Checking links in $file"
+          
+          # Extract markdown links
+          grep -oE '\[.*\]\([^)]*\)' "$file" | while read link; do
+            # Extract the URL part
+            url=$(echo "$link" | sed 's/.*(\([^)]*\)).*/\1/')
+            
+            # Skip external links
+            if echo "$url" | grep -qE "^https?://"; then
+              continue
+            fi
+            
+            # Check if it's a relative link
+            if echo "$url" | grep -q "^docs/"; then
+              total_links=$((total_links + 1))
+              
+              # Convert relative path to absolute
+              if [ -f "$url" ] || [ -d "$url" ]; then
+                echo "  ✅ $url"
+              else
+                echo "  ❌ $url (broken)"
+                broken_links=$((broken_links + 1))
+              fi
+            fi
+          done
+        done
+        
+        echo "📊 Link check summary:"
+        echo "- Total links checked: $total_links"
+        echo "- Broken links: $broken_links"
+        
+        if [ $broken_links -gt 0 ]; then
+          echo "❌ Found $broken_links broken links. Please fix them."
+          exit 1
+        else
+          echo "✅ All internal links are valid!"
+        fi
+        EOF
+        
+        chmod +x check-links.sh
+        ./check-links.sh
+
+  structure-check:
+    runs-on: ubuntu-latest
+    name: Documentation Structure Check
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check documentation structure
+      run: |
+        echo "🏗️ Checking documentation structure..."
+        
+        # Required directories
+        required_dirs=(
+          "docs/algorithms"
+          "docs/testing"
+          "docs/examples"
+          "docs/architecture"
+          "docs/templates"
+          "docs/assets"
+        )
+        
+        # Required files
+        required_files=(
+          "docs/README.md"
+          "docs/INDEX.md"
+          "docs/COMPLEXITY_TABLE.md"
+          "docs/TEST_CASE_MATRIX.md"
+          "docs/GLOSSARY.md"
+          "docs/FAQ.md"
+          "docs/LEARNING_PATH.md"
+          "docs/STYLE_GUIDE.md"
+          "docs/ERROR_HANDLING_GUIDE.md"
+          "docs/NAMING_CONVENTIONS.md"
+          "docs/templates/algorithm-template.md"
+          "docs/templates/test-template.md"
+          "docs/examples/README.md"
+          "docs/architecture/README.md"
+          "docs/templates/README.md"
+        )
+        
+        # Check directories
+        echo "📁 Checking required directories..."
+        for dir in "${required_dirs[@]}"; do
+          if [ -d "$dir" ]; then
+            echo "  ✅ $dir"
+          else
+            echo "  ❌ $dir (missing)"
+            exit 1
+          fi
+        done
+        
+        # Check files
+        echo "📄 Checking required files..."
+        for file in "${required_files[@]}"; do
+          if [ -f "$file" ]; then
+            echo "  ✅ $file"
+          else
+            echo "  ❌ $file (missing)"
+            exit 1
+          fi
+        done
+        
+        echo "✅ Documentation structure is valid!"
+
+  consistency-check:
+    runs-on: ubuntu-latest
+    name: Documentation Consistency Check
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check documentation consistency
+      run: |
+        echo "🔄 Checking documentation consistency..."
+        
+        # Check if all algorithm docs have corresponding test docs
+        echo "📋 Checking algorithm-test documentation pairs..."
+        missing_pairs=0
+        
+        for alg_doc in docs/algorithms/*_Documentation.md; do
+          if [ -f "$alg_doc" ]; then
+            alg_name=$(basename "$alg_doc" "_Documentation.md")
+            test_doc="docs/testing/${alg_name}_Test_Documentation.md"
+            
+            if [ ! -f "$test_doc" ]; then
+              echo "  ⚠️  Missing test documentation for $alg_name"
+              missing_pairs=$((missing_pairs + 1))
+            fi
+          fi
+        done
+        
+        # Check if all test docs have corresponding algorithm docs
+        for test_doc in docs/testing/*_Test_Documentation.md; do
+          if [ -f "$test_doc" ]; then
+            test_name=$(basename "$test_doc" "_Test_Documentation.md")
+            alg_doc="docs/algorithms/${test_name}_Documentation.md"
+            
+            if [ ! -f "$alg_doc" ]; then
+              echo "  ⚠️  Missing algorithm documentation for $test_name"
+              missing_pairs=$((missing_pairs + 1))
+            fi
+          fi
+        done
+        
+        if [ $missing_pairs -gt 0 ]; then
+          echo "⚠️  Found $missing_pairs missing documentation pairs"
+        else
+          echo "✅ All documentation pairs are consistent!"
+        fi
+        
+        # Check INDEX.md consistency
+        echo "📊 Checking INDEX.md consistency..."
+        if [ -f "docs/INDEX.md" ]; then
+          # Count algorithms in INDEX.md
+          index_count=$(grep -c "\|.*\.java.*|" docs/INDEX.md || echo "0")
+          
+          # Count actual algorithm files
+          java_count=$(find . -maxdepth 1 -name "*_Test.java" | wc -l)
+          
+          echo "  📈 Algorithms in INDEX.md: $index_count"
+          echo "  📈 Actual algorithm test files: $java_count"
+          
+          if [ "$index_count" -eq "$java_count" ]; then
+            echo "✅ INDEX.md is consistent with actual files!"
+          else
+            echo "⚠️  INDEX.md count ($index_count) doesn't match actual files ($java_count)"
+          fi
+        fi
+
+  content-quality:
+    runs-on: ubuntu-latest
+    name: Content Quality Check
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check content quality
+      run: |
+        echo "📝 Checking content quality..."
+        
+        # Check for minimum content requirements
+        echo "📋 Checking minimum content requirements..."
+        issues=0
+        
+        for md_file in docs/**/*.md; do
+          if [ -f "$md_file" ]; then
+            filename=$(basename "$md_file")
+            
+            # Check if file has a title
+            if ! head -n 1 "$md_file" | grep -q "^# "; then
+              echo "  ⚠️  $filename missing title header"
+              issues=$((issues + 1))
+            fi
+            
+            # Check minimum length (should have substantial content)
+            line_count=$(wc -l < "$md_file")
+            if [ "$line_count" -lt 20 ]; then
+              echo "  ⚠️  $filename seems too short ($line_count lines)"
+              issues=$((issues + 1))
+            fi
+            
+            # Check for TODO/FIXME comments
+            todo_count=$(grep -c "TODO\|FIXME\|XXX" "$md_file" 2>/dev/null || echo "0")
+            if [ "$todo_count" -gt 0 ]; then
+              echo "  ⚠️  $filename has $todo_count TODO/FIXME comments"
+            fi
+          fi
+        done
+        
+        # Check for broken image references
+        echo "🖼️ Checking image references..."
+        for md_file in docs/**/*.md; do
+          if [ -f "$md_file" ]; then
+            # Extract image references
+            grep -oE '!\[.*\]\([^)]*\)' "$md_file" | while read img; do
+              img_path=$(echo "$img" | sed 's/.*(\([^)]*\)).*/\1/')
+              
+              # Skip external images
+              if echo "$img_path" | grep -qE "^https?://"; then
+                continue
+              fi
+              
+              # Check if image exists
+              if [ ! -f "$img_path" ]; then
+                echo "  ❌ Broken image reference: $img_path in $md_file"
+                issues=$((issues + 1))
+              fi
+            done
+          fi
+        done
+        
+        echo "📊 Quality check summary:"
+        echo "- Issues found: $issues"
+        
+        if [ $issues -gt 10 ]; then
+          echo "❌ Too many quality issues found. Please review and fix."
+          exit 1
+        else
+          echo "✅ Content quality is acceptable!"
+        fi
+
+  auto-index-update:
+    runs-on: ubuntu-latest
+    name: Auto-Update Index (if needed)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Check if index needs update
+      id: check-index
+      run: |
+        echo "🔄 Checking if INDEX.md needs update..."
+        
+        # Count current algorithms
+        current_count=$(grep -c "\|.*\.java.*|" docs/INDEX.md || echo "0")
+        actual_count=$(find . -maxdepth 1 -name "*_Test.java" | wc -l)
+        
+        echo "current-count=$current_count" >> $GITHUB_OUTPUT
+        echo "actual-count=$actual_count" >> $GITHUB_OUTPUT
+        
+        if [ "$current_count" -ne "$actual_count" ]; then
+          echo "needs-update=true" >> $GITHUB_OUTPUT
+          echo "📝 INDEX.md needs update ($current_count vs $actual_count)"
+        else
+          echo "needs-update=false" >> $GITHUB_OUTPUT
+          echo "✅ INDEX.md is up to date"
+        fi
+        
+    - name: Update INDEX.md
+      if: steps.check-index.outputs.needs-update == 'true'
+      run: |
+        echo "📝 Updating INDEX.md automatically..."
+        
+        # This would be implemented with a script to regenerate the index
+        # For now, just create a reminder
+        echo "⚠️  INDEX.md needs manual update. Please run the index generation script."
+        
+    - name: Create issue for index update
+      if: steps.check-index.outputs.needs-update == 'true'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: 'INDEX.md needs update',
+            body: 'The INDEX.md file is out of sync with the actual algorithm files. Please run the index generation script to update it.',
+            labels: ['documentation', 'maintenance']
+          })
+
+  # Summary job
+  quality-summary:
+    runs-on: ubuntu-latest
+    name: Quality Summary
+    needs: [markdown-lint, link-check, structure-check, consistency-check, content-quality]
+    if: always()
+    
+    steps:
+    - name: Quality Check Summary
+      run: |
+        echo "📊 Documentation Quality Check Summary"
+        echo "======================================"
+        echo ""
+        echo "✅ Markdown Linting: ${{ needs.markdown-lint.result }}"
+        echo "✅ Link Checking: ${{ needs.link-check.result }}"
+        echo "✅ Structure Check: ${{ needs.structure-check.result }}"
+        echo "✅ Consistency Check: ${{ needs.consistency-check.result }}"
+        echo "✅ Content Quality: ${{ needs.content-quality.result }}"
+        echo ""
+        
+        if [[ "${{ needs.markdown-lint.result }}" == "failure" || \
+              "${{ needs.link-check.result }}" == "failure" || \
+              "${{ needs.structure-check.result }}" == "failure" || \
+              "${{ needs.consistency-check.result }}" == "failure" || \
+              "${{ needs.content-quality.result }}" == "failure" ]]; then
+          echo "❌ Some quality checks failed. Please review the issues above."
+          exit 1
+        else
+          echo "🎉 All documentation quality checks passed!"
+        fi

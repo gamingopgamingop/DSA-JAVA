@@ -2,6 +2,31 @@
 
 This is the central navigation hub for all documentation in the DSA Java project. Each algorithm implementation is linked to its corresponding documentation, test files, and test documentation.
 
+## 📊 Code-to-Doc Mapping Table
+
+| Java File | Algorithm Doc | Test File | Test Doc | Category | Status |
+|-----------|---------------|-----------|----------|----------|--------|
+| **[BinarySearch.java](../BinarySearch.java)** | [📄](algorithms/BinarySearch_Documentation.md) | [🧪](../BinarySearch_Test.java) | [📋](testing/BinarySearch_Test_Documentation.md) | Search | ✅ |
+| **[BubbleSort.java](../BubbleSort.java)** | [📄](algorithms/BubbleSort_Documentation.md) | [🧪](../BubbleSort_Test.java) | [📋](testing/BubbleSort_Test_Documentation.md) | Sorting | ✅ |
+| **[CircularQueue.java](../CircularQueue.java)** | [📄](algorithms/CircularQueue_Documentation.md) | [🧪](../CircularQueue_Test.java) | [📋](testing/CircularQueue_Test_Documentation.md) | Data Structure | ✅ |
+| **[DequeOperations.java](../DequeOperations.java)** | [📄](algorithms/DequeOperations_Documentation.md) | [🧪](../DequeOperations_Test.java) | [📋](testing/DequeOperations_Test_Documentation.md) | Data Structure | ✅ |
+| **[InsertElement.java](../InsertElement.java)** | [📄](algorithms/InsertElement_Documentation.md) | [🧪](../InsertElement_Test.java) | [📋](testing/InsertElement_Test_Documentation.md) | Array Ops | ✅ |
+| **[InsertionSort.java](../InsertionSort.java)** | [📄](algorithms/InsertionSort_Documentation.md) | [🧪](../InsertionSort_Test.java) | [📋](testing/InsertionSort_Test_Documentation.md) | Sorting | ✅ |
+| **[LinearQueue.java](../LinearQueue.java)** | [📄](algorithms/LinearQueue_Documentation.md) | [🧪](../LinearQueue_Test.java) | [📋](testing/LinearQueue_Test_Documentation.md) | Data Structure | ✅ |
+| **[LinearSearch.java](../LinearSearch.java)** | [📄](algorithms/LinearSearch_Documentation.md) | [🧪](../LinearSearch_Test.java) | [📋](testing/LinearSearch_Test_Documentation.md) | Search | ✅ |
+| **[LinkedListWithAddresses.java](../LinkedListWithAddresses.java)** | [📄](algorithms/LinkedListWithAddresses_Documentation.md) | [🧪](../LinkedListWithAddresses_Test.java) | [📋](testing/LinkedListWithAddresses_Test_Documentation.md) | Data Structure | ✅ |
+| **[MatrxMultiplication.java](../MatrxMultiplication.java)** | [📄](algorithms/MatrxMultiplication_Documentation.md) | [🧪](../MatrxMultiplication_Test.java) | [📋](testing/MatrxMultiplication_Test_Documentation.md) | Matrix | ✅ |
+| **[MergeSortAlgorithm.java](../MergeSortAlgorithm.java)** | [📄](algorithms/MergeSortAlgorithm_Documentation.md) | [🧪](../MergeSortAlgorithm_Test.java) | [📋](testing/MergeSortAlgorithm_Test_Documentation.md) | Sorting | ✅ |
+| **[PriorityQueueOperations.java](../PriorityQueueOperations.java)** | [📄](algorithms/PriorityQueueOperations_Documentation.md) | [🧪](../PriorityQueueOperations_Test.java) | [📋](testing/PriorityQueueOperations_Test_Documentation.md) | Data Structure | ✅ |
+| **[QueueUsingArray.java](../QueueUsingArray.java)** | [📄](algorithms/QueueUsingArray_Documentation.md) | [🧪](../QueueUsingArray_Test.java) | [📋](testing/QueueUsingArray_Test_Documentation.md) | Data Structure | ✅ |
+| **[QuickSortAlgorithm.java](../QuickSortAlgorithm.java)** | [📄](algorithms/QuickSortAlgorithm_Documentation.md) | [🧪](../QuickSortAlgorithm_Test.java) | [📋](testing/QuickSortAlgorithm_Test_Documentation.md) | Sorting | ✅ |
+| **[RemoveElement.java](../RemoveElement.java)** | [📄](algorithms/RemoveElement_Documentation.md) | [🧪](../RemoveElement_Test.java) | [📋](testing/RemoveElement_Test_Documentation.md) | Array Ops | ✅ |
+| **[SecondSmallestSecondLargest.java](../SecondSmallestSecondLargest.java)** | [📄](algorithms/SecondSmallestSecondLargest_Documentation.md) | [🧪](../SecondSmallestSecondLargest_Test.java) | [📋](testing/SecondSmallestSecondLargest_Test_Documentation.md) | Statistical | ✅ |
+| **[SelectionSort.java](../SelectionSort.java)** | [📄](algorithms/SelectionSort_Documentation.md) | [🧪](../SelectionSort_Test.java) | [📋](testing/SelectionSort_Test_Documentation.md) | Sorting | ✅ |
+| **[SparseMatrix.java](../SparseMatrix.java)** | [📄](algorithms/SparseMatrix_Documentation.md) | [🧪](../SparseMatrix_Test.java) | [📋](testing/SparseMatrix_Test_Documentation.md) | Matrix | ✅ |
+| **[StackOperations.java](../StackOperations.java)** | [📄](algorithms/StackOperations_Documentation.md) | [🧪](../StackOperations_Test.java) | [📋](testing/StackOperations_Test_Documentation.md) | Data Structure | ✅ |
+| **[Traversal.java](../Traversal.java)** | [📄](algorithms/Traversal_Documentation.md) | [🧪](../Traversal_Test.java) | [📋](testing/Traversal_Test_Documentation.md) | Array Ops | ✅ |
+
 ## 📚 Algorithm Documentation Index
 
 ### 🔍 Sorting Algorithms
