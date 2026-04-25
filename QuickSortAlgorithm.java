@@ -109,6 +109,17 @@ public class QuickSortAlgorithm implements Runnable {
             recursionStack.pop();
         }
     }
+    
+    public void quickSort(int[] arr, int low, int high, Stack<Integer> recursionStack) {
+        if (low < high) {
+            recursionStack.push(low); // Track recursion for demonstration
+            int pi = partition(arr, low, high);
+            quickSort(arr, low, pi - 1, recursionStack);
+            quickSort(arr, pi + 1, high, recursionStack);
+            recursionStack.pop();
+        }
+    }
+
 
     /**
      * Partitions the array into two sub-arrays around a pivot element.
