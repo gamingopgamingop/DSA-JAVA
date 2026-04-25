@@ -989,18 +989,18 @@ public class QueueUsingArray_Test {
         return queue[front];
     }
     
-    public static boolean isEmpty(int front) {
-        return front == -1;
+    public static boolean isEmpty(QueuePointers ptr) {
+        return ptr.front == -1;
     }
     
-    private static int getQueueSize(int front, int rear, int queueLength) {
-        if (front == -1) {
+    private static int getQueueSize(QueuePointers ptr, int queueLength) {
+        if (ptr.front == -1) {
             return 0;
         }
-        if (rear >= front) {
-            return rear - front + 1;
+        if (ptr.rear >= ptr.front) {
+            return ptr.rear - ptr.front + 1;
         } else {
-            return (rear + 1) + (queueLength - front);
+            return (ptr.rear + 1) + (queueLength - ptr.front);
         }
     }
     
