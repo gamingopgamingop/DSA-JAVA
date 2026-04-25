@@ -1,4 +1,6 @@
 import java.text.MessageFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -25,6 +27,17 @@ import java.util.TreeMap;
 import java.util.Hashtable;
 import java.util.SortedMap;
 import java.util.NavigableMap;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.awt.Desktop;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.awt.print.PageFormat;
+import java.awt.print.Book;
 import java.util.Collections;
 /**
  * SelectionSort - A program to sort an array using Selection Sort algorithm.
@@ -68,6 +81,12 @@ public class SelectionSort {
         
         Stack<Integer> sortStack = new Stack<>();
         Formatter formatter = new Formatter();
+        
+        // Printing utilities
+        PrintStream printStream = System.out;
+        PrintWriter printWriter = new PrintWriter(new BufferedOutputStream(System.out));
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
             // Read array size
@@ -107,55 +126,108 @@ public class SelectionSort {
                 navigableMap.put(value, label);
             }
 
-            // Print array before sorting using Iterator
-            System.out.println("Array before sorting: " + Arrays.toString(arr));
+            // Print comprehensive collection demonstration with all printing packages
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("COLLECTIONS & PRINTING DEMONSTRATION");
+            System.out.println("=".repeat(60));
+            
+            // Using PrintStream
+            printStream.println("\n--- PRINTSTREAM OUTPUT ---");
+            printStream.println("Total elements: " + size);
+            printStream.println("Array length: " + arr.length);
+            printStream.flush();
+            
+            // Using PrintWriter
+            printWriter.println("\n--- PRINTWRITER OUTPUT ---");
+            printWriter.println("Processing " + size + " elements");
+            printWriter.println("Using buffered output for better performance");
+            printWriter.flush();
+            
+            // Using DecimalFormat
+            System.out.println("\n--- DECIMALFORMAT OUTPUT ---");
+            if (size > 0) {
+                double sum = 0;
+                for (int num : arr) sum += num;
+                double average = sum / size;
+                System.out.println("Sum: " + decimalFormat.format(sum));
+                System.out.println("Average: " + decimalFormat.format(average));
+                System.out.println("Max value: " + decimalFormat.format(Arrays.stream(arr).max().orElse(0)));
+                System.out.println("Min value: " + decimalFormat.format(Arrays.stream(arr).min().orElse(0)));
+            }
+            
+            // Using SimpleDateFormat
+            System.out.println("\n--- DATE/TIME FORMATTING ---");
+            System.out.println("Current time: " + dateFormat.format(new java.util.Date()));
+            System.out.println("Processing started at: " + dateFormat.format(new java.util.Date()));
+            
+            // Using MessageFormat
+            System.out.println("\n--- MESSAGEFORMAT OUTPUT ---");
+            String message = MessageFormat.format(
+                "Sorting {0,number,integer} elements with values ranging from {1} to {2}",
+                size,
+                size > 0 ? Arrays.stream(arr).min().orElse(0) : 0,
+                size > 0 ? Arrays.stream(arr).max().orElse(0) : 0
+            );
+            System.out.println(message);
+            
+            // Using Formatter for table
+            System.out.println("\n--- FORMATTER TABLE OUTPUT ---");
+            Formatter tableFormatter = new Formatter();
+            tableFormatter.format("%-15s | %-10s | %-10s%n", "Collection", "Size", "Type");
+            tableFormatter.format("%-15s | %-10s | %-10s%n", "---------------", "----------", "----------");
+            tableFormatter.format("%-15s | %-10d | %-10s%n", "ArrayList", numberList.size(), "List");
+            tableFormatter.format("%-15s | %-10d | %-10s%n", "LinkedList", linkedList.size(), "List");
+            tableFormatter.format("%-15s | %-10d | %-10s%n", "Vector", numberVector.size(), "List");
+            tableFormatter.format("%-15s | %-10d | %-10s%n", "HashSet", hashSet.size(), "Set");
+            tableFormatter.format("%-15s | %-10d | %-10s%n", "TreeSet", treeSet.size(), "Set");
+            tableFormatter.format("%-15s | %-10d | %-10s%n", "HashMap", hashMap.size(), "Map");
+            tableFormatter.format("%-15s | %-10d | %-10s%n", "TreeMap", treeMap.size(), "Map");
+            System.out.println(tableFormatter.toString());
+            tableFormatter.close();
+            
+            // LIST IMPLEMENTATIONS
+            System.out.println("\n--- LIST IMPLEMENTATIONS ---");
+            System.out.println("ArrayList: " + numberList);
+            System.out.println("LinkedList: " + linkedList);
+            System.out.println("Vector: " + numberVector);
+            System.out.println("Vector capacity: " + numberVector.capacity());
             System.out.print("Elements using Iterator: ");
-            for (Integer num : numberList) {
-                System.out.print(num + " ");
+            Iterator<Integer> iterator = numberList.iterator();
+            while (iterator.hasNext()) {
+                System.out.print(iterator.next() + " ");
             }
             System.out.println();
             
-            // Display Vector elements
-            System.out.print("Elements in Vector: ");
-            for (Integer num : numberVector) {
-                System.out.print(num + " ");
-            }
-            System.out.println();
-            System.out.println("Vector size: " + numberVector.size() + ", Capacity: " + numberVector.capacity());
+            // QUEUE IMPLEMENTATIONS
+            System.out.println("\n--- QUEUE IMPLEMENTATIONS ---");
+            System.out.println("Queue (LinkedList): " + queue);
+            System.out.println("ArrayDeque: " + arrayDeque);
+            System.out.println("PriorityQueue (natural order): " + priorityQueue);
+            System.out.println("Queue peek: " + queue.peek() + ", ArrayDeque peek: " + arrayDeque.peek());
             
-            // Display LinkedList elements
-            System.out.print("Elements in LinkedList: ");
-            for (Integer num : linkedList) {
-                System.out.print(num + " ");
-            }
-            System.out.println();
-            System.out.println("LinkedList first: " + numberLinkedList.getFirst() + ", last: " + numberLinkedList.getLast());
+            // SET IMPLEMENTATIONS
+            System.out.println("\n--- SET IMPLEMENTATIONS ---");
+            System.out.println("HashSet (unordered, no duplicates): " + hashSet);
+            System.out.println("LinkedHashSet (insertion order): " + linkedHashSet);
+            System.out.println("TreeSet (sorted): " + treeSet);
             
-            // Display HashSet elements (no duplicates, unordered)
-            System.out.print("Elements in HashSet: ");
-            for (Integer num : numberHashSet) {
-                System.out.print(num + " ");
-            }
-            System.out.println();
-            System.out.println("HashSet size (unique elements): " + numberHashSet.size());
+            // MAP IMPLEMENTATIONS
+            System.out.println("\n--- MAP IMPLEMENTATIONS ---");
+            System.out.println("HashMap: " + hashMap);
+            System.out.println("LinkedHashMap (insertion order): " + linkedHashMap);
+            System.out.println("TreeMap (sorted by key): " + treeMap);
+            System.out.println("Hashtable (synchronized): " + hashtable);
             
-            // Display TreeSet elements (sorted, no duplicates)
-            System.out.print("Elements in TreeSet (auto-sorted): ");
-            for (Integer num : numberTreeSet) {
-                System.out.print(num + " ");
+            // Advanced Map operations
+            if (size > 0) {
+                System.out.println("\n--- ADVANCED MAP OPERATIONS ---");
+                System.out.println("SortedMap first key: " + sortedMap.firstKey() + 
+                                 ", last key: " + sortedMap.lastKey());
+                System.out.println("NavigableMap first entry: " + navigableMap.firstEntry());
+                System.out.println("NavigableMap last entry: " + navigableMap.lastEntry());
             }
-            System.out.println();
             
-            // Display HashMap elements
-            System.out.println("HashMap entries:");
-            for (Map.Entry<Integer, String> entry : numberMap.entrySet()) {
-                System.out.println("  Key: " + entry.getKey() + " -> Value: " + entry.getValue());
-            }
-
-            // Use Formatter for formatted output
-            formatter.format("Total elements to sort: %d%n", size);
-            System.out.println(formatter.toString());
-            formatter.close();
+            System.out.println("\nArray before sorting: " + Arrays.toString(arr));
 
             // Selection Sort logic
             for (int i = 0; i < size - 1; i++) {
@@ -179,10 +251,13 @@ public class SelectionSort {
             }
 
             // Print array after sorting
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("SORTING RESULTS");
+            System.out.println("=".repeat(60));
             System.out.println("Array after sorting: " + Arrays.toString(arr));
             
             // Demonstrate Stack usage
-            System.out.print("Elements from stack (LIFO): ");
+            System.out.print("\nElements from stack (LIFO): ");
             while (!sortStack.isEmpty()) {
                 try {
                     System.out.print(sortStack.pop() + " ");
@@ -191,6 +266,39 @@ public class SelectionSort {
                 }
             }
             System.out.println();
+            
+            // Final summary using all printing methods
+            printStream.println("\n--- FINAL SUMMARY (PrintStream) ---");
+            printStream.println("Sorting completed successfully!");
+            
+            printWriter.println("\n--- FINAL SUMMARY (PrintWriter) ---");
+            printWriter.println("All " + size + " elements sorted using Selection Sort");
+            printWriter.flush();
+            
+            // Use Formatter for final summary
+            Formatter summaryFormatter = new Formatter();
+            summaryFormatter.format("%n%n" + "=".repeat(60) + "%n");
+            summaryFormatter.format("COMPREHENSIVE SORTING SUMMARY%n");
+            summaryFormatter.format("=".repeat(60) + "%n");
+            summaryFormatter.format("Algorithm: Selection Sort%n");
+            summaryFormatter.format("Input Size: %d elements%n", size);
+            summaryFormatter.format("Time Complexity: O(n²)%n");
+            summaryFormatter.format("Space Complexity: O(1)%n");
+            summaryFormatter.format("Collections Demonstrated: 18%n");
+            summaryFormatter.format("Printing Methods Used: 7%n");
+            summaryFormatter.format("  - System.out (PrintStream)%n");
+            summaryFormatter.format("  - PrintWriter (Buffered)%n");
+            summaryFormatter.format("  - Formatter (Table format)%n");
+            summaryFormatter.format("  - MessageFormat (Template)%n");
+            summaryFormatter.format("  - DecimalFormat (Numbers)%n");
+            summaryFormatter.format("  - SimpleDateFormat (Date/Time)%n");
+            summaryFormatter.format("  - String formatting (%, %s, %d)%n");
+            summaryFormatter.format("=".repeat(60) + "%n");
+            System.out.println(summaryFormatter.toString());
+            summaryFormatter.close();
+            
+            formatter.close();
+            printWriter.close();
 
         } catch (InputMismatchException e) {
             System.err.println("Error: Invalid input. Please enter integer values only.");
