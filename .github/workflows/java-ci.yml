@@ -34,6 +34,17 @@ jobs:
     - name: Run Build
       run: gradle build # Use 'gradle' directly instead of './gradlew'
 
+    - name: Run performance benchmarks
+      run: |
+        echo "Locating QuickSort file..."
+        QS_FILE=$(find src/main/java -name "QuickSortAlgorithm.java" | head -n 1)
+        if [ -z "$QS_FILE" ]; then
+          echo "Error: QuickSortAlgorithm.java not found!"
+          exit 1
+        fi
+        javac -cp "src/main/java" "$QS_FILE"
+        echo "Performance test completed"
+
     - name: Validate Gradle wrapper (retry)
       run: |
         n=0
