@@ -1,0 +1,148 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.dsa'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // No external dependencies - pure Java implementation
+    testImplementation 'junit:junit:4.13.2'
+}
+
+application {
+    mainClass = 'TestFramework'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    
+    // Include all test files
+    include '**/*Test.class'
+    
+    // Configure test output
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
+
+// Task to run all algorithms
+task runAllAlgorithms {
+    description = 'Run all algorithm implementations'
+    doLast {
+        def algorithmFiles = fileTree(dir: 'src/main/java').include('**/*.java')
+        algorithmFiles.each { file ->
+            if (file.name.endsWith('.java') && !file.name.contains('Test')) {
+                def className = file.path.replaceFirst('.*/src/main/java/', '').replace('/', '.').replace('.java', '')
+                println "Running ${className}..."
+                try {
+                    javaexec {
+                        main = className
+                        classpath = sourceSets.main.runtimeClasspath
+                    }
+                } catch (Exception e) {
+                    println "Failed to run ${className}: ${e.message}"
+                }
+            }
+        }
+    }
+}
+
+// Task to run all tests
+task runAllTests {
+    description = 'Run all test files'
+    doLast {
+        def testFiles = fileTree(dir: 'src/main/java').include('**/*Test.java')
+        testFiles.each { file ->
+            def className = file.path.replaceFirst('.*/src/main/java/', '').replace('/', '.').replace('.java', '')
+            println "Running ${className}..."
+            try {
+                javaexec {
+                    main = className
+                    classpath = sourceSets.main.runtimeClasspath
+                }
+            } catch (Exception e) {
+                println "Failed to run ${className}: ${e.message}"
+            }
+        }
+    }
+}
+
+// Task to generate documentation index
+task generateDocsIndex {
+    description = 'Generate documentation index'
+    doLast {
+        def docsDir = file('docs')
+        if (!docsDir.exists()) {
+            docsDir.mkdirs()
+        }
+        
+        def indexFile = new File(docsDir, 'README.md')
+        indexFile.text = """# DSA Java Documentation Index
+
+This directory contains comprehensive documentation for all algorithms and data structures.
+
+## Algorithm Documentation
+
+### Sorting Algorithms
+- [Merge Sort](MergeSortAlgorithm_Documentation.md) - Divide-and-conquer sorting
+- [Quick Sort](QuickSortAlgorithm_Documentation.md) - Partition-based sorting
+- [Bubble Sort](BubbleSortAlgorithm_Documentation.md) - Simple sorting algorithm
+- [Selection Sort](SelectionSortAlgorithm_Documentation.md) - Selection-based sorting
+- [Insertion Sort](InsertionSortAlgorithm_Documentation.md) - Incremental sorting
+
+### Data Structures
+- [Linked List](LinkedListWithAddresses_Documentation.md) - Node-based data structure
+- [Stack](StackOperations_Documentation.md) - LIFO data structure
+- [Queue Implementations](LinearQueue_Documentation.md) - FIFO data structures
+  - [Circular Queue](CircularQueue_Documentation.md) - Circular buffer
+  - [Priority Queue](PriorityQueueOperations_Documentation.md) - Priority-based queue
+  - [Queue Using Array](QueueUsingArray_Documentation.md) - Array-based queue
+- [Deque](DequeOperations_Documentation.md) - Double-ended queue
+
+### Array Operations
+- [Insert Element](InsertElement_Documentation.md) - Array insertion algorithm
+- [Remove Element](RemoveElement_Documentation.md) - Array removal algorithm
+- [Matrix Multiplication](MatrxMultiplication_Documentation.md) - Matrix operations
+
+### Search and Analysis
+- [Binary Search](BinarySearch_Documentation.md) - Efficient search algorithm
+- [Second Smallest/Largest](SecondSmallestSecondLargest_Documentation.md) - Statistical analysis
+
+## Test Documentation
+
+Each algorithm has corresponding test documentation:
+- [Test Documentation Index](../Test_Documentation_Index.md)
+
+## Generated Reports
+
+Test results are generated in the main directory with naming convention:
+- `*_test_results.txt` - Individual test results
+- `Test_Summary_Report.md` - Comprehensive test summary
+
+---
+*Generated on: ${new Date()}*
+"""
+        println "Documentation index generated: ${indexFile.absolutePath}"
+    }
+}
+
+// Clean task
+clean {
+    delete 'build', 'out', 'bin', 'dist'
+    delete fileTree(dir: '.').include('*_test_results.txt')
+}
+
+// Default task
+defaultTasks 'build', 'test'

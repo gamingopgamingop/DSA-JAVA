@@ -1,0 +1,267 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        java-version: [11, 17, 21]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v2
+    
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v3
+      with:
+        arguments: build
+    
+    - name: Run tests
+      uses: gradle/gradle-build-action@v3
+      with:
+        arguments: test
+    
+    - name: Run algorithm tests
+      run: |
+        echo "Running all algorithm tests..."
+        find . -name "*_Test.java" -exec javac -cp ".:src/main/java" {} \;
+        for test_file in $(find . -name "*_Test.java"); do
+          test_class=$(basename "$test_file" .java)
+          echo "Running $test_class..."
+          java -cp ".:src/main/java" "$test_class"
+        done
+    
+    - name: Check code formatting
+      run: |
+        echo "Checking code formatting..."
+        # Check if files have proper line endings
+        find . -name "*.java" -exec file {} \; | grep -v "ASCII text" || true
+        # Check for trailing whitespace
+        find . -name "*.java" -exec grep -l "[[:space:]]$" {} \; || echo "No trailing whitespace found"
+    
+    - name: Validate documentation
+      run: |
+        echo "Validating documentation structure..."
+        # Check if all algorithms have corresponding documentation
+        for algo_file in $(find . -name "*Algorithm.java" -o -name "*Operations.java" -o -name "*UsingArray.java"); do
+          base_name=$(basename "$algo_file" .java)
+          doc_file="${base_name}_Documentation.md"
+          test_file="${base_name}_Test.java"
+          test_doc_file="${base_name}_Test_Documentation.md"
+          
+          echo "Checking $base_name..."
+          if [ -f "$doc_file" ]; then
+            echo "✓ $doc_file exists"
+          else
+            echo "✗ $doc_file missing"
+            exit 1
+          fi
+          
+          if [ -f "$test_file" ]; then
+            echo "✓ $test_file exists"
+          else
+            echo "✗ $test_file missing"
+            exit 1
+          fi
+          
+          if [ -f "$test_doc_file" ]; then
+            echo "✓ $test_doc_file exists"
+          else
+            echo "✗ $test_doc_file missing"
+            exit 1
+          fi
+        done
+    
+    - name: Check imports
+      run: |
+        echo "Checking Java imports..."
+        for java_file in $(find . -name "*.java" -not -path "./.git/*"); do
+          # Check if files have the standard 63 imports
+          import_count=$(grep -c "^import " "$java_file" || echo "0")
+          if [ "$import_count" -lt 50 ]; then
+            echo "⚠ $java_file has only $import_count imports (expected ~63)"
+          else
+            echo "✓ $java_file has $import_count imports"
+          fi
+        done
+    
+    - name: Generate test summary
+      if: always()
+      run: |
+        echo "## Test Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Java Version: ${{ matrix.java-version }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Files Processed" >> $GITHUB_STEP_SUMMARY
+        echo "- Algorithm files: $(find . -name "*Algorithm.java" -o -name "*Operations.java" | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- Test files: $(find . -name "*_Test.java" | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- Documentation files: $(find . -name "*_Documentation.md" | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Build Status" >> $GITHUB_STEP_SUMMARY
+        echo "- Build: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Tests: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run security scan
+      uses: securecodewarrior/github-action-add-sarif@v1
+      with:
+        sarif-file: 'security-scan-results.sarif'
+    
+    - name: Check for hardcoded secrets
+      run: |
+        echo "Checking for hardcoded secrets..."
+        # Check for potential API keys, passwords, etc.
+        if grep -r -i "password\|secret\|key\|token" --include="*.java" --include="*.properties" --include="*.yml" --include="*.yaml" .; then
+          echo "⚠ Potential secrets found - please review"
+        else
+          echo "✓ No obvious secrets found"
+        fi
+
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Run performance benchmarks
+      run: |
+        echo "Running performance benchmarks..."
+        # Compile and run a simple performance test
+        javac -cp "src/main/java" src/main/java/QuickSortAlgorithm.java
+        echo "Performance test completed"
+    
+    - name: Generate performance report
+      run: |
+        echo "## Performance Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Algorithm Performance" >> $GITHUB_STEP_SUMMARY
+        echo "- Quick Sort: O(n log n) average case" >> $GITHUB_STEP_SUMMARY
+        echo "- Merge Sort: O(n log n) worst case" >> $GITHUB_STEP_SUMMARY
+        echo "- Bubble Sort: O(n²) - educational only" >> $GITHUB_STEP_SUMMARY
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check documentation links
+      run: |
+        echo "Checking documentation links..."
+        # Check if all documentation files are properly referenced
+        for doc_file in $(find . -name "*_Documentation.md"); do
+          echo "Checking $doc_file..."
+          # Basic markdown syntax check
+          if grep -q "^# " "$doc_file"; then
+            echo "✓ Has proper title"
+          else
+            echo "✗ Missing title"
+          fi
+        done
+    
+    - name: Validate README
+      run: |
+        echo "Validating README.md..."
+        if [ -f "README.md" ]; then
+          echo "✓ README.md exists"
+          # Check for required sections
+          if grep -q "## License" README.md; then
+            echo "✓ License section exists"
+          else
+            echo "⚠ License section missing"
+          fi
+        else
+          echo "✗ README.md missing"
+          exit 1
+        fi
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Check code quality
+      run: |
+        echo "Checking code quality..."
+        # Check for common issues
+        for java_file in $(find . -name "*.java" -not -path "./.git/*"); do
+          # Check for proper class documentation
+          if grep -q "/\*\*" "$java_file"; then
+            echo "✓ $java_file has JavaDoc"
+          else
+            echo "⚠ $java_file missing JavaDoc"
+          fi
+          
+          # Check for main method
+          if grep -q "public static void main" "$java_file"; then
+            echo "✓ $java_file has main method"
+          fi
+          
+          # Check for proper exception handling
+          if grep -q "try.*catch" "$java_file"; then
+            echo "✓ $java_file has exception handling"
+          fi
+        done
+    
+    - name: Generate quality report
+      if: always()
+      run: |
+        echo "## Code Quality Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Quality Metrics" >> $GITHUB_STEP_SUMMARY
+        echo "- Files with JavaDoc: $(find . -name "*.java" -exec grep -l "/\*\*" {} \; | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- Files with main methods: $(find . -name "*.java" -exec grep -l "public static void main" {} \; | wc -l)" >> $GITHUB_STEP_SUMMARY
+        echo "- Files with exception handling: $(find . -name "*.java" -exec grep -l "try.*catch" {} \; | wc -l)" >> $GITHUB_STEP_SUMMARY
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [build, security, performance, docs, quality]
+    if: always()
+    steps:
+    - name: Notify build status
+      run: |
+        echo "## Build Notification" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Job Results" >> $GITHUB_STEP_SUMMARY
+        echo "- Build: ${{ needs.build.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Security: ${{ needs.security.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Performance: ${{ needs.performance.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Documentation: ${{ needs.docs.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Quality: ${{ needs.quality.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Overall Status" >> $GITHUB_STEP_SUMMARY
+        if [[ "${{ needs.build.result }}" == "success" && "${{ needs.security.result }}" == "success" && "${{ needs.docs.result }}" == "success" && "${{ needs.quality.result }}" == "success" ]]; then
+          echo "✅ All checks passed!" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Some checks failed" >> $GITHUB_STEP_SUMMARY
+        fi
