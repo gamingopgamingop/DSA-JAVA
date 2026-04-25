@@ -61,6 +61,7 @@ import java.util.function.LongConsumer;
 import java.io.StreamTokenizer;
 import java.util.Date;
 import java.util.Random;
+
 public class SmallestLargest {
     public static void main(String[] args) {
         Scanner scanner = new java.util.Scanner(System.in);
