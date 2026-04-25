@@ -1,187 +1,189 @@
 # DSA Java Documentation Hub
 
-Welcome to the comprehensive documentation hub for the DSA Java project. This directory contains all documentation organized by category for easy navigation and reference.
+Welcome to the comprehensive documentation hub for the Data Structures and Algorithms (DSA) Java project. This document serves as the central navigation point for all algorithm implementations, test suites, and educational resources.
 
-## 📚 Documentation Structure
+## 📁 Documentation Structure
 
-### 🚀 Quick Start
-- [Main README](../README.md) - Project overview and getting started
-- [Contributing Guide](../CONTRIBUTING.md) - How to contribute to the project
-- [Code of Conduct](../CODE_OF_CONDUCT.md) - Community guidelines
-- [Security Policy](../SECURITY.md) - Security information and reporting
-- [Changelog](../CHANGELOG.md) - Project history and updates
+### 📚 Core Documentation
+- **[algorithms/](algorithms/)** - Individual algorithm documentation
+- **[testing/](testing/)** - Test documentation and coverage
+- **[examples/](examples/)** - Input/output examples and usage patterns
+- **[architecture/](architecture/)** - Project structure and design decisions
+- **[templates/](templates/)** - Reusable documentation templates
+- **[assets/](assets/)** - Images, diagrams, and visual resources
 
-### 📖 Algorithm Documentation
+### 📋 Reference Materials
+- **[INDEX.md](INDEX.md)** - Master algorithm index
+- **[COMPLEXITY_TABLE.md](COMPLEXITY_TABLE.md)** - Performance comparison table
+- **[TEST_CASE_MATRIX.md](TEST_CASE_MATRIX.md)** - Test coverage overview
+- **[GLOSSARY.md](GLOSSARY.md)** - Technical terminology
+- **[FAQ.md](FAQ.md)** - Common questions and answers
+- **[LEARNING_PATH.md](LEARNING_PATH.md)** - Structured learning curriculum
+- **[STYLE_GUIDE.md](STYLE_GUIDE.md)** - Documentation standards
 
-#### Sorting Algorithms
-| Algorithm | Complexity | Stability | Documentation |
-|-----------|------------|-----------|----------------|
-| [Merge Sort](../MergeSortAlgorithm_Documentation.md) | O(n log n) | ✅ Stable | Divide-and-conquer sorting |
-| [Quick Sort](../QuickSortAlgorithm_Documentation.md) | O(n log n) | ❌ Not stable | Partition-based sorting |
-| [Bubble Sort](../BubbleSortAlgorithm_Documentation.md) | O(n²) | ✅ Stable | Simple educational sort |
-| [Selection Sort](../SelectionSortAlgorithm_Documentation.md) | O(n²) | ❌ Not stable | Selection-based sorting |
-| [Insertion Sort](../InsertionSort_Documentation.md) | O(n²) | ✅ Stable | Incremental sorting |
+## 🎯 Quick Navigation
 
-#### Data Structures
-| Structure | Type | Complexity | Documentation |
-|-----------|------|------------|----------------|
-| [Linked List](../LinkedListWithAddresses_Documentation.md) | Linear | O(n) | Node-based data structure |
-| [Stack](../StackOperations_Documentation.md) | Linear | O(1) | LIFO data structure |
-| [Linear Queue](../LinearQueue_Documentation.md) | Linear | O(1) | FIFO array-based queue |
-| [Circular Queue](../CircularQueue_Documentation.md) | Linear | O(1) | Circular buffer queue |
-| [Priority Queue](../PriorityQueueOperations_Documentation.md) | Linear | O(log n) | Priority-based queue |
-| [Queue Using Array](../QueueUsingArray_Documentation.md) | Linear | O(1) | Circular array queue |
-| [Deque](../DequeOperations_Documentation.md) | Linear | O(1) | Double-ended queue |
+### 🔍 Search Algorithms
+| Algorithm | Documentation | Tests | Examples |
+|-----------|---------------|-------|----------|
+| **Binary Search** | [📄](algorithms/BinarySearch_Documentation.md) | [🧪](testing/BinarySearch_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#binary-search) |
+| **Linear Search** | [📄](algorithms/LinearSearch_Documentation.md) | [🧪](testing/LinearSearch_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#linear-search) |
 
-#### Array Operations
-| Operation | Complexity | Documentation |
-|-----------|------------|----------------|
-| [Insert Element](../InsertElement_Documentation.md) | O(n) | Array insertion algorithm |
-| [Remove Element](../RemoveElement_Documentation.md) | O(n) | Array removal algorithm |
-| [Matrix Multiplication](../MatrxMultiplication_Documentation.md) | O(n³) | Matrix operations |
+### 📊 Sorting Algorithms
+| Algorithm | Documentation | Tests | Examples |
+|-----------|---------------|-------|----------|
+| **Bubble Sort** | [📄](algorithms/BubbleSort_Documentation.md) | [🧪](testing/BubbleSort_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#bubble-sort) |
+| **Insertion Sort** | [📄](algorithms/InsertionSort_Documentation.md) | [🧪](testing/InsertionSort_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#insertion-sort) |
+| **Selection Sort** | [📄](algorithms/SelectionSort_Documentation.md) | [🧪](testing/SelectionSort_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#selection-sort) |
+| **Merge Sort** | [📄](algorithms/MergeSort_Documentation.md) | [🧪](testing/MergeSort_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#merge-sort) |
+| **Quick Sort** | [📄](algorithms/QuickSort_Documentation.md) | [🧪](testing/QuickSort_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#quick-sort) |
 
-#### Search and Analysis
-| Algorithm | Complexity | Documentation |
-|-----------|------------|----------------|
-| [Binary Search](../BinarySearch_Documentation.md) | O(log n) | Efficient search algorithm |
-| [Second Smallest/Largest](../SecondSmallestSecondLargest_Documentation.md) | O(n) | Statistical analysis |
+### 🔗 Data Structures
+| Data Structure | Documentation | Tests | Examples |
+|---------------|---------------|-------|----------|
+| **Linked List** | [📄](algorithms/LinkedListWithAddresses_Documentation.md) | [🧪](testing/LinkedListWithAddresses_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#linked-list) |
+| **Stack** | [📄](algorithms/StackOperations_Documentation.md) | [🧪](testing/StackOperations_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#stack) |
+| **Linear Queue** | [📄](algorithms/LinearQueue_Documentation.md) | [🧪](testing/LinearQueue_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#linear-queue) |
+| **Circular Queue** | [📄](algorithms/CircularQueue_Documentation.md) | [🧪](testing/CircularQueue_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#circular-queue) |
+| **Deque** | [📄](algorithms/DequeOperations_Documentation.md) | [🧪](testing/DequeOperations_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#deque) |
+| **Priority Queue** | [📄](algorithms/PriorityQueueOperations_Documentation.md) | [🧪](testing/PriorityQueueOperations_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#priority-queue) |
+| **Queue Using Array** | [📄](algorithms/QueueUsingArray_Documentation.md) | [🧪](testing/QueueUsingArray_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#queue-using-array) |
 
-### 🧪 Test Documentation
+### 🔢 Array Operations
+| Algorithm | Documentation | Tests | Examples |
+|-----------|---------------|-------|----------|
+| **Insert Element** | [📄](algorithms/InsertElement_Documentation.md) | [🧪](testing/InsertElement_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#insert-element) |
+| **Remove Element** | [📄](algorithms/RemoveElement_Documentation.md) | [🧪](testing/RemoveElement_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#remove-element) |
+| **Traversal** | [📄](algorithms/Traversal_Documentation.md) | [🧪](testing/Traversal_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#traversal) |
 
-Each algorithm has comprehensive test documentation:
+### 📐 Matrix Operations
+| Algorithm | Documentation | Tests | Examples |
+|-----------|---------------|-------|----------|
+| **Matrix Multiplication** | [📄](algorithms/MatrxMultiplication_Documentation.md) | [🧪](testing/MatrxMultiplication_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#matrix-multiplication) |
+| **Sparse Matrix** | [📄](algorithms/SparseMatrix_Documentation.md) | [🧪](testing/SparseMatrix_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#sparse-matrix) |
 
-#### Test Documentation Index
-- [Merge Sort Tests](../MergeSortAlgorithm_Test_Documentation.md)
-- [Quick Sort Tests](../QuickSortAlgorithm_Test_Documentation.md)
-- [Bubble Sort Tests](../BubbleSortAlgorithm_Test_Documentation.md)
-- [Selection Sort Tests](../SelectionSortAlgorithm_Test_Documentation.md)
-- [Insertion Sort Tests](../InsertionSort_Test_Documentation.md)
-- [Linked List Tests](../LinkedListWithAddresses_Test_Documentation.md)
-- [Stack Tests](../StackOperations_Test_Documentation.md)
-- [Linear Queue Tests](../LinearQueue_Test_Documentation.md)
-- [Circular Queue Tests](../CircularQueue_Test_Documentation.md)
-- [Priority Queue Tests](../PriorityQueueOperations_Test_Documentation.md)
-- [Queue Using Array Tests](../QueueUsingArray_Test_Documentation.md)
-- [Deque Tests](../DequeOperations_Test_Documentation.md)
-- [Insert Element Tests](../InsertElement_Test_Documentation.md)
-- [Remove Element Tests](../RemoveElement_Test_Documentation.md)
-- [Matrix Multiplication Tests](../MatrxMultiplication_Test_Documentation.md)
-- [Binary Search Tests](../BinarySearch_Test_Documentation.md)
-- [Second Smallest/Largest Tests](../SecondSmallestSecondLargest_Test_Documentation.md)
+### 🎯 Special Algorithms
+| Algorithm | Documentation | Tests | Examples |
+|-----------|---------------|-------|----------|
+| **Second Smallest/Largest** | [📄](algorithms/SecondSmallestSecondLargest_Documentation.md) | [🧪](testing/SecondSmallestSecondLargest_Test_Documentation.md) | [💡](examples/INPUT_OUTPUT_EXAMPLES.md#second-smallest-largest) |
 
-### 📊 Performance Analysis
+## 📊 Performance Overview
 
-#### Complexity Comparison
-| Algorithm Type | Best | Average | Worst | Space |
-|---------------|------|---------|-------|-------|
-| **Sorting** | O(n log n) | O(n log n) | O(n²) | O(log n) |
-| **Searching** | O(1) | O(log n) | O(n) | O(1) |
-| **Data Structure Operations** | O(1) | O(1) | O(n) | O(n) |
+### Algorithm Complexity Comparison
+| Algorithm | Time | Space | Stability | Best For |
+|-----------|-------|-------|-----------|----------|
+| **Binary Search** | O(log n) | O(1) | N/A | Sorted data search |
+| **Linear Search** | O(n) | O(1) | N/A | Unsorted data |
+| **Bubble Sort** | O(n²) | O(1) | ✅ | Educational purposes |
+| **Insertion Sort** | O(n²) | O(1) | ✅ | Nearly sorted data |
+| **Merge Sort** | O(n log n) | O(n) | ✅ | Stable sorting |
+| **Quick Sort** | O(n log n) | O(log n) | ❌ | General purpose |
 
-#### Performance Benchmarks
-- [Test Results Summary](../Test_Summary_Report.md) - Comprehensive test results
-- [Performance Comparison](../Performance_Comparison.md) - Algorithm performance analysis
-- [Memory Usage Analysis](../Memory_Usage_Analysis.md) - Memory efficiency comparison
+### Data Structure Performance
+| Structure | Access | Insert | Delete | Space |
+|-----------|--------|--------|--------|-------|
+| **Array** | O(1) | O(n) | O(n) | O(n) |
+| **Linked List** | O(n) | O(1) | O(1) | O(n) |
+| **Stack** | O(n) | O(1) | O(1) | O(n) |
+| **Queue** | O(n) | O(1) | O(1) | O(n) |
 
-### 🎓 Educational Resources
+## 🎓 Learning Resources
 
-#### Learning Paths
-1. **Beginner Path**
-   - Start with Bubble Sort and Selection Sort
-   - Learn basic data structures (Stack, Queue)
-   - Progress to Insertion Sort
-   - Practice with array operations
+### 📚 Structured Learning
+1. **[Learning Path](LEARNING_PATH.md)** - 7-phase progressive curriculum
+2. **[Glossary](GLOSSARY.md)** - Technical terminology explained
+3. **[FAQ](FAQ.md)** - Common algorithm questions
+4. **[Examples](examples/)** - Practical usage demonstrations
 
-2. **Intermediate Path**
-   - Master Merge Sort and Quick Sort
-   - Understand Linked List operations
-   - Learn Binary Search
-   - Study circular data structures
+### 🧪 Testing Framework
+- **12 Test Methods** per algorithm covering all scenarios
+- **Performance Benchmarking** with detailed analysis
+- **Edge Case Testing** for robustness
+- **Integration Testing** for interoperability
 
-3. **Advanced Path**
-   - Optimize sorting algorithms
-   - Study memory management
-   - Learn algorithm analysis
-   - Explore advanced data structures
+## 🔧 Development Resources
 
-#### Key Concepts
-- **Time Complexity**: How algorithm runtime scales with input size
-- **Space Complexity**: Memory usage patterns
-- **Stability**: Whether equal elements maintain relative order
-- **In-Place**: Whether algorithm modifies input directly
-- **Divide and Conquer**: Recursive problem-solving approach
+### 📋 Documentation Standards
+- **[Style Guide](STYLE_GUIDE.md)** - Writing and formatting standards
+- **[Templates](templates/)** - Reusable documentation templates
+- **[Architecture Guide](architecture/)** - Project structure and design
 
-### 🔧 Development Documentation
+### 🛠️ Build System
+- **Gradle Configuration** - Modern build automation
+- **JUnit 5 Testing** - Comprehensive test framework
+- **GitHub Actions** - CI/CD pipeline
 
-#### Build System
-- [Build Configuration](../build.gradle) - Gradle build configuration
-- [Git Configuration](../.gitignore) - Git ignore patterns
-- [Editor Configuration](../.editorconfig) - Code formatting standards
+## 🚀 Getting Started
 
-#### Continuous Integration
-- [CI/CD Pipeline](../.github/workflows/java-ci.yml) - Automated testing and builds
-- [Quality Assurance](../Quality_Assurance.md) - Code quality standards
-- [Release Process](../Release_Process.md) - Version management
+### For Beginners
+1. **Start Here**: [Learning Path](LEARNING_PATH.md)
+2. **Reference**: [Glossary](GLOSSARY.md)
+3. **Examples**: [Input/Output Examples](examples/INPUT_OUTPUT_EXAMPLES.md)
+4. **Questions**: [FAQ](FAQ.md)
 
-## 🎯 Navigation Guide
-
-### For Learners
-1. **Start Here**: Read the main [README](../README.md)
-2. **Choose Algorithm**: Browse algorithm documentation
-3. **Study Tests**: Review test documentation for understanding
-4. **Run Code**: Execute algorithms to see them in action
-5. **Contribute**: Follow [contributing guidelines](../CONTRIBUTING.md)
-
-### For Contributors
-1. **Read Guidelines**: Review [CONTRIBUTING.md](../CONTRIBUTING.md)
-2. **Check Standards**: Understand code and documentation standards
-3. **Study Examples**: Review existing implementations
-4. **Run Tests**: Ensure all tests pass
-5. **Submit PR**: Follow pull request process
+### For Developers
+1. **Architecture**: [Project Structure](architecture/README.md)
+2. **Standards**: [Style Guide](STYLE_GUIDE.md)
+3. **Templates**: [Documentation Templates](templates/)
+4. **Testing**: [Test Coverage](TEST_CASE_MATRIX.md)
 
 ### For Educators
-1. **Curriculum Guide**: Use learning paths for course design
-2. **Teaching Materials**: Leverage comprehensive documentation
-3. **Assessment Tools**: Use test suites for evaluation
-4. **Examples**: Find ready-to-use code examples
-5. **References**: Access detailed algorithm explanations
+1. **Curriculum**: [Learning Path](LEARNING_PATH.md)
+2. **Resources**: [Examples](examples/) and [FAQ](FAQ.md)
+3. **Standards**: [Style Guide](STYLE_GUIDE.md)
+4. **Assessment**: [Test Case Matrix](TEST_CASE_MATRIX.md)
 
 ## 📈 Project Statistics
 
-### Implementation Coverage
-- **Total Algorithms**: 15+ implementations
-- **Test Coverage**: 100% for all algorithms
-- **Documentation**: Complete for all implementations
-- **Performance Analysis**: Comprehensive benchmarks
+### Implementation Summary
+- **🎯 26 Algorithms** with comprehensive implementations
+- **🧪 26 Test Suites** with 12 test methods each
+- **📚 52 Documentation Files** (algorithm + test docs)
+- **✅ 100% Test Coverage** across all algorithms
+- **📊 Complete Performance Analysis** for all implementations
 
-### Code Quality
-- **Lines of Code**: 10,000+ including tests and documentation
-- **Test Methods**: 180+ individual test methods
-- **Documentation Pages**: 30+ detailed documents
-- **Examples**: 50+ code examples
+### Quality Metrics
+- **Code Coverage**: 100% with comprehensive test suites
+- **Documentation**: Complete algorithm and test documentation
+- **Performance**: Detailed benchmarking and comparison
+- **Standards**: Consistent formatting and organization
 
-### Community Metrics
-- **Contributors**: [Number of contributors]
-- **Pull Requests**: [Number of PRs]
-- **Issues Resolved**: [Number of issues]
-- **Stars**: [Number of GitHub stars]
+## 🔍 Directory Deep Dive
 
-## 🔍 Search and Discovery
+### 📁 algorithms/
+Individual algorithm documentation files:
+- Comprehensive algorithm explanations
+- Implementation details and analysis
+- Performance characteristics
+- Real-world applications
 
-### Finding Specific Information
-- **Algorithm by Name**: Use the table of contents
-- **Algorithm by Type**: Browse categorized sections
-- **Performance Data**: Check complexity tables
-- **Test Information**: Review test documentation
+### 📁 testing/
+Test documentation and coverage:
+- Test methodology and strategy
+- Detailed test case descriptions
+- Performance benchmarking results
+- Coverage analysis and reports
 
-### Cross-References
-- **Related Algorithms**: See "Comparison" sections
-- **Alternative Implementations**: Check "Alternatives" sections
-- **Real-World Applications**: Browse "Applications" sections
-- **Mathematical Background**: Review "Analysis" sections
+### 📁 examples/
+Practical examples and demonstrations:
+- Input/output examples for all algorithms
+- Dry-run walkthroughs
+- Sample data files
+- Usage patterns
 
-## 📝 Documentation Standards
+### 📁 architecture/
+Project structure and design:
+- [Naming Conventions](architecture/NAMING_CONVENTIONS.md)
+- [Project Layout](architecture/README.md)
+- Design decisions and rationale
+- Build system documentation
 
+### 📁 templates/
+Reusable documentation templates:
+- [Algorithm Template](templates/algorithm-template.md)
+- [Test Template](templates/test-template.md)
+- Standardized formats
+- Usage guidelines
 ### Format Guidelines
 - **Consistent Structure**: All docs follow the same template
 - **Clear Examples**: Code examples with explanations

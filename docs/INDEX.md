@@ -7,14 +7,14 @@ This is the central navigation hub for all documentation in the DSA Java project
 ### 🔍 Sorting Algorithms
 | Algorithm | Implementation | Algorithm Doc | Test File | Test Doc |
 |-----------|----------------|--------------|-----------|----------|
-| [Binary Search](../BinarySearch.java) | [Algorithm Doc](../BinarySearch_Documentation.md) | [Test File](../BinarySearch_Test.java) | [Test Doc](../BinarySearch_Test_Documentation.md) |
-| [Bubble Sort](../BubbleSort.java) | [Algorithm Doc](../BubbleSort_Documentation.md) | [Test File](../BubbleSort_Test.java) | [Test Doc](../BubbleSort_Test_Documentation.md) |
-| [Insertion Sort](../InsertionSort.java) | [Algorithm Doc](../InsertionSort_Documentation.md) | [Test File](../InsertionSort_Test.java) | [Test Doc](../InsertionSort_Test_Documentation.md) |
-| [Selection Sort](../SelectionSort.java) | [Algorithm Doc](../SelectionSort_Documentation.md) | [Test File](../SelectionSort_Test.java) | [Test Doc](../SelectionSort_Test_Documentation.md) |
-| [Merge Sort](../MergeSort.java) | [Algorithm Doc](../MergeSort_Documentation.md) | [Test File](../MergeSort_Test.java) | [Test Doc](../MergeSort_Test_Documentation.md) |
-| [Quick Sort](../QuickSort.java) | [Algorithm Doc](../QuickSort_Documentation.md) | [Test File](../QuickSort_Test.java) | [Test Doc](../QuickSort_Test_Documentation.md) |
-| [Merge Sort Algorithm](../MergeSortAlgorithm.java) | [Algorithm Doc](../MergeSortAlgorithm_Documentation.md) | [Test File](../MergeSortAlgorithm_Test.java) | [Test Doc](../MergeSortAlgorithm_Test_Documentation.md) |
-| [Quick Sort Algorithm](../QuickSortAlgorithm.java) | [Algorithm Doc](../QuickSortAlgorithm_Documentation.md) | [Test File](../QuickSortAlgorithm_Test.java) | [Test Doc](../QuickSortAlgorithm_Test_Documentation.md) |
+| [Binary Search](../BinarySearch.java) | [📄](algorithms/BinarySearch_Documentation.md) | [🧪](../BinarySearch_Test.java) | [📋](testing/BinarySearch_Test_Documentation.md) |
+| [Bubble Sort](../BubbleSort.java) | [📄](algorithms/BubbleSort_Documentation.md) | [🧪](../BubbleSort_Test.java) | [📋](testing/BubbleSort_Test_Documentation.md) |
+| [Insertion Sort](../InsertionSort.java) | [📄](algorithms/InsertionSort_Documentation.md) | [🧪](../InsertionSort_Test.java) | [📋](testing/InsertionSort_Test_Documentation.md) |
+| [Selection Sort](../SelectionSort.java) | [📄](algorithms/SelectionSort_Documentation.md) | [🧪](../SelectionSort_Test.java) | [📋](testing/SelectionSort_Test_Documentation.md) |
+| [Merge Sort](../MergeSort.java) | [📄](algorithms/MergeSort_Documentation.md) | [🧪](../MergeSort_Test.java) | [📋](testing/MergeSort_Test_Documentation.md) |
+| [Quick Sort](../QuickSort.java) | [📄](algorithms/QuickSort_Documentation.md) | [🧪](../QuickSort_Test.java) | [📋](testing/QuickSort_Test_Documentation.md) |
+| [Merge Sort Algorithm](../MergeSortAlgorithm.java) | [📄](algorithms/MergeSortAlgorithm_Documentation.md) | [🧪](../MergeSortAlgorithm_Test.java) | [📋](testing/MergeSortAlgorithm_Test_Documentation.md) |
+| [Quick Sort Algorithm](../QuickSortAlgorithm.java) | [📄](algorithms/QuickSortAlgorithm_Documentation.md) | [🧪](../QuickSortAlgorithm_Test.java) | [📋](testing/QuickSortAlgorithm_Test_Documentation.md) |
 
 ### 🔍 Search Algorithms
 | Algorithm | Implementation | Algorithm Doc | Test File | Test Doc |

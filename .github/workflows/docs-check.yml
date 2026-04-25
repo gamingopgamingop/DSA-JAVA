@@ -1,0 +1,265 @@
+name: Documentation Check
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'docs/**'
+      - '**.md'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - '**.md'
+
+jobs:
+  docs-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install markdownlint
+      run: npm install -g markdownlint-cli
+      
+    - name: Run markdownlint
+      run: |
+        markdownlint **/*.md --config .markdownlint.json || true
+        
+    - name: Check for broken links
+      uses: lycheeverse/lychee-action@v1.8.0
+      with:
+        args: --verbose --no-progress 'docs/**/*.md' '**.md'
+        fail: true
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        
+    - name: Check documentation structure
+      run: |
+        echo "Checking documentation structure..."
+        
+        # Check if main directories exist
+        [ -d "docs/algorithms" ] || { echo "❌ docs/algorithms directory missing"; exit 1; }
+        [ -d "docs/testing" ] || { echo "❌ docs/testing directory missing"; exit 1; }
+        [ -d "docs/examples" ] || { echo "❌ docs/examples directory missing"; exit 1; }
+        [ -d "docs/architecture" ] || { echo "❌ docs/architecture directory missing"; exit 1; }
+        [ -d "docs/templates" ] || { echo "❌ docs/templates directory missing"; exit 1; }
+        
+        # Check if essential files exist
+        [ -f "docs/README.md" ] || { echo "❌ docs/README.md missing"; exit 1; }
+        [ -f "docs/INDEX.md" ] || { echo "❌ docs/INDEX.md missing"; exit 1; }
+        [ -f "docs/COMPLEXITY_TABLE.md" ] || { echo "❌ docs/COMPLEXITY_TABLE.md missing"; exit 1; }
+        [ -f "docs/TEST_CASE_MATRIX.md" ] || { echo "❌ docs/TEST_CASE_MATRIX.md missing"; exit 1; }
+        [ -f "docs/GLOSSARY.md" ] || { echo "❌ docs/GLOSSARY.md missing"; exit 1; }
+        [ -f "docs/FAQ.md" ] || { echo "❌ docs/FAQ.md missing"; exit 1; }
+        [ -f "docs/LEARNING_PATH.md" ] || { echo "❌ docs/LEARNING_PATH.md missing"; exit 1; }
+        [ -f "docs/STYLE_GUIDE.md" ] || { echo "❌ docs/STYLE_GUIDE.md missing"; exit 1; }
+        
+        echo "✅ Documentation structure is valid"
+        
+    - name: Check documentation consistency
+      run: |
+        echo "Checking documentation consistency..."
+        
+        # Check if all algorithm docs have corresponding test docs
+        for alg_doc in docs/algorithms/*_Documentation.md; do
+          if [ -f "$alg_doc" ]; then
+            alg_name=$(basename "$alg_doc" "_Documentation.md")
+            test_doc="docs/testing/${alg_name}_Test_Documentation.md"
+            
+            if [ ! -f "$test_doc" ]; then
+              echo "⚠️  Missing test documentation for $alg_name"
+            fi
+          fi
+        done
+        
+        # Check if all test docs have corresponding algorithm docs
+        for test_doc in docs/testing/*_Test_Documentation.md; do
+          if [ -f "$test_doc" ]; then
+            test_name=$(basename "$test_doc" "_Test_Documentation.md")
+            alg_doc="docs/algorithms/${test_name}_Documentation.md"
+            
+            if [ ! -f "$alg_doc" ]; then
+              echo "⚠️  Missing algorithm documentation for $test_name"
+            fi
+          fi
+        done
+        
+        echo "✅ Documentation consistency check completed"
+        
+    - name: Validate markdown files
+      run: |
+        echo "Validating markdown files..."
+        
+        # Check for common markdown issues
+        find docs -name "*.md" -exec echo "Checking {}" \; -exec markdownlint {} \; 2>&1 | grep -E "(error|warning)" || true
+        
+        # Check if all markdown files have proper headers
+        for md_file in docs/**/*.md; do
+          if [ -f "$md_file" ]; then
+            # Check if file has a title (starts with #)
+            if ! head -n 1 "$md_file" | grep -q "^# "; then
+              echo "⚠️  $md_file missing title header"
+            fi
+            
+            # Check if file has proper structure
+            if [ $(wc -l < "$md_file") -lt 10 ]; then
+              echo "⚠️  $md_file seems too short (< 10 lines)"
+            fi
+          fi
+        done
+        
+        echo "✅ Markdown validation completed"
+        
+    - name: Check internal links
+      run: |
+        echo "Checking internal documentation links..."
+        
+        # Check if links in docs point to existing files
+        for md_file in docs/**/*.md; do
+          if [ -f "$md_file" ]; then
+            # Extract markdown links
+            grep -oE '\[.*\]\([^)]*\)' "$md_file" | while read link; do
+              # Extract the URL part
+              url=$(echo "$link" | sed 's/.*(\([^)]*\)).*/\1/')
+              
+              # Check if it's a relative link
+              if echo "$url" | grep -q "^docs/"; then
+                if [ ! -f "$url" ] && [ ! -d "$url" ]; then
+                  echo "⚠️  Broken link in $md_file: $url"
+                fi
+              fi
+            done
+          fi
+        done
+        
+        echo "✅ Internal links check completed"
+        
+    - name: Generate documentation summary
+      run: |
+        echo "Generating documentation summary..."
+        
+        echo "# Documentation Summary" > docs-summary.md
+        echo "" >> docs-summary.md
+        
+        echo "## File Counts" >> docs-summary.md
+        echo "- Algorithm docs: $(find docs/algorithms -name "*.md" 2>/dev/null | wc -l)" >> docs-summary.md
+        echo "- Test docs: $(find docs/testing -name "*.md" 2>/dev/null | wc -l)" >> docs-summary.md
+        echo "- Example docs: $(find docs/examples -name "*.md" 2>/dev/null | wc -l)" >> docs-summary.md
+        echo "- Architecture docs: $(find docs/architecture -name "*.md" 2>/dev/null | wc -l)" >> docs-summary.md
+        echo "- Template docs: $(find docs/templates -name "*.md" 2>/dev/null | wc -l)" >> docs-summary.md
+        echo "- Total docs: $(find docs -name "*.md" 2>/dev/null | wc -l)" >> docs-summary.md
+        echo "" >> docs-summary.md
+        
+        echo "## Directory Structure" >> docs-summary.md
+        tree docs/ 2>/dev/null || find docs -type d | sort >> docs-summary.md
+        echo "" >> docs-summary.md
+        
+        echo "## Largest Files" >> docs-summary.md
+        find docs -name "*.md" -exec wc -l {} \; | sort -nr | head -10 >> docs-summary.md
+        
+        cat docs-summary.md
+        
+    - name: Upload documentation summary
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation-summary
+        path: docs-summary.md
+        
+    - name: Check for TODO comments
+      run: |
+        echo "Checking for TODO comments in documentation..."
+        
+        todo_count=$(grep -r "TODO\|FIXME\|XXX" docs/ 2>/dev/null | wc -l)
+        if [ "$todo_count" -gt 0 ]; then
+          echo "⚠️  Found $todo_count TODO/FIXME comments:"
+          grep -rn "TODO\|FIXME\|XXX" docs/ 2>/dev/null || true
+        else
+          echo "✅ No TODO/FIXME comments found"
+        fi
+        
+  spell-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install spell checker
+      run: |
+        npm install -g spellchecker
+        
+    - name: Run spell check
+      run: |
+        echo "Running spell check on documentation..."
+        
+        # Create a simple spell check script
+        cat > spell-check.js << 'EOF'
+        const fs = require('fs');
+        const path = require('path');
+        
+        function checkSpelling(file) {
+          const content = fs.readFileSync(file, 'utf8');
+          const words = content.toLowerCase().match(/\b[a-z]+\b/g) || [];
+          
+          // Common technical terms that might be flagged
+          const validWords = new Set([
+            'algorithm', 'array', 'queue', 'stack', 'linked', 'list', 'sort', 'search',
+            'binary', 'linear', 'bubble', 'insertion', 'selection', 'merge', 'quick',
+            'complexity', 'time', 'space', 'performance', 'implementation', 'java',
+            'github', 'gradle', 'junit', 'markdown', 'documentation', 'testing',
+            'data', 'structure', 'node', 'pointer', 'memory', 'recursive', 'iterative',
+            'stable', 'inplace', 'heap', 'priority', 'deque', 'circular', 'sparse',
+            'matrix', 'multiplication', 'traversal', 'edge', 'case', 'boundary',
+            'benchmark', 'scalability', 'optimization', 'efficiency', 'analysis'
+          ]);
+          
+          let suspiciousWords = [];
+          words.forEach(word => {
+            if (word.length > 3 && !validWords.has(word) && !/^[a-z]{3,}$/.test(word)) {
+              suspiciousWords.push(word);
+            }
+          });
+          
+          return suspiciousWords;
+        }
+        
+        const docsDir = 'docs';
+        const files = fs.readdirSync(docsDir, { recursive: true })
+          .filter(file => file.endsWith('.md'));
+        
+        let totalSuspicious = 0;
+        files.forEach(file => {
+          const fullPath = path.join(docsDir, file);
+          const suspicious = checkSpelling(fullPath);
+          if (suspicious.length > 0) {
+            console.log(`⚠️  ${file}: ${suspicious.length} suspicious words`);
+            totalSuspicious += suspicious.length;
+          }
+        });
+        
+        console.log(`\n📊 Spell check summary:`);
+        console.log(`- Files checked: ${files.length}`);
+        console.log(`- Total suspicious words: ${totalSuspicious}`);
+        
+        if (totalSuspicious > 50) {
+          console.log('❌ Too many suspicious words found');
+          process.exit(1);
+        } else {
+          console.log('✅ Spell check passed');
+        }
+        EOF
+        
+        node spell-check.js
