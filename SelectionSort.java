@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.List;
 import java.util.Stack;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * SelectionSort - A program to sort an array using Selection Sort algorithm.
@@ -26,6 +27,7 @@ public class SelectionSort {
 
         Scanner scanner = new Scanner(System.in);
         List<Integer> numberList = new ArrayList<>();
+        Vector<Integer> numberVector = new Vector<>();
         Stack<Integer> sortStack = new Stack<>();
         Formatter formatter = new Formatter();
 
@@ -41,6 +43,7 @@ public class SelectionSort {
             for (int i = 0; i < size; i++) {
                 arr[i] = scanner.nextInt();
                 numberList.add(arr[i]);
+                numberVector.add(arr[i]);
             }
 
             // Print array before sorting using Iterator
@@ -50,6 +53,14 @@ public class SelectionSort {
                 System.out.print(num + " ");
             }
             System.out.println();
+            
+            // Display Vector elements
+            System.out.print("Elements in Vector: ");
+            for (Integer num : numberVector) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            System.out.println("Vector size: " + numberVector.size() + ", Capacity: " + numberVector.capacity());
 
             // Use Formatter for formatted output
             formatter.format("Total elements to sort: %d%n", size);
