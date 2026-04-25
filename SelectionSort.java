@@ -46,9 +46,8 @@ public class SelectionSort {
             // Print array before sorting using Iterator
             System.out.println("Array before sorting: " + Arrays.toString(arr));
             System.out.print("Elements using Iterator: ");
-            Iterator<Integer> iterator = numberList.iterator();
-            while (iterator.hasNext()) {
-                System.out.print(iterator.next() + " ");
+            for (Integer num : numberList) {
+                System.out.print(num + " ");
             }
             System.out.println();
 
