@@ -25,7 +25,7 @@ import java.util.TreeMap;
 import java.util.Hashtable;
 import java.util.SortedMap;
 import java.util.NavigableMap;
-
+import java.util.Collections;
 /**
  * SelectionSort - A program to sort an array using Selection Sort algorithm.
  * 
@@ -107,67 +107,55 @@ public class SelectionSort {
                 navigableMap.put(value, label);
             }
 
-            // Print comprehensive collection demonstration
-            System.out.println("\n" + "=".repeat(60));
-            System.out.println("COLLECTIONS DEMONSTRATION");
-            System.out.println("=".repeat(60));
-            
-            // LIST IMPLEMENTATIONS
-            System.out.println("\n--- LIST IMPLEMENTATIONS ---");
-            System.out.println("ArrayList: " + numberList);
-            System.out.println("LinkedList: " + linkedList);
-            System.out.println("Vector: " + numberVector);
-            System.out.println("Vector capacity: " + numberVector.capacity());
-            System.out.println("Elements using Iterator: ");
-            Iterator<Integer> iterator = numberList.iterator();
-            while (iterator.hasNext()) {
-                System.out.print(iterator.next() + " ");
+            // Print array before sorting using Iterator
+            System.out.println("Array before sorting: " + Arrays.toString(arr));
+            System.out.print("Elements using Iterator: ");
+            for (Integer num : numberList) {
+                System.out.print(num + " ");
             }
             System.out.println();
             
-            // QUEUE IMPLEMENTATIONS
-            System.out.println("\n--- QUEUE IMPLEMENTATIONS ---");
-            System.out.println("Queue (LinkedList): " + queue);
-            System.out.println("ArrayDeque: " + arrayDeque);
-            System.out.println("PriorityQueue (natural order): " + priorityQueue);
-            System.out.println("Queue peek: " + queue.peek() + ", ArrayDeque peek: " + arrayDeque.peek());
-            System.out.println("Queue size: " + queue.size() + ", ArrayDeque size: " + arrayDeque.size() + 
-                             ", PriorityQueue size: " + priorityQueue.size());
+            // Display Vector elements
+            System.out.print("Elements in Vector: ");
+            for (Integer num : numberVector) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            System.out.println("Vector size: " + numberVector.size() + ", Capacity: " + numberVector.capacity());
             
-            // SET IMPLEMENTATIONS
-            System.out.println("\n--- SET IMPLEMENTATIONS ---");
-            System.out.println("HashSet (unordered, no duplicates): " + hashSet);
-            System.out.println("LinkedHashSet (insertion order): " + linkedHashSet);
-            System.out.println("TreeSet (sorted): " + treeSet);
-            System.out.println("Unique elements count - HashSet: " + hashSet.size() + 
-                             ", LinkedHashSet: " + linkedHashSet.size() + 
-                             ", TreeSet: " + treeSet.size());
+            // Display LinkedList elements
+            System.out.print("Elements in LinkedList: ");
+            for (Integer num : linkedList) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            System.out.println("LinkedList first: " + numberLinkedList.getFirst() + ", last: " + numberLinkedList.getLast());
             
-            // MAP IMPLEMENTATIONS
-            System.out.println("\n--- MAP IMPLEMENTATIONS ---");
-            System.out.println("HashMap: " + hashMap);
-            System.out.println("LinkedHashMap (insertion order): " + linkedHashMap);
-            System.out.println("TreeMap (sorted by key): " + treeMap);
-            System.out.println("Hashtable (synchronized): " + hashtable);
+            // Display HashSet elements (no duplicates, unordered)
+            System.out.print("Elements in HashSet: ");
+            for (Integer num : numberHashSet) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            System.out.println("HashSet size (unique elements): " + numberHashSet.size());
             
-            // SortedMap and NavigableMap operations
-            if (size > 0) {
-                System.out.println("\n--- ADVANCED MAP OPERATIONS ---");
-                System.out.println("SortedMap first key: " + sortedMap.firstKey() + 
-                                 ", last key: " + sortedMap.lastKey());
-                System.out.println("NavigableMap lower entry: " + navigableMap.lowerEntry(navigableMap.lastKey()));
-                System.out.println("NavigableMap higher entry: " + navigableMap.higherEntry(navigableMap.firstKey()));
-                System.out.println("NavigableMap first entry: " + navigableMap.firstEntry());
-                System.out.println("NavigableMap last entry: " + navigableMap.lastEntry());
-                System.out.println("NavigableMap descending map: " + navigableMap.descendingMap());
+            // Display TreeSet elements (sorted, no duplicates)
+            System.out.print("Elements in TreeSet (auto-sorted): ");
+            for (Integer num : numberTreeSet) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+            
+            // Display HashMap elements
+            System.out.println("HashMap entries:");
+            for (Map.Entry<Integer, String> entry : numberMap.entrySet()) {
+                System.out.println("  Key: " + entry.getKey() + " -> Value: " + entry.getValue());
             }
 
             // Use Formatter for formatted output
-            formatter.format("%nTotal elements to sort: %d%n", size);
+            formatter.format("Total elements to sort: %d%n", size);
             System.out.println(formatter.toString());
             formatter.close();
-            
-            System.out.println("\nArray before sorting: " + Arrays.toString(arr));
 
             // Selection Sort logic
             for (int i = 0; i < size - 1; i++) {
