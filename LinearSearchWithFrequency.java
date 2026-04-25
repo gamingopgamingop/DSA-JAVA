@@ -1,7 +1,8 @@
-import java.util.*;
-import java.text.*;
-
-// import java.util.InputMismatchException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * LinearSearchWithFrequency - Performs linear search and counts occurrences.

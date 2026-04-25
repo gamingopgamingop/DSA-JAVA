@@ -188,6 +188,109 @@ public class BinarySearch {
     }
     
     /**
+     * Demonstrates all remaining imports and advanced features.
+     */
+    public static void demonstrateAllImports() {
+        try {
+            // Advanced Collections
+            Set<Integer> linkedHashSet = new LinkedHashSet<>(Arrays.asList(3, 1, 4, 1, 5));
+            Set<Integer> enumSet = EnumSet.noneOf(java.lang.Thread.State.class);
+            Map<String, Integer> linkedHashMap = new LinkedHashMap<>();
+            linkedHashMap.put("first", 1);
+            linkedHashMap.put("second", 2);
+            Map<String, Integer> treeMap = new TreeMap<>();
+            treeMap.put("z", 26);
+            treeMap.put("a", 1);
+            Hashtable<String, Integer> hashtable = new Hashtable<>();
+            hashtable.put("hash", 42);
+            SortedMap<String, Integer> sortedMap = new TreeMap<>();
+            sortedMap.put("sorted", 100);
+            NavigableMap<String, Integer> navigableMap = new TreeMap<>();
+            navigableMap.put("nav", 200);
+            
+            // I/O Operations
+            PrintStream printStream = new PrintStream(new BufferedOutputStream(
+                new FileOutputStream("demo_output.txt")), true);
+            printStream.println("Demo output using PrintStream");
+            printStream.close();
+            
+            // Character encoding
+            String encodedText = "Hello World";
+            byte[] utf8Bytes = encodedText.getBytes(StandardCharsets.UTF_8);
+            System.out.println("UTF-8 encoded: " + new String(utf8Bytes, StandardCharsets.UTF_8));
+            
+            // Desktop operations (if supported)
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    System.out.println("Desktop operations supported: " + desktop.isSupported(Desktop.Action.BROWSE));
+                }
+            } catch (Exception e) {
+                System.out.println("Desktop operations not available");
+            }
+            
+            // Printing operations
+            try {
+                PrinterJob printerJob = PrinterJob.getPrinterJob();
+                PageFormat pageFormat = printerJob.defaultPage();
+                Book book = new Book();
+                System.out.println("Printing system available: " + printerJob.printDialog());
+            } catch (PrinterException e) {
+                System.out.println("Printing system error: " + e.getMessage());
+            }
+            
+            // Advanced Functional Interfaces
+            IntUnaryOperator square = x -> x * x;
+            IntBinaryOperator multiply = (a, b) -> a * b;
+            IntPredicate isPositive = x -> x > 0;
+            IntConsumer printInt = x -> System.out.println("Int: " + x);
+            IntFunction<String> intToString = Object::toString;
+            
+            DoubleUnaryOperator doubleSquare = x -> x * x;
+            DoubleBinaryOperator doubleMultiply = (a, b) -> a * b;
+            DoublePredicate isDoublePositive = x -> x > 0.0;
+            DoubleConsumer printDouble = x -> System.out.println("Double: " + x);
+            DoubleFunction<String> doubleToString = Object::toString;
+            
+            LongUnaryOperator longSquare = x -> x * x;
+            LongPredicate isLongPositive = x -> x > 0L;
+            LongConsumer printLong = x -> System.out.println("Long: " + x);
+            
+            // Stream Tokenizer demonstration
+            String sampleText = "Hello 123 World 456";
+            StreamTokenizer tokenizer = new StreamTokenizer(new java.io.StringReader(sampleText));
+            while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
+                System.out.println("Token: " + tokenizer.sval + " (Type: " + tokenizer.ttype + ")");
+            }
+            
+            // Random operations
+            Random random = new Random();
+            System.out.println("Random int: " + random.nextInt());
+            System.out.println("Random double: " + random.nextDouble());
+            
+            // Demonstrate functional interfaces
+            int result = square.applyAsInt(5);
+            System.out.println("Square of 5: " + result);
+            
+            int product = multiply.applyAsInt(3, 4);
+            System.out.println("3 * 4 = " + product);
+            
+            System.out.println("Is 10 positive? " + isPositive.test(10));
+            printInt.accept(42);
+            String strResult = intToString.apply(123);
+            System.out.println("Int to String: " + strResult);
+            
+            double doubleResult = doubleSquare.applyAsDouble(2.5);
+            System.out.println("Square of 2.5: " + doubleResult);
+            
+            System.out.println("All imports demonstrated successfully!");
+            
+        } catch (IOException e) {
+            System.err.println("I/O Error: " + e.getMessage());
+        }
+    }
+    
+    /**
      * Main method to test the binary search implementation with enhanced features.
      * 
      * @param args Command line arguments (not used).
@@ -195,6 +298,7 @@ public class BinarySearch {
     public static void main(String[] args) {
         demonstrateDataStructures();
         demonstrateFormatting();
+        demonstrateAllImports();
         
         Scanner scanner = new Scanner(System.in);
         try {
