@@ -23,11 +23,17 @@ jobs:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
         cache: gradle
+      
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+      
+    - name: Build
+      run: ./gradlew build
     
     - name: Build with retry
       run: |
           ./gradlew build || ./gradlew build
-          
+
     
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@v2
