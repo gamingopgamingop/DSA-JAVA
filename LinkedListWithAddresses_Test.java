@@ -540,7 +540,7 @@ public class LinkedListWithAddresses_Test {
         LinkedListWithAddresses list = new LinkedListWithAddresses();
         
         // Test concurrent modifications
-        Thread writer = new Thread(() -> {
+        Thread writerThread = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
                 list.insert(i);
                 try {
@@ -552,7 +552,7 @@ public class LinkedListWithAddresses_Test {
             }
         });
         
-        Thread reader = new Thread(() -> {
+        Thread readerThread = new Thread(() -> {
             int readCount = 0;
             while (readCount < 1000) {
                 if (list.getSize() > readCount) {
@@ -568,12 +568,11 @@ public class LinkedListWithAddresses_Test {
         });
         
         try {
-            writer.start();
-            reader.start();
+            writerThread.start();
+            readerThread.start();
             
-            writer.start();
-            writer.join();
-            reader.join();
+            writerThread.join();
+            readerThread.join();
             
             writer.printf("Thread safety test: Concurrent modifications completed%n");
             writer.printf("  Final list size: %d%n", list.getSize());
@@ -665,13 +664,15 @@ public class LinkedListWithAddresses_Test {
         
         // Test maximum capacity (practical limit)
         int maxCapacity = 1000000;
+        int insertedCount = 0;
         try {
             for (int i = 0; i < maxCapacity; i++) {
                 list.insert(i);
+                insertedCount = i + 1;
             }
             writer.printf("Maximum capacity test: Successfully inserted %d elements%n", maxCapacity);
         } catch (OutOfMemoryError e) {
-            writer.printf("Maximum capacity test: Out of memory at %d elements%n", i);
+            writer.printf("Maximum capacity test: Out of memory at %d elements%n", insertedCount);
         }
         
         // Test integer overflow

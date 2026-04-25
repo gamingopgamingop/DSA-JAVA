@@ -104,6 +104,232 @@ public class LinkedListWithAddresses {
     }
 
     /**
+     * Gets the current size of the linked list.
+     * 
+     * @return The number of elements in the list.
+     */
+    public int getSize() {
+        int count = 0;
+        Node current = head;
+        while (current != null) {
+            count++;
+            current = current.next;
+        }
+        return count;
+    }
+
+    /**
+     * Searches for a value in the linked list.
+     * 
+     * @param data The value to search for.
+     * @return true if found, false otherwise.
+     */
+    public boolean search(int data) {
+        Node current = head;
+        while (current != null) {
+            if (current.data == data) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    /**
+     * Gets the head node of the linked list.
+     * 
+     * @return The head node, or null if list is empty.
+     */
+    public Node getHead() {
+        return head;
+    }
+
+    /**
+     * Deletes the first node from the linked list.
+     */
+    public void deleteFromBeginning() {
+        if (head != null) {
+            head = head.next;
+        }
+    }
+
+    /**
+     * Inserts a new node at the beginning of the linked list.
+     * 
+     * @param data The integer value to be inserted.
+     */
+    public void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    /**
+     * Deletes the last node from the linked list.
+     */
+    public void deleteFromEnd() {
+        if (head == null) {
+            return;
+        }
+        if (head.next == null) {
+            head = null;
+            return;
+        }
+        Node current = head;
+        while (current.next.next != null) {
+            current = current.next;
+        }
+        current.next = null;
+    }
+
+    /**
+     * Inserts a new node at the specified position.
+     * 
+     * @param position The position (0-indexed) where to insert.
+     * @param data The integer value to be inserted.
+     */
+    public void insertAtPosition(int position, int data) {
+        if (position < 0) {
+            throw new IllegalArgumentException("Position cannot be negative");
+        }
+        if (position == 0) {
+            insertAtBeginning(data);
+            return;
+        }
+        
+        Node newNode = new Node(data);
+        Node current = head;
+        int currentPos = 0;
+        
+        while (current != null && currentPos < position - 1) {
+            current = current.next;
+            currentPos++;
+        }
+        
+        if (current == null) {
+            throw new IndexOutOfBoundsException("Position out of bounds");
+        }
+        
+        newNode.next = current.next;
+        current.next = newNode;
+    }
+
+    /**
+     * Deletes a node at the specified position.
+     * 
+     * @param position The position (0-indexed) to delete.
+     */
+    public void deleteAtPosition(int position) {
+        if (position < 0) {
+            throw new IllegalArgumentException("Position cannot be negative");
+        }
+        if (head == null) {
+            throw new IndexOutOfBoundsException("List is empty");
+        }
+        if (position == 0) {
+            deleteFromBeginning();
+            return;
+        }
+        
+        Node current = head;
+        int currentPos = 0;
+        
+        while (current != null && currentPos < position - 1) {
+            current = current.next;
+            currentPos++;
+        }
+        
+        if (current == null || current.next == null) {
+            throw new IndexOutOfBoundsException("Position out of bounds");
+        }
+        
+        current.next = current.next.next;
+    }
+
+    /**
+     * Converts the linked list to an array.
+     * 
+     * @return An array containing all elements of the list.
+     */
+    public int[] toArray() {
+        int size = getSize();
+        int[] array = new int[size];
+        Node current = head;
+        int index = 0;
+        
+        while (current != null) {
+            array[index++] = current.data;
+            current = current.next;
+        }
+        
+        return array;
+    }
+
+    /**
+     * Detects if there's a cycle in the linked list using Floyd's algorithm.
+     * 
+     * @return true if a cycle is detected, false otherwise.
+     */
+    public boolean hasCycle() {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        
+        Node slow = head;
+        Node fast = head.next;
+        
+        while (fast != null && fast.next != null) {
+            if (slow == fast) {
+                return true;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Removes duplicate values from the linked list.
+     */
+    public void removeDuplicates() {
+        if (head == null) {
+            return;
+        }
+        
+        Node current = head;
+        while (current != null) {
+            Node runner = current;
+            while (runner.next != null) {
+                if (runner.next.data == current.data) {
+                    runner.next = runner.next.next;
+                } else {
+                    runner = runner.next;
+                }
+            }
+            current = current.next;
+        }
+    }
+
+    /**
+     * Reverses the linked list.
+     */
+    public void reverseList() {
+        Node prev = null;
+        Node current = head;
+        Node next = null;
+        
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        
+        head = prev;
+    }
+
+    /**
      * Displays all nodes in the linked list with their data and memory addresses.
      */
     public void displayWithAddresses() {

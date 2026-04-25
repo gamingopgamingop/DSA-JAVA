@@ -882,65 +882,25 @@ public class QueueUsingArray_Test {
         writer.println("• ArrayDeque is best for dynamic queue operations");
     }
     
-    /**
-     * Helper class to hold queue pointers (simulates pass-by-reference)
-     */
-    private static class QueuePointers {
-        int front;
-        int rear;
-        
-        QueuePointers() {
-            this.front = -1;
-            this.rear = -1;
-        }
-    }
-    
-    /**
-     * Helper methods for queue operations
-     */
-    private static boolean enqueue(int[] queue, QueuePointers ptr, int item) {
-        if ((ptr.rear + 1) % queue.length == ptr.front) {
-            return false; // Queue is full
-        }
-        
-        if (ptr.front == -1) {
-            ptr.front = 0;
-        }
-        
-        ptr.rear = (ptr.rear + 1) % queue.length;
-        queue[ptr.rear] = item;
-        return true;
-    }
-    
-    private static int dequeue(int[] queue, QueuePointers ptr) {
-        if (ptr.front == -1) {
+    public static int peek(int[] queue, int front) {
+        if (front == -1) {
             return -1; // Queue is empty
         }
-        
-        int item = queue[ptr.front];
-        
-        if (ptr.front == ptr.rear) {
-            ptr.front = -1;
-            ptr.rear = -1;
-        } else {
-            ptr.front = (ptr.front + 1) % queue.length;
-        }
-        
-        return item;
+        return queue[front];
     }
     
-    // Helper class to return updated front and rear values
-    private static class QueueResult {
-        boolean success;
-        int front;
-        int rear;
-        int value;
-        
-        QueueResult(boolean success, int front, int rear, int value) {
-            this.success = success;
-            this.front = front;
-            this.rear = rear;
-            this.value = value;
+    public static boolean isEmpty(int front) {
+        return front == -1;
+    }
+    
+    private static int getQueueSize(int front, int rear, int queueLength) {
+        if (front == -1) {
+            return 0;
+        }
+        if (rear >= front) {
+            return rear - front + 1;
+        } else {
+            return (rear + 1) + (queueLength - front);
         }
     }
     
@@ -982,28 +942,7 @@ public class QueueUsingArray_Test {
         return new QueueResult(true, newFront, newRear, item);
     }
     
-    public static int peek(int[] queue, int front) {
-        if (front == -1) {
-            return -1; // Queue is empty
-        }
-        return queue[front];
-    }
-    
-    public static boolean isEmpty(QueuePointers ptr) {
-        return ptr.front == -1;
-    }
-    
-    private static int getQueueSize(QueuePointers ptr, int queueLength) {
-        if (ptr.front == -1) {
-            return 0;
-        }
-        if (ptr.rear >= ptr.front) {
-            return ptr.rear - ptr.front + 1;
-        } else {
-            return (ptr.rear + 1) + (queueLength - ptr.front);
-        }
-    }
-    
+        
     /**
      * Generate final summary
      */
