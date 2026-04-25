@@ -61,6 +61,7 @@ import java.util.function.LongConsumer;
 import java.io.StreamTokenizer;
 import java.util.Date;
 import java.util.Random;
+import java.util.stream.Stream;
 
 /**
  * Test class for Traversal algorithm validation
@@ -247,7 +248,7 @@ public class Traversal_Test {
         writer.println("\nPerformance Analysis:");
         writer.println("• Tree DFS: O(n) - Visits each node exactly once");
         writer.println("• Tree BFS: O(n) - Visits each node exactly once");
-        nodeWriter.println("• Graph DFS: O(V + E) - Visits vertices and edges");
+        writer.println("• Graph DFS: O(V + E) - Visits vertices and edges");
         writer.println("• Graph BFS: O(V + E) - Visits vertices and edges");
         writer.println("• Performance depends on data structure and traversal method");
         writer.println("• Tree traversals are generally faster than graph traversals");
@@ -287,7 +288,8 @@ public class Traversal_Test {
         long bstBFSStart = System.nanoTime();
         levelOrderTraversal(bst, bstBFS::add);
         long bstBFSEnd = System.nanoTime();
-        long bstBFSTime = bstBFSE - bstBFSStart;
+        // long bstBFSTime = bstBFSE - bstBFSStart;
+        long bstBFSTime = bstBFSEnd - bstBFSStart;
         
         writer.printf("Different Data Structures Test:%n");
         writer.printf("  Binary Tree DFS: %d ms, Size: %d%n", binaryDFSTime / 1000000, binaryTree.size());
@@ -943,7 +945,8 @@ class Graph {
     
     public void addEdge(int source, int destination) {
         adjacencyList.computeIfAbsent(source, k -> new ArrayList<>()).add(destination);
-        vertexCount = Math.max(vertexCount, source + 1, destination + 1);
+        // vertexCount = Math.max(vertexCount, source + 1, destination + 1);
+        vertexCount = Math.max(vertexCount, Math.max(source + 1, destination + 1));
     }
     
     public List<Integer> getNeighbors(int vertex) {
@@ -1261,7 +1264,7 @@ class TraversalPerformanceComparison {
         writer.println("Algorithm correctness validated.");
         writer.println("All 63 imports actively used in main program.");
     }
-}
+
     
     /**
      * Performance comparison utility for graph traversal algorithms
@@ -1332,7 +1335,7 @@ class TraversalPerformanceComparison {
         }
         
         private static Map<Integer, Integer> bidirectionalBFS(Graph graph) {
-            Map<Integer, Integer> forwardDistances = new HashMap<>();
+            // Map<Integer, Integer> forwardDistances = new HashMap<>();
             Map<Integer, Integer> backwardDistances = new HashMap<>();
             
             // Forward BFS from node 1
