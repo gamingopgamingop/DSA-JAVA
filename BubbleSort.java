@@ -8,6 +8,7 @@ import java.util.Formatter;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -266,7 +267,7 @@ public class BubbleSort {
             System.out.println();
 
             // Convert array to List for demonstration
-            List<Integer> list = Arrays.stream(arr).boxed().toList();
+            List<Integer> list = Arrays.stream(arr).boxed().collect(Collectors.toList());
             System.out.println("Array converted to List: " + list);
 
             // Bubble Sort logic

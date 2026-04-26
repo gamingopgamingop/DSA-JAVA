@@ -322,7 +322,7 @@ public class sample_Test {
                 array[i] = i;
             }
             for (int i = 0; i < size; i++) {
-                array[i];
+                int dummy = array[i]; // Access the element
             }
             long arrayEnd = System.nanoTime();
             long arrayTime = arrayEnd - arrayStart;

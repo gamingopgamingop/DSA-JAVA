@@ -73,7 +73,7 @@ public class LinearQueue_Test {
     public static void main(String[] args) {
         try {
             writer = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream(TEST_RESULTS_FILE), true));
+                new FileOutputStream(TEST_RESULTS_FILE)), true);
             
             writer.println("=== LinearQueue Test Results ===");
             writer.println("Timestamp: " + new Date());
@@ -730,7 +730,7 @@ public class LinearQueue_Test {
         if (queue.isEmpty()) return 0;
         
         int size = 0;
-        LinearQueue tempQueue = new LinearQueue(queue.capacity);
+        LinearQueue tempQueue = new LinearQueue(queue.getCapacity());
         
         // Copy elements to temporary queue to count
         while (!queue.isEmpty()) {
@@ -1083,5 +1083,31 @@ class LinearQueuePerformanceComparison {
         System.out.println("• IsFull: O(1) - Constant time check");
         System.out.println("• Display: O(n) - Linear traversal");
         System.out.println("• All operations are consistent regardless of queue state");
+    }
+    
+    // Helper method to copy a queue
+    private static LinearQueue copyQueue(LinearQueue original) {
+        LinearQueue copy = new LinearQueue(original.capacity);
+        
+        // Create a temporary array to store elements
+        int[] temp = new int[original.capacity];
+        int count = 0;
+        
+        // Extract all elements from original queue
+        while (!original.isEmpty()) {
+            try {
+                temp[count++] = original.dequeue();
+            } catch (Exception e) {
+                break;
+            }
+        }
+        
+        // Restore original queue
+        for (int i = 0; i < count; i++) {
+            original.enqueue(temp[i]);
+            copy.enqueue(temp[i]);
+        }
+        
+        return copy;
     }
 }

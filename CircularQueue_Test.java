@@ -73,7 +73,7 @@ public class CircularQueue_Test {
     public static void main(String[] args) {
         try {
             writer = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream(TEST_RESULTS_FILE), true));
+                new FileOutputStream(TEST_RESULTS_FILE)), true);
             
             writer.println("=== CircularQueue Test Results ===");
             writer.println("Timestamp: " + new Date());
@@ -711,7 +711,7 @@ public class CircularQueue_Test {
         if (queue.isEmpty()) return 0;
         
         int size = 0;
-        CircularQueue tempQueue = new CircularQueue(queue.capacity);
+        CircularQueue tempQueue = new CircularQueue(queue.getCapacity());
         
         // Copy elements to temporary queue to count
         // Note: This is just for testing - in real implementation, we'd add a size method

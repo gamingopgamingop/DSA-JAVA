@@ -73,7 +73,7 @@ public class DequeOperations_Test {
     public static void main(String[] args) {
         try {
             writer = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream(TEST_RESULTS_FILE), true));
+                new FileOutputStream(TEST_RESULTS_FILE)), true);
             
             writer.println("=== DequeOperations Test Results ===");
             writer.println("Timestamp: " + new Date());
@@ -759,7 +759,7 @@ public class DequeOperations_Test {
         if (deque.isEmpty()) return 0;
         
         int size = 0;
-        DequeOperations tempDeque = new DequeOperations(deque.capacity);
+        DequeOperations tempDeque = new DequeOperations(deque.getCapacity());
         
         // Copy elements to temporary deque to count
         while (!deque.isEmpty()) {
@@ -780,7 +780,7 @@ public class DequeOperations_Test {
         
         if (!deque.isEmpty()) {
             // Extract elements without destroying the deque
-            DequeOperations tempDeque = new DequeOperations(deque.capacity);
+            DequeOperations tempDeque = new DequeOperations(deque.getCapacity());
             
             while (!deque.isEmpty()) {
                 int element = deque.deleteFront();
@@ -816,7 +816,7 @@ public class DequeOperations_Test {
     private static int getFrontElement(DequeOperations deque) {
         if (deque.isEmpty()) return -1;
         int element = deque.deleteFront();
-        DequeOperations tempDeque = new DequeOperations(deque.capacity);
+        DequeOperations tempDeque = new DequeOperations(deque.getCapacity());
         tempDeque.insertRear(element);
         while (!deque.isEmpty()) {
             tempDeque.insertRear(deque.deleteFront());
@@ -830,7 +830,7 @@ public class DequeOperations_Test {
     private static int getRearElement(DequeOperations deque) {
         if (deque.isEmpty()) return -1;
         int element = deque.deleteRear();
-        DequeOperations tempDeque = new DequeOperations(deque.capacity);
+        DequeOperations tempDeque = new DequeOperations(deque.getCapacity());
         tempDeque.insertRear(element);
         while (!deque.isEmpty()) {
             tempDeque.insertRear(deque.deleteFront());

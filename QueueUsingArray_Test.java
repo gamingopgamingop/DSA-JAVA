@@ -73,7 +73,7 @@ public class QueueUsingArray_Test {
     public static void main(String[] args) {
         try {
             writer = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream(TEST_RESULTS_FILE), true));
+                new FileOutputStream(TEST_RESULTS_FILE)), true);
             
             writer.println("=== QueueUsingArray Test Results ===");
             writer.println("Timestamp: " + new Date());
@@ -1069,5 +1069,36 @@ class QueueUsingArrayPerformanceComparison {
         System.out.println("• Vector: O(n) - Synchronized array overhead");
         System.out.println("• Array Queue is most memory efficient");
         System.out.println("• LinkedList has highest overhead due to nodes");
+    }
+}
+
+// Helper class for queue operations
+class QueueResult {
+    boolean success;
+    int front;
+    int rear;
+    int value;
+    
+    public QueueResult(boolean success, int front, int rear, int value) {
+        this.success = success;
+        this.front = front;
+        this.rear = rear;
+        this.value = value;
+    }
+    
+    public boolean isSuccess() {
+        return success;
+    }
+    
+    public int getFront() {
+        return front;
+    }
+    
+    public int getRear() {
+        return rear;
+    }
+    
+    public int getValue() {
+        return value;
     }
 }
