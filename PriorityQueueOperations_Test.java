@@ -115,6 +115,9 @@ public class PriorityQueueOperations_Test {
             // Test 12: Performance comparison
             testPerformanceComparison();
             
+            // Generate final summary
+            generateSummary();
+            
             writer.close();
             System.out.println("PriorityQueueOperations tests completed. Results saved to " + TEST_RESULTS_FILE);
             
@@ -308,13 +311,7 @@ public class PriorityQueueOperations_Test {
             extracted.add(priorityPQ.delete());
         }
         
-        boolean priorityOrder = true;
-        for (int i = 0; i < extracted.size() - 1; i++) {
-            if (extracted.get(i) > extracted.get(i + 1)) {
-                priorityOrder = false;
-                break;
-            }
-        }
+        boolean priorityOrder = isSorted(extracted);
         
         // Test min-heap property
         PriorityQueueOperations minHeapPQ = new PriorityQueueOperations();
@@ -393,14 +390,7 @@ public class PriorityQueueOperations_Test {
         for (int i = 0; i < 100; i++) {
             sample.add(largePQ.delete());
         }
-        
-        boolean sampleOrdered = true;
-        for (int i = 0; i < sample.size() - 1; i++) {
-            if (sample.get(i) > sample.get(i + 1)) {
-                sampleOrdered = false;
-                break;
-            }
-        }
+        boolean sampleOrdered = isSorted(sample);
         
         // Test delete performance on remaining elements
         long deleteStart = System.nanoTime();
@@ -655,16 +645,7 @@ public class PriorityQueueOperations_Test {
         for (int i = 0; i < 10; i++) {
             testPQ.offer(10 - i);
         }
-        boolean priorityOrdering = true;
-        int last = testPQ.poll();
-        while (!testPQ.isEmpty()) {
-            int current = testPQ.poll();
-            if (last > current) {
-                priorityOrdering = false;
-                break;
-            }
-            last = current;
-        }
+        boolean priorityOrdering = isSorted(testPQ);
         
         writer.printf("Queue implementations test:%n");
         writer.printf("  PriorityQueue time: %d ms%n", pqTime / 1000000);
