@@ -207,17 +207,22 @@ public class QueueUsingArray_Test {
         dequeue(circularQueue, circularFront, circularRear);
         
         // Add more elements to test wraparound
-        boolean wrapInsert1 = enqueue(circularQueue, circularFront, circularRear, 6);
-        boolean wrapInsert2 = enqueue(circularQueue, circularFront, circularRear, 7);
+        int[] circularFrontRef = {circularFront};
+        int[] circularRearRef = {circularRear};
+        boolean wrapInsert1 = enqueue(circularQueue, circularFrontRef, circularRearRef, 6);
+        boolean wrapInsert2 = enqueue(circularQueue, circularFrontRef, circularRearRef, 7);
+        circularFront = circularFrontRef[0];
+        circularRear = circularRearRef[0];
         
         // Test full queue
         int[] fullQueue = new int[3];
-        int fullFront = -1, fullRear = -1;
+        int[] fullFrontRef = {-1};
+        int[] fullRearRef = {-1};
         
-        boolean fullInsert1 = enqueue(fullQueue, fullFront, fullRear, 1);
-        boolean fullInsert2 = enqueue(fullQueue, fullFront, fullRear, 2);
-        boolean fullInsert3 = enqueue(fullQueue, fullFront, fullRear, 3);
-        boolean fullInsert4 = enqueue(fullQueue, fullFront, fullRear, 4); // Should fail
+        boolean fullInsert1 = enqueue(fullQueue, fullFrontRef, fullRearRef, 1);
+        boolean fullInsert2 = enqueue(fullQueue, fullFrontRef, fullRearRef, 2);
+        boolean fullInsert3 = enqueue(fullQueue, fullFrontRef, fullRearRef, 3);
+        boolean fullInsert4 = enqueue(fullQueue, fullFrontRef, fullRearRef, 4); // Should fail
         
         writer.printf("Edge Case Tests:%n");
         writer.printf("  Empty queue peek: %d (Expected: -1)%n", emptyPeek);
@@ -690,10 +695,14 @@ public class QueueUsingArray_Test {
         int[] fullQueue = new int[3];
         int fullFront = -1, fullRear = -1;
         
-        enqueue(fullQueue, fullFront, fullRear, 1);
-        enqueue(fullQueue, fullFront, fullRear, 2);
-        enqueue(fullQueue, fullFront, fullRear, 3);
-        boolean fullInsert = enqueue(fullQueue, fullFront, fullRear, 4); // Should fail
+        int[] fullFrontRef = {fullFront};
+        int[] fullRearRef = {fullRear};
+        enqueue(fullQueue, fullFrontRef, fullRearRef, 1);
+        enqueue(fullQueue, fullFrontRef, fullRearRef, 2);
+        enqueue(fullQueue, fullFrontRef, fullRearRef, 3);
+        boolean fullInsert = enqueue(fullQueue, fullFrontRef, fullRearRef, 4); // Should fail
+        fullFront = fullFrontRef[0];
+        fullRear = fullRearRef[0];
         
         // Test with invalid indices (simulated)
         int[] invalidQueue = new int[10];
@@ -766,12 +775,16 @@ public class QueueUsingArray_Test {
         int[] maxQueue = new int[5];
         int maxFront = -1, maxRear = -1;
         
-        boolean maxInsert1 = enqueue(maxQueue, maxFront, maxRear, 1);
-        boolean maxInsert2 = enqueue(maxQueue, maxFront, maxRear, 2);
-        boolean maxInsert3 = enqueue(maxQueue, maxFront, maxRear, 3);
-        boolean maxInsert4 = enqueue(maxQueue, maxFront, maxRear, 4);
-        boolean maxInsert5 = enqueue(maxQueue, maxFront, maxRear, 5);
-        boolean maxInsert6 = enqueue(maxQueue, maxFront, maxRear, 6); // Should fail
+        int[] maxFrontRef = {maxFront};
+        int[] maxRearRef = {maxRear};
+        boolean maxInsert1 = enqueue(maxQueue, maxFrontRef, maxRearRef, 1);
+        boolean maxInsert2 = enqueue(maxQueue, maxFrontRef, maxRearRef, 2);
+        boolean maxInsert3 = enqueue(maxQueue, maxFrontRef, maxRearRef, 3);
+        boolean maxInsert4 = enqueue(maxQueue, maxFrontRef, maxRearRef, 4);
+        boolean maxInsert5 = enqueue(maxQueue, maxFrontRef, maxRearRef, 5);
+        boolean maxInsert6 = enqueue(maxQueue, maxFrontRef, maxRearRef, 6); // Should fail
+        maxFront = maxFrontRef[0];
+        maxRear = maxRearRef[0];
         
         // Test with boundary values
         int[] boundaryQueue = new int[10];
@@ -793,7 +806,11 @@ public class QueueUsingArray_Test {
         
         // Remove one and add one to test wraparound
         dequeue(wrapBoundaryQueue, wrapFront, wrapRear);
-        boolean wrapInsert = enqueue(wrapBoundaryQueue, wrapFront, wrapRear, 4);
+        int[] wrapFrontRef = {wrapFront};
+        int[] wrapRearRef = {wrapRear};
+        boolean wrapInsert = enqueue(wrapBoundaryQueue, wrapFrontRef, wrapRearRef, 4);
+        wrapFront = wrapFrontRef[0];
+        wrapRear = wrapRearRef[0];
         
         writer.printf("Boundary conditions test:%n");
         writer.printf("  Single element peek: %d (Expected: 42)%n", singlePeek);
@@ -904,8 +921,8 @@ public class QueueUsingArray_Test {
         }
     }
     
-    // Overloaded methods for backward compatibility with existing calls
-    public static QueueResult enqueue(int[] queue, int front, int rear, int item) {
+    // Helper method for enqueue implementation
+    private static QueueResult enqueueImpl(int[] queue, int front, int rear, int item) {
         if ((rear + 1) % queue.length == front) {
             return new QueueResult(false, front, rear, -1); // Queue is full
         }
@@ -921,6 +938,21 @@ public class QueueUsingArray_Test {
         queue[newRear] = item;
         
         return new QueueResult(true, newFront, newRear, -1);
+    }
+    
+    // Main enqueue method that returns QueueResult
+    public static QueueResult enqueue(int[] queue, int front, int rear, int item) {
+        return enqueueImpl(queue, front, rear, item);
+    }
+    
+    // Helper method for boolean return type (updates front/rear by reference)
+    public static boolean enqueue(int[] queue, int[] frontRef, int[] rearRef, int item) {
+        QueueResult result = enqueueImpl(queue, frontRef[0], rearRef[0], item);
+        if (result.isSuccess()) {
+            frontRef[0] = result.getFront();
+            rearRef[0] = result.getRear();
+        }
+        return result.isSuccess();
     }
     
     public static QueueResult dequeue(int[] queue, int front, int rear) {
