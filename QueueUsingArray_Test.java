@@ -1034,13 +1034,15 @@ class QueueUsingArrayPerformanceComparison {
             // Array-based Queue
             int[] arrayQueue = new int[size];
             int arrayFront = -1, arrayRear = -1;
+            int[] arrayFrontRef = {arrayFront};
+            int[] arrayRearRef = {arrayRear};
             
             long arrayStart = System.nanoTime();
             for (int i = 0; i < size; i++) {
-                new QueueUsingArray_Test().enqueue(arrayQueue, arrayFront, arrayRear, i);
+                enqueue(arrayQueue, arrayFrontRef, arrayRearRef, i);
             }
             for (int i = 0; i < size; i++) {
-                new QueueUsingArray_Test().dequeue(arrayQueue, arrayFront, arrayRear);
+                dequeueImpl(arrayQueue, arrayFrontRef, arrayRearRef);
             }
             long arrayEnd = System.nanoTime();
             long arrayTime = arrayEnd - arrayStart;
