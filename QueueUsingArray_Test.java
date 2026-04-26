@@ -186,7 +186,7 @@ public class QueueUsingArray_Test {
         int[] emptyRearRef = {emptyRear};
         
         int emptyPeek = peek(emptyQueue, emptyFrontRef[0]);
-        int emptyDelete = dequeue(emptyQueue, emptyFrontRef, emptyRearRef);
+        int emptyDelete = dequeueImpl(emptyQueue, emptyFrontRef, emptyRearRef);
         boolean emptyIsEmpty = isEmpty(emptyFrontRef[0]);
         
         // Test single element operations
@@ -197,7 +197,7 @@ public class QueueUsingArray_Test {
         
         enqueue(singleQueue, singleFrontRef, singleRearRef, 100);
         int singlePeek = peek(singleQueue, singleFrontRef[0]);
-        int singleDelete = dequeue(singleQueue, singleFrontRef, singleRearRef);
+        int singleDelete = dequeueImpl(singleQueue, singleFrontRef, singleRearRef);
         boolean singleIsEmptyAfter = isEmpty(singleFrontRef[0]);
         
         // Test queue wraparound (circular behavior)
@@ -212,8 +212,8 @@ public class QueueUsingArray_Test {
         }
         
         // Remove some elements
-        dequeue(circularQueue, circularFrontRef, circularRearRef);
-        dequeue(circularQueue, circularFrontRef, circularRearRef);
+        dequeueImpl(circularQueue, circularFrontRef, circularRearRef);
+        dequeueImpl(circularQueue, circularFrontRef, circularRearRef);
         
         // Add more elements to test wraparound
         boolean wrapInsert1 = enqueue(circularQueue, circularFrontRef, circularRearRef, 6);
