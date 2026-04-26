@@ -106,6 +106,12 @@ public class BubbleSort_Test {
             // Test 9: Different data types
             testDifferentDataTypes();
             
+            // Test 10: Stability testing
+            testStability();
+            
+            // Generate final summary
+            generateSummary();
+            
             writer.close();
             System.out.println("BubbleSort tests completed. Results saved to " + TEST_RESULTS_FILE);
             

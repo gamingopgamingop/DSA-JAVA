@@ -103,16 +103,19 @@ public class PriorityQueueOperations_Test {
             // Test 8: Different data types
             testDifferentDataTypes();
             
-            // Test 9: Queue implementations comparison
+            // Test 9: Stability testing
+            testStability();
+            
+            // Test 10: Queue implementations comparison
             testQueueImplementations();
             
-            // Test 10: Error handling
+            // Test 11: Error handling
             testErrorHandling();
             
-            // Test 11: Boundary conditions
+            // Test 12: Boundary conditions
             testBoundaryConditions();
             
-            // Test 12: Performance comparison
+            // Test 13: Performance comparison
             testPerformanceComparison();
             
             // Generate final summary
@@ -645,7 +648,7 @@ public class PriorityQueueOperations_Test {
         for (int i = 0; i < 10; i++) {
             testPQ.offer(10 - i);
         }
-        boolean priorityOrdering = isSorted(testPQ);
+        boolean priorityOrdering = isSorted(new ArrayList<>(testPQ));
         
         writer.printf("Queue implementations test:%n");
         writer.printf("  PriorityQueue time: %d ms%n", pqTime / 1000000);

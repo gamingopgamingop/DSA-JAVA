@@ -664,12 +664,20 @@ public class sample_Test {
             int[] arr = new int[1];
             int dummy = arr[1]; // ArrayIndexOutOfBoundsException to trigger exception path
             writer.printf("Arithmetic test: Should throw exception%n");
+            // Use dummy to prevent unused warning (this line never executes)
+            if (dummy != Integer.MAX_VALUE) {
+                writer.printf("Impossible case reached%n");
+            }
         } catch (ArithmeticException e) {
             writer.printf("Arithmetic error properly caught: %s%n", e.getMessage());
         } catch (ArrayIndexOutOfBoundsException e) {
             // Fallback to test ArithmeticException directly
             try {
                 int dummy = 10 / 0;
+                // Use dummy to prevent unused warning (this line never executes)
+                if (dummy != Integer.MAX_VALUE) {
+                    writer.printf("Impossible case reached%n");
+                }
             } catch (ArithmeticException ae) {
                 writer.printf("Arithmetic error properly caught: %s%n", ae.getMessage());
             }
