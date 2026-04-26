@@ -1,0 +1,70 @@
+#!/usr/bin/env groovy
+
+// Comprehensive test for build.gradle syntax validation
+@Grapes([
+    @Grab(group='org.apache.groovy', module='groovy', version='4.0.15')
+])
+
+import groovy.lang.GroovyShell
+import groovy.lang.GroovyCodeSource
+
+try {
+    println "🔍 Validating build.gradle syntax..."
+    
+    // Read the build.gradle file
+    def buildFile = new File('build.gradle')
+    if (!buildFile.exists()) {
+        throw new FileNotFoundException("build.gradle file not found")
+    }
+    
+    def content = buildFile.text
+    println "📄 File size: ${buildFile.length()} bytes"
+    println "📝 Lines: ${content.split('\n').length}"
+    
+    // Check for common syntax issues
+    def issues = []
+    
+    // Check for unclosed strings
+    def tripleQuotes = (content =~ /"""/).size()
+    if (tripleQuotes % 2 != 0) {
+        issues.add("Unmatched triple quotes")
+    }
+    
+    // Check for unclosed parentheses
+    def openParens = (content =~ /\(/).size()
+    def closeParens = (content =~ /\)/).size()
+    if (openParens != closeParens) {
+        issues.add("Unmatched parentheses: $openParens open, $closeParens close")
+    }
+    
+    // Check for unclosed braces
+    def openBraces = (content =~ /\{/).size()
+    def closeBraces = (content =~ /\}/).size()
+    if (openBraces != closeBraces) {
+        issues.add("Unmatched braces: $openBraces open, $closeBraces close")
+    }
+    
+    // Try to parse the file
+    try {
+        def shell = new GroovyShell()
+        def source = new GroovyCodeSource(content, "build.gradle", "groovy")
+        shell.parse(source)
+        println "✅ Groovy syntax validation passed"
+    } catch (Exception e) {
+        issues.add("Groovy parsing error: ${e.message}")
+    }
+    
+    // Report results
+    if (issues.isEmpty()) {
+        println "🎉 All validations passed!"
+        println "✅ build.gradle is syntactically correct"
+    } else {
+        println "❌ Issues found:"
+        issues.each { println "   - $it" }
+        System.exit(1)
+    }
+    
+} catch (Exception e) {
+    println "❌ Validation failed: ${e.message}"
+    System.exit(1)
+}

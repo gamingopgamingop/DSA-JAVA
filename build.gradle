@@ -317,10 +317,10 @@ ${algorithms.collect {
 
 ## 🔧 Development
 
-- **Build**: \`./gradlew build\`
-- **Test**: \`./gradlew test\`
-- **Run Algorithms**: \`./gradlew runAllAlgorithms\`
-- **Coverage**: \`./gradlew jacocoTestReport\`
+- **Build**: ./gradlew build
+- **Test**: ./gradlew test
+- **Run Algorithms**: ./gradlew runAllAlgorithms
+- **Coverage**: ./gradlew jacocoTestReport
 
 ---
 

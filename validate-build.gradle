@@ -1,0 +1,18 @@
+// Simple validation script for build.gradle syntax
+try {
+    // Try to parse the build.gradle file
+    def buildFile = new File('build.gradle')
+    def content = buildFile.text
+    
+    // Basic Groovy syntax check
+    new GroovyShell().parse(content)
+    
+    println "✅ build.gradle syntax is valid"
+    println "📄 File size: ${buildFile.length()} bytes"
+    println "📝 Lines: ${content.split('\n').length}"
+    
+} catch (Exception e) {
+    println "❌ build.gradle syntax error:"
+    println e.message
+    System.exit(1)
+}

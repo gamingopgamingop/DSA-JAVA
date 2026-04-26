@@ -1,0 +1,16 @@
+// Simple test to check if the build.gradle syntax is correct
+
+// Test the problematic string
+def testString = """# Test Markdown
+
+## 🔧 Development
+
+- **Build**: \`./gradlew build\`
+- **Test**: \`./gradlew test\`
+
+---
+
+"""
+
+println "Test passed - no syntax errors"
+println testString
