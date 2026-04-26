@@ -1,148 +1,394 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'org.owasp.dependencycheck' version '9.0.7'
+    id 'org.sonarqube' version '4.4.1.3373'
 }
 
 group = 'com.dsa'
 version = '1.0.0'
+description = 'Data Structures and Algorithms in Java - A comprehensive learning repository'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    
+    // Enable preview features for future Java versions
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
-    // No external dependencies - pure Java implementation
-    testImplementation 'junit:junit:4.13.2'
+    // JUnit 5 for modern testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.6.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.6.0'
+    
+    // Logging framework
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'ch.qos.logback:logback-classic:1.4.11'
+    
+    // Utility libraries
+    implementation 'org.apache.commons:commons-lang3:3.13.0'
+    implementation 'com.google.guava:guava:32.1.3-jre'
+    
+    // JSON processing for documentation
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+    
+    // Command line argument parsing
+    implementation 'info.picocli:picocli:4.7.5'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.5'
 }
 
 application {
-    mainClass = 'TestFramework'
+    mainClass = 'com.dsa.TestFramework'
 }
 
+// Test configuration
 tasks.named('test') {
     useJUnitPlatform()
     
+    // Configure comprehensive test execution
+    testLogging {
+        events "started", "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        
+        // Format output
+        info.events = ["started", "passed", "skipped", "failed"]
+        debug.events = ["started", "passed", "skipped", "failed"]
+        debug.exceptionFormat = "full"
+    }
+    
+    // Test system properties
+    systemProperty "java.util.logging.config.file", "src/test/resources/logging.properties"
+    
+    // JVM options for tests
+    jvmArgs = [
+        '-Xmx512m',
+        '-XX:+UseG1GC',
+        '-Dfile.encoding=UTF-8'
+    ]
+    
     // Include all test files
     include '**/*Test.class'
+    include '**/*Tests.class'
     
-    // Configure test output
-    testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
+    // Exclude performance tests from regular test run
+    exclude '**/*PerformanceTest.class'
+    exclude '**/*Benchmark.class'
+}
+
+// JaCoCo configuration for test coverage
+jacoco {
+    toolVersion = "0.8.11"
+    reportsDirectory = layout.buildDirectory.dir('reports/jacoco')
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+    
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                '**/TestFramework.class',
+                '**/*Test.class',
+                '**/*Tests.class'
+            ])
+        }))
     }
 }
 
-// Task to run all algorithms
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70
+            }
+        }
+    }
+}
+
+// Shadow JAR configuration for fat JAR
+shadowJar {
+    archiveBaseName = 'dsa-java-algorithms'
+    archiveClassifier = 'fat'
+    archiveVersion = project.version
+    
+    manifest {
+        attributes(
+            'Implementation-Title': 'DSA Java Algorithms',
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': 'DSA Java Project',
+            'Main-Class': 'com.dsa.TestFramework',
+            'Created-By': 'Gradle ' + gradle.gradleVersion,
+            'Build-Date': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            'Build-JDK': System.getProperty('java.version')
+        )
+    }
+    
+    // Exclude test files from fat JAR
+    exclude '**/*Test.class'
+    exclude '**/*Tests.class'
+}
+
+// Custom task to run all algorithms with main methods
 task runAllAlgorithms {
-    description = 'Run all algorithm implementations'
+    description = 'Run all algorithm implementations with main methods'
+    group = 'Execution'
+    
     doLast {
-        def algorithmFiles = fileTree(dir: 'src/main/java').include('**/*.java')
+        def algorithmFiles = fileTree(dir: '.').include('*.java')
+            .exclude('*_Test.java')
+            .exclude('TestFramework.java')
+            .exclude('sample.java')
+        
+        def successCount = 0
+        def failureCount = 0
+        def results = []
+        
         algorithmFiles.each { file ->
-            if (file.name.endsWith('.java') && !file.name.contains('Test')) {
-                def className = file.path.replaceFirst('.*/src/main/java/', '').replace('/', '.').replace('.java', '')
-                println "Running ${className}..."
-                try {
-                    javaexec {
-                        main = className
-                        classpath = sourceSets.main.runtimeClasspath
-                    }
-                } catch (Exception e) {
-                    println "Failed to run ${className}: ${e.message}"
-                }
-            }
-        }
-    }
-}
-
-// Task to run all tests
-task runAllTests {
-    description = 'Run all test files'
-    doLast {
-        def testFiles = fileTree(dir: 'src/main/java').include('**/*Test.java')
-        testFiles.each { file ->
-            def className = file.path.replaceFirst('.*/src/main/java/', '').replace('/', '.').replace('.java', '')
-            println "Running ${className}..."
+            def className = file.name.replace('.java', '')
+            
+            // Check if class has main method
             try {
-                javaexec {
-                    main = className
-                    classpath = sourceSets.main.runtimeClasspath
+                def clazz = Class.forName(className)
+                def mainMethod = clazz.getDeclaredMethod('main', String[].class)
+                
+                if (mainMethod != null) {
+                    println "🚀 Running ${className}..."
+                    try {
+                        javaexec {
+                            main = className
+                            classpath = sourceSets.main.runtimeClasspath
+                            args = []
+                            standardOutput = new ByteArrayOutputStream()
+                            errorOutput = new ByteArrayOutputStream()
+                        }
+                        results << "✅ ${className} - SUCCESS"
+                        successCount++
+                    } catch (Exception e) {
+                        results << "❌ ${className} - FAILED: ${e.message}"
+                        failureCount++
+                    }
                 }
-            } catch (Exception e) {
-                println "Failed to run ${className}: ${e.message}"
+            } catch (ClassNotFoundException | NoSuchMethodException e) {
+                // Class doesn't have main method, skip
+                results << "⏭️  ${className} - NO MAIN METHOD"
             }
         }
+        
+        println "\n" + "=".repeat(50)
+        println "ALGORITHM EXECUTION SUMMARY"
+        println "=".repeat(50)
+        results.each { println it }
+        println "=".repeat(50)
+        println "✅ Successful: ${successCount}"
+        println "❌ Failed: ${failureCount}"
+        println "📊 Total: ${successCount + failureCount}"
+        println "=".repeat(50)
     }
 }
 
-// Task to generate documentation index
+// Custom task to run all tests using Gradle test engine
+task runAllTests {
+    description = 'Run all tests using Gradle test engine'
+    group = 'Verification'
+    
+    dependsOn test
+    doLast {
+        println "🧪 All tests completed!"
+        println "📊 Check test reports at: ${buildDir}/reports/tests/test"
+        println "📈 Coverage report at: ${buildDir}/reports/jacoco/test/html"
+    }
+}
+
+// Enhanced documentation generation
 task generateDocsIndex {
-    description = 'Generate documentation index'
+    description = 'Generate comprehensive documentation index'
+    group = 'Documentation'
+    
     doLast {
         def docsDir = file('docs')
         if (!docsDir.exists()) {
             docsDir.mkdirs()
         }
         
+        def algorithms = []
+        def testFiles = []
+        
+        // Scan for algorithm files
+        fileTree(dir: '.').include('*.java').exclude('*_Test.java').each { file ->
+            def className = file.name.replace('.java', '')
+            def docFile = file("${className}_Documentation.md")
+            def testFile = file("${className}_Test.java")
+            
+            algorithms << [
+                name: className,
+                hasDoc: docFile.exists(),
+                hasTest: testFile.exists()
+            ]
+        }
+        
+        // Generate comprehensive index
         def indexFile = new File(docsDir, 'README.md')
         indexFile.text = """# DSA Java Documentation Index
 
-This directory contains comprehensive documentation for all algorithms and data structures.
-
-## Algorithm Documentation
-
-### Sorting Algorithms
-- [Merge Sort](MergeSortAlgorithm_Documentation.md) - Divide-and-conquer sorting
-- [Quick Sort](QuickSortAlgorithm_Documentation.md) - Partition-based sorting
-- [Bubble Sort](BubbleSortAlgorithm_Documentation.md) - Simple sorting algorithm
-- [Selection Sort](SelectionSortAlgorithm_Documentation.md) - Selection-based sorting
-- [Insertion Sort](InsertionSortAlgorithm_Documentation.md) - Incremental sorting
-
-### Data Structures
-- [Linked List](LinkedListWithAddresses_Documentation.md) - Node-based data structure
-- [Stack](StackOperations_Documentation.md) - LIFO data structure
-- [Queue Implementations](LinearQueue_Documentation.md) - FIFO data structures
-  - [Circular Queue](CircularQueue_Documentation.md) - Circular buffer
-  - [Priority Queue](PriorityQueueOperations_Documentation.md) - Priority-based queue
-  - [Queue Using Array](QueueUsingArray_Documentation.md) - Array-based queue
-- [Deque](DequeOperations_Documentation.md) - Double-ended queue
-
-### Array Operations
-- [Insert Element](InsertElement_Documentation.md) - Array insertion algorithm
-- [Remove Element](RemoveElement_Documentation.md) - Array removal algorithm
-- [Matrix Multiplication](MatrxMultiplication_Documentation.md) - Matrix operations
-
-### Search and Analysis
-- [Binary Search](BinarySearch_Documentation.md) - Efficient search algorithm
-- [Second Smallest/Largest](SecondSmallestSecondLargest_Documentation.md) - Statistical analysis
-
-## Test Documentation
-
-Each algorithm has corresponding test documentation:
-- [Test Documentation Index](../Test_Documentation_Index.md)
-
-## Generated Reports
-
-Test results are generated in the main directory with naming convention:
-- `*_test_results.txt` - Individual test results
-- `Test_Summary_Report.md` - Comprehensive test summary
+> 🎯 **A comprehensive collection of Data Structures and Algorithms implemented in Java**
 
 ---
-*Generated on: ${new Date()}*
+
+## 📊 Project Statistics
+
+- **Total Algorithms**: ${algorithms.size()}
+- **With Documentation**: ${algorithms.count { it.hasDoc }}
+- **With Tests**: ${algorithms.count { it.hasTest }}
+- **Test Coverage**: ${Math.round((algorithms.count { it.hasTest } / algorithms.size()) * 100)}%
+
+---
+
+## 🚀 Algorithm Categories
+
+### 🔍 Search Algorithms
+${algorithms.findAll { it.name.contains('Search') }.collect { 
+    "- [${it.name}](${it.name}_Documentation.md)${it.hasDoc ? '' : ' 📝'}${it.hasTest ? ' 🧪' : ''}" 
+}.join('\n')}
+
+### 📊 Sorting Algorithms
+${algorithms.findAll { it.name.contains('Sort') }.collect { 
+    "- [${it.name}](${it.name}_Documentation.md)${it.hasDoc ? '' : ' 📝'}${it.hasTest ? ' 🧪' : ''}" 
+}.join('\n')}
+
+### 🔗 Data Structures
+${algorithms.findAll { 
+    it.name.contains('Queue') || it.name.contains('Stack') || it.name.contains('List') || it.name.contains('Deque')
+}.collect { 
+    "- [${it.name}](${it.name}_Documentation.md)${it.hasDoc ? '' : ' 📝'}${it.hasTest ? ' 🧪' : ''}" 
+}.join('\n')}
+
+### 🔢 Array Operations
+${algorithms.findAll { 
+    it.name.contains('Element') || it.name.contains('Traversal') || it.name.contains('Matrix')
+}.collect { 
+    "- [${it.name}](${it.name}_Documentation.md)${it.hasDoc ? '' : ' 📝'}${it.hasTest ? ' 🧪' : ''}" 
+}.join('\n')}
+
+### 📈 Statistical Analysis
+${algorithms.findAll { 
+    it.name.contains('Smallest') || it.name.contains('Largest') || it.name.contains('Second')
+}.collect { 
+    "- [${it.name}](${it.name}_Documentation.md)${it.hasDoc ? '' : ' 📝'}${it.hasTest ? ' 🧪' : ''}" 
+}.join('\n')}
+
+---
+
+## 🧪 Test Documentation
+
+Each algorithm has corresponding test documentation:
+- [Test Documentation Index](../testing/Test_Documentation_Index.md)
+
+---
+
+## 📋 Quick Reference
+
+| Algorithm | Documentation | Tests | Status |
+|-----------|---------------|-------|--------|
+${algorithms.collect { 
+    "| ${it.name} | ${it.hasDoc ? '✅' : '❌'} | ${it.hasTest ? '✅' : '❌'} | ${it.hasDoc && it.hasTest ? '🟢 Complete' : '🟡 In Progress'}" 
+}.join('\n')}
+
+---
+
+## 🔧 Development
+
+- **Build**: \`./gradlew build\`
+- **Test**: \`./gradlew test\`
+- **Run Algorithms**: \`./gradlew runAllAlgorithms\`
+- **Coverage**: \`./gradlew jacocoTestReport\`
+
+---
+
+## 📚 Additional Resources
+
+- [Functional Programming Guide](Functional_Programming_Guide.md)
+- [Java Collections Framework Guide](Java_Collections_Framework_Guide.md)
+- [Project Documentation Summary](Project_Documentation_Summary.md)
+- [Complete Testing Summary](Complete_Testing_Summary.md)
+
+---
+
+*📅 **Last Updated**: ${new Date().format("yyyy-MM-dd HH:mm:ss")}*  
+*🔧 **Generated by**: Gradle Documentation Generator*
 """
-        println "Documentation index generated: ${indexFile.absolutePath}"
+        
+        println "📚 Documentation index generated: ${indexFile.absolutePath}"
+        println "📊 Processed ${algorithms.size()} algorithms"
     }
 }
 
-// Clean task
+// Performance testing task
+task runPerformanceTests {
+    description = 'Run performance benchmarks'
+    group = 'Verification'
+    
+    doLast {
+        println "🏃 Running performance tests..."
+        def performanceTests = fileTree(dir: '.').include('*PerformanceTest.java')
+        
+        performanceTests.each { file ->
+            def className = file.name.replace('.java', '')
+            println "🚀 Running ${className}..."
+            try {
+                javaexec {
+                    main = className
+                    classpath = sourceSets.main.runtimeClasspath
+                }
+            } catch (Exception e) {
+                println "❌ Performance test ${className} failed: ${e.message}"
+            }
+        }
+    }
+}
+
+// Clean task with enhanced cleaning
 clean {
     delete 'build', 'out', 'bin', 'dist'
     delete fileTree(dir: '.').include('*_test_results.txt')
+    delete fileTree(dir: '.').include('*.log')
+    delete fileTree(dir: '.').include('demo_output.txt')
+    delete fileTree(dir: '.').include('binary_search_results.txt')
 }
 
-// Default task
-defaultTasks 'build', 'test'
+// Checkstyle configuration
+checkstyle {
+    toolVersion = '10.12.4'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
+    maxErrors = 0
+}
+
+// PMD configuration
+pmd {
+    toolVersion = '6.55.0'
+    ruleSetFiles = files("${rootDir}/config/pmd/ruleset.xml")
+    ignoreFailures = false
+}
+
+// Default tasks
+defaultTasks 'clean', 'build', 'test', 'jacocoTestReport'

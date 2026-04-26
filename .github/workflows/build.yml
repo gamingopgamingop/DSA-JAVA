@@ -1,0 +1,225 @@
+name: 🚀 Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  JAVA_VERSION: '17'
+  GRADLE_OPTS: '-Xmx2g -Dfile.encoding=UTF-8'
+
+jobs:
+  # Build and Test Job
+  build:
+    name: 🔨 Build & Test
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        java-version: ['17', '21']
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: 🐘 Setup Java ${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: 🔐 Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v2
+      with:
+        allow-snapshots: false
+    
+    - name: 🔍 Dependency Check
+      run: ./gradlew dependencyCheckAnalyze
+    
+    - name: 🔨 Build Project
+      run: ./gradlew build --no-daemon --stacktrace
+    
+    - name: 🧪 Run Tests
+      run: ./gradlew test --no-daemon --continue
+    
+    - name: 📊 Generate Test Coverage
+      run: ./gradlew jacocoTestReport --no-daemon
+    
+    - name: 📤 Upload Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./build/reports/jacoco/test/jacocoTestReport.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+    
+    - name: 📋 Upload Test Results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results-java${{ matrix.java-version }}
+        path: |
+          build/reports/tests/
+          build/reports/jacoco/
+        retention-days: 30
+    
+    - name: 📦 Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts-java${{ matrix.java-version }}
+        path: |
+          build/libs/*.jar
+          build/distributions/
+        retention-days: 7
+
+  # Code Quality Job
+  code-quality:
+    name: 🔍 Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: 🐘 Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: 🔐 Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v2
+    
+    - name: 🔍 Run Checkstyle
+      run: ./gradlew checkstyleMain checkstyleTest --continue
+      continue-on-error: true
+    
+    - name: 🔍 Run PMD
+      run: ./gradlew pmdMain pmdTest --continue
+      continue-on-error: true
+    
+    - name: 📋 Upload Quality Reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: code-quality-reports
+        path: |
+          build/reports/checkstyle/
+          build/reports/pmd/
+        retention-days: 30
+
+  # Documentation Generation
+  docs:
+    name: 📚 Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: 🐘 Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: 🔐 Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v2
+    
+    - name: 📚 Generate Documentation Index
+      run: ./gradlew generateDocsIndex
+    
+    - name: 📋 Upload Documentation
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/
+        retention-days: 30
+
+  # Security Scanning
+  security:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: 🔐 Run Trivy Vulnerability Scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: 📤 Upload Trivy Results to GitHub Security Tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # Performance Testing (optional)
+  performance:
+    name: ⚡ Performance Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: 🐘 Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    
+    - name: 🔐 Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v2
+    
+    - name: ⚡ Run Performance Tests
+      run: ./gradlew runPerformanceTests
+      continue-on-error: true
+    
+    - name: 📊 Upload Performance Results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: performance-results
+        path: |
+          build/reports/performance/
+          *_performance_*.txt
+        retention-days: 30
+
+  # Build Status Summary
+  build-summary:
+    name: 📊 Build Summary
+    runs-on: ubuntu-latest
+    needs: [build, code-quality, docs, security]
+    if: always()
+    
+    steps:
+    - name: 📊 Build Summary
+      run: |
+        echo "## 🚀 Build Status Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔨 Build & Test | ${{ needs.build.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔍 Code Quality | ${{ needs.code-quality.result == 'success' && '✅ Success' || '⚠️ Completed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📚 Documentation | ${{ needs.docs.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔒 Security Scan | ${{ needs.security.result == 'success' && '✅ Success' || '⚠️ Completed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "- **Build**: ${{ needs.build.result == 'success' && 'All tests passed' || 'Some tests failed' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Coverage**: Check artifacts for detailed coverage report" >> $GITHUB_STEP_SUMMARY
+        echo "- **Artifacts**: Download from the Actions tab" >> $GITHUB_STEP_SUMMARY
