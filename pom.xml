@@ -41,6 +41,9 @@
         <commons-lang3.version>3.13.0</commons-lang3.version>
         <guava.version>32.1.3-jre</guava.version>
         <picocli.version>4.7.5</picocli.version>
+        
+        <!-- JavaFX Version -->
+        <javafx.version>21.0.2</javafx.version>
     </properties>
 
     <dependencies>
@@ -178,6 +181,19 @@
             <version>${picocli.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- JavaFX Dependencies -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -302,6 +318,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.4.5</version>
+            </plugin>
+
+            <!-- JavaFX Maven Plugin -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>com.dsa.App</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
