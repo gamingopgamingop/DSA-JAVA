@@ -1,0 +1,21 @@
+// Simple syntax validation for build.gradle
+try {
+    // Try to evaluate the build.gradle file
+    def buildFile = new File('build.gradle')
+    if (!buildFile.exists()) {
+        throw new Exception("build.gradle not found")
+    }
+    
+    // Basic Groovy syntax check
+    def groovyShell = new GroovyShell()
+    groovyShell.evaluate(buildFile.text)
+    
+    println "✅ build.gradle syntax is valid"
+    println "📄 File: ${buildFile.absolutePath}"
+    println "📏 Size: ${buildFile.length()} bytes"
+    
+} catch (Exception e) {
+    println "❌ Syntax error in build.gradle:"
+    println "   ${e.message}"
+    System.exit(1)
+}
