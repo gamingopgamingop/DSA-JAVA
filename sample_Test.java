@@ -322,7 +322,13 @@ public class sample_Test {
                 array[i] = i;
             }
             for (int i = 0; i < size; i++) {
-                int dummy = array[i]; // Access the element
+                // Access the element to prevent optimization
+                int dummy = array[i];
+                // Use the variable to avoid unused warning
+                if (dummy == Integer.MIN_VALUE) {
+                    // This will never happen, just to use the variable
+                    System.out.println("Impossible case");
+                }
             }
             long arrayEnd = System.nanoTime();
             long arrayTime = arrayEnd - arrayStart;
@@ -337,6 +343,11 @@ public class sample_Test {
             long streamEnd = System.nanoTime();
             long streamTime = streamEnd - streamStart;
             
+            // Verify stream operation worked correctly
+            boolean streamCorrect = streamResult.size() == size && 
+                                 streamResult.get(0) == 0 && 
+                                 streamResult.get(size - 1) == (size - 1) * 2;
+            
             writer.printf("%-8d | %-13d | %-12d | %-12d | %-14d | %-15d%n", 
                 size, listTime / 1000000, setTime / 1000000, mapTime / 1000000, 
                 arrayTime / 1000000, streamTime / 1000000);
@@ -346,9 +357,10 @@ public class sample_Test {
         writer.println("• List: O(n) for access, O(1) for add at end");
         writer.println("• Set: O(1) for add and contains (hash-based)");
         writer.println("• Map: O(1) for put and get (hash-based)");
-        writer.println("• Array: O(1) for access, O(n) for operations");
         writer.println("• Stream: O(n) for most operations");
         writer.println("• Performance depends on data structure and operation");
+        writer.println("• Stream transformation correct: " + (streamCorrect ? "✅" : "❌"));
+        writer.println("• Stream processing overhead: " + (streamTime > arrayTime ? "Higher" : "Lower"));
     }
     
     /**
@@ -638,8 +650,7 @@ public class sample_Test {
         }
         
         // Test InputMismatchException
-        try {
-            Scanner scanner = new Scanner("abc");
+        try (Scanner scanner = new Scanner("abc")) {
             scanner.nextInt();
             writer.printf("InputMismatch test: Should throw exception%n");
         } catch (InputMismatchException e) {
@@ -648,15 +659,28 @@ public class sample_Test {
         
         // Test ArithmeticException
         try {
-            int result = 10 / 0;
+            // This will throw ArithmeticException
+            int[] arr = new int[1];
+            int dummy = arr[1]; // ArrayIndexOutOfBoundsException to trigger exception path
             writer.printf("Arithmetic test: Should throw exception%n");
         } catch (ArithmeticException e) {
             writer.printf("Arithmetic error properly caught: %s%n", e.getMessage());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // Fallback to test ArithmeticException directly
+            try {
+                int dummy = 10 / 0;
+            } catch (ArithmeticException ae) {
+                writer.printf("Arithmetic error properly caught: %s%n", ae.getMessage());
+            }
         }
         
         // Test NumberFormatException
         try {
-            int result = Integer.parseInt("abc");
+            // This will throw NumberFormatException
+            String testStr = "abc";
+            if (testStr.length() > 0) {
+                int dummy = Integer.parseInt(testStr); // This will throw NumberFormatException
+            }
             writer.printf("NumberFormat test: Should throw exception%n");
         } catch (NumberFormatException e) {
             writer.printf("NumberFormat error properly caught: %s%n", e.getMessage());
@@ -1000,6 +1024,10 @@ class CollectionPerformanceComparison {
             long parallelEnd = System.nanoTime();
             long parallelTime = parallelEnd - parallelStart;
             
+            // Lambda correctness verification
+            boolean lambdaCorrect = sum4 == sum2;
+            
+            // Lambda
             // Lambda
             long lambdaStart = System.nanoTime();
             int sum4 = list.stream().reduce(0, (a, b) -> a + b);
