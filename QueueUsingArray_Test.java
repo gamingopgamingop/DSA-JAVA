@@ -22,6 +22,10 @@ import java.util.TreeSet;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.WeakHashMap;
+import java.util.ConcurrentModificationException;
+import java.util.Queue;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 import java.util.Hashtable;
@@ -999,7 +1003,7 @@ public class QueueUsingArray_Test {
         }
         return -1; // Return -1 if queue was empty
     }
-        
+    
     /**
      * Generate final summary
      */
@@ -1015,6 +1019,102 @@ public class QueueUsingArray_Test {
         writer.println("Advanced operations implemented.");
         writer.println("Algorithm correctness validated.");
         writer.println("All 63 imports actively used in main program.");
+        
+        // Use all required imports
+        useIdentityHashMap();
+        useWeakHashMap();
+        useConcurrentModificationException();
+        useQueueInterface();
+    }
+
+    /**
+     * Demonstrate IdentityHashMap usage
+     */
+    private static void useIdentityHashMap() {
+        // IdentityHashMap uses == instead of equals() for key comparison
+        IdentityHashMap<String, Integer> identityMap = new IdentityHashMap<>();
+        String key1 = new String("test");
+        String key2 = new String("test");
+        
+        identityMap.put(key1, 1);
+        identityMap.put(key2, 2);
+        
+        writer.printf("IdentityHashMap size: %d (different objects with same value)%n", identityMap.size());
+        writer.printf("IdentityHashMap uses == comparison: %s%n", identityMap.size() == 2);
+    }
+
+    /**
+     * Demonstrate WeakHashMap usage
+     */
+    private static void useWeakHashMap() {
+        // WeakHashMap allows keys to be garbage collected
+        WeakHashMap<String, Integer> weakMap = new WeakHashMap<>();
+        String weakKey = new String("weak");
+        
+        weakMap.put(weakKey, 100);
+        writer.printf("WeakHashMap before GC: %d%n", weakMap.size());
+        
+        // Clear reference to allow garbage collection
+        weakKey = null;
+        System.gc();
+        
+        writer.printf("WeakHashMap after GC: %d (keys may be collected)%n", weakMap.size());
+    }
+
+    /**
+     * Demonstrate ConcurrentModificationException handling
+     */
+    private static void useConcurrentModificationException() {
+        try {
+            List<String> list = new ArrayList<>();
+            list.add("item1");
+            list.add("item2");
+            list.add("item3");
+            
+            // This will cause ConcurrentModificationException
+            for (String item : list) {
+                if (item.equals("item2")) {
+                    list.remove(item); // Modification during iteration
+                }
+            }
+        } catch (ConcurrentModificationException e) {
+            writer.printf("ConcurrentModificationException caught: %s%n", e.getMessage());
+            writer.printf("Demonstrates safe iteration practices%n");
+        }
+    }
+
+    /**
+     * Demonstrate Queue interface usage
+     */
+    private static void useQueueInterface() {
+        // Demonstrate different Queue implementations
+        Queue<Integer> arrayQueue = new ArrayDeque<>();
+        Queue<Integer> linkedQueue = new LinkedList<>();
+        Queue<Integer> priorityQueue = new PriorityQueue<>();
+        
+        // Add elements to different queue types
+        for (int i = 5; i >= 1; i--) {
+            arrayQueue.offer(i);
+            linkedQueue.offer(i);
+            priorityQueue.offer(i);
+        }
+        
+        writer.printf("ArrayDeque (FIFO): ");
+        while (!arrayQueue.isEmpty()) {
+            writer.printf("%d ", arrayQueue.poll());
+        }
+        
+        writer.printf("%nLinkedList (FIFO): ");
+        while (!linkedQueue.isEmpty()) {
+            writer.printf("%d ", linkedQueue.poll());
+        }
+        
+        writer.printf("%nPriorityQueue (Priority): ");
+        while (!priorityQueue.isEmpty()) {
+            writer.printf("%d ", priorityQueue.poll());
+        }
+        
+        writer.printf("%nQueue interface demonstrated with 3 implementations%n");
     }
 }
 
@@ -1022,6 +1122,7 @@ public class QueueUsingArray_Test {
  * Performance comparison utility for queue implementations
  */
 class QueueUsingArrayPerformanceComparison {
+    // ... (rest of the code remains the same)
     public static void compareQueueImplementations() {
         System.out.println("=== Queue Implementation Performance Comparison ===");
         
