@@ -1,0 +1,87 @@
+name: Documentation Quality Checks (PAT Version)
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'docs/**'
+      - '**.md'
+      - '.github/workflows/docs-check-pat.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - '**.md'
+      - '.github/workflows/docs-check-pat.yml'
+
+# Enhanced permissions for PAT-based workflow
+permissions:
+  contents: read          # Read repository contents
+  issues: write          # Create and edit issues
+  pull-requests: write   # Comment on PRs
+  checks: write          # Update check statuses
+  actions: read         # Read workflow runs
+  metadata: read        # Read repository metadata
+
+env:
+  JAVA_VERSION: '17'
+  GRADLE_OPTS: '-Xmx2g -Dfile.encoding=UTF-8'
+
+jobs:
+  # ... (same jobs as before) ...
+
+  auto-index-update:
+    runs-on: ubuntu-latest
+    name: Auto-Update Index (PAT Version)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.PAT_TOKEN }}  # Use PAT instead of GITHUB_TOKEN
+        
+    - name: Check if index needs update
+      id: check-index
+      run: |
+        echo "🔄 Checking if INDEX.md needs update..."
+        
+        # Count current algorithms
+        current_count=$(grep -c "\|.*\.java.*|" docs/INDEX.md || echo "0")
+        actual_count=$(find . -maxdepth 1 -name "*_Test.java" | wc -l)
+        
+        echo "current-count=$current_count" >> $GITHUB_OUTPUT
+        echo "actual-count=$actual_count" >> $GITHUB_OUTPUT
+        
+        if [ "$current_count" -ne "$actual_count" ]; then
+          echo "needs-update=true" >> $GITHUB_OUTPUT
+          echo "📝 INDEX.md needs update ($current_count vs $actual_count)"
+        else
+          echo "needs-update=false" >> $GITHUB_OUTPUT
+          echo "✅ INDEX.md is up to date"
+        fi
+        
+    - name: Create issue for index update
+      if: steps.check-index.outputs.needs-update == 'true'
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.PAT_TOKEN }}  # Use PAT for enhanced permissions
+        script: |
+          const result = await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: 'INDEX.md needs update',
+            body: 'The INDEX.md file is out of sync with the actual algorithm files. Please run the index generation script to update it.',
+            labels: ['documentation', 'maintenance', 'automated']
+          });
+          console.log('Issue created successfully:', result.data.html_url);
+          
+          // Optionally add assignees and projects
+          await github.rest.issues.addAssignees({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: result.data.number,
+            assignees: [context.actor]  # Assign to the trigger user
+          });
+
+  # ... (rest of the workflow) ...
