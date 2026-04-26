@@ -73,7 +73,7 @@ public class BubbleSort_Test {
     public static void main(String[] args) {
         try {
             writer = new PrintStream(new BufferedOutputStream(
-                new FileOutputStream(TEST_RESULTS_FILE), true));
+                new FileOutputStream(TEST_RESULTS_FILE)), true);
             
             writer.println("=== BubbleSort Test Results ===");
             writer.println("Timestamp: " + new Date());
@@ -102,6 +102,9 @@ public class BubbleSort_Test {
             
             // Test 8: Optimized bubble sort
             testOptimizedBubbleSort();
+            
+            // Test 9: Different data types
+            testDifferentDataTypes();
             
             writer.close();
             System.out.println("BubbleSort tests completed. Results saved to " + TEST_RESULTS_FILE);

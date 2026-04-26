@@ -19,8 +19,10 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.TreeSet;
 import java.util.EnumSet;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.WeakHashMap;
+import java.util.ConcurrentModificationException;
+import java.util.Queue;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 import java.util.Hashtable;
@@ -786,11 +788,20 @@ public class sample_Test {
         for (int i = 1; i <= 10; i++) {
             hashMap.put(i, "Value" + i);
             linkedHashMap.put(i, "Value" + i);
+            IdentityHashMap<Integer, String> identityHashMap = new IdentityHashMap<>();
+            WeakHashMap<Integer, String> weakHashMap = new WeakHashMap<>();
+            
+            for (int i = 1; i <= 10; i++) {
+                identityHashMap.put(i, "Value" + i);
+                weakHashMap.put(i, "Value" + i);
+            }
+            
             treeMap.put(i, "Value" + i);
             hashtable.put(i, "Value" + i);
         }
         
         boolean mapSuccess = hashMap.size() == 10 && linkedHashMap.size() == 10 && 
+                           identityHashMap.size() == 10 && weakHashMap.size() == 10 &&
                            treeMap.size() == 10 && hashtable.size() == 10;
         
         writer.printf("  Maps: %s (Expected: true)%n", mapSuccess);
