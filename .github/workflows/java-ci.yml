@@ -31,6 +31,11 @@ jobs:
       with:
         gradle-version: 8.5 # Forces the version without needing to download via wrapper
 
+    - name: Install JavaFX dependencies for headless testing
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtk-3-dev libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
+
     - name: Run Build
       run: gradle build # Use 'gradle' directly instead of './gradlew'
 
@@ -59,8 +64,8 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x gradlew
       
-    - name: Build
-      run: ./gradlew build
+    - name: Build with JavaFX support
+      run: ./gradlew build -Dheadless=true
     
     - name: Build with retry
       run: |
@@ -73,12 +78,12 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v3
       with:
-        arguments: build
+        arguments: build -Dheadless=true
     
     - name: Run tests
       uses: gradle/gradle-build-action@v3
       with:
-        arguments: test
+        arguments: test -Dheadless=true
     
     - name: Run algorithm tests
       run: |
