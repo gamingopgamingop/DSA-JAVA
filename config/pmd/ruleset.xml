@@ -26,21 +26,18 @@
     <!-- Design Rules -->
     <rule ref="category/java/design.xml">
         <exclude name="LawOfDemeter"/>
-        <exclude name="LooseCoupling"/>
         <exclude name="TooManyMethods"/>
         <exclude name="NPathComplexity"/>
     </rule>
 
     <!-- Error Prone Rules -->
     <rule ref="category/java/errorprone.xml">
-        <exclude name="BeanMembersShouldSerialize"/>
         <exclude name="MissingSerialVersionUID"/>
     </rule>
 
     <!-- Performance Rules -->
     <rule ref="category/java/performance.xml">
         <exclude name="InefficientStringBuffering"/>
-        <exclude name="InefficientStringConcatenation"/>
         <exclude name="TooFewBranchesForASwitchStatement"/>
     </rule>
 
@@ -61,10 +58,10 @@
             <property name="xpath">
                 <value>
                     <![CDATA[
-                        //ClassOrInterfaceDeclaration[ends-with(@Image, 'Algorithm') or 
-                        ends-with(@Image, 'Sort') or 
-                        ends-with(@Image, 'Search')]
-                        [not(.//ClassOrInterfaceDeclaration/Annotation/MarkerAnnotation/Name[@Image='Complexity'])]
+                        //ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Algorithm') or 
+                        ends-with(@SimpleName, 'Sort') or 
+                        ends-with(@SimpleName, 'Search')]
+                        [not(.//ClassOrInterfaceDeclaration/Annotation/MarkerAnnotation/Name[@SimpleName='Complexity'])]
                     ]]>
                 </value>
             </property>
@@ -91,9 +88,9 @@
             <property name="xpath">
                 <value>
                     <![CDATA[
-                        //ClassOrInterfaceDeclaration[ends-with(@Image, 'Test')]
+                        //ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Test')]
                         [count(.//MethodDeclaration[@Public='true' and 
-                        (contains(@Image, 'test') or contains(@Image, 'Test'))]) < 3]
+                        (contains(@SimpleName, 'test') or contains(@SimpleName, 'Test'))]) < 3]
                     ]]>
                 </value>
             </property>
@@ -114,10 +111,10 @@
                 <value>
                     <![CDATA[
                         //ClassOrInterfaceDeclaration[
-                            ends-with(@Image, 'Algorithm') or 
-                            ends-with(@Image, 'Sort') or 
-                            ends-with(@Image, 'Search') or
-                            ends-with(@Image, 'Operations')
+                            ends-with(@SimpleName, 'Algorithm') or 
+                            ends-with(@SimpleName, 'Sort') or 
+                            ends-with(@SimpleName, 'Search') or
+                            ends-with(@SimpleName, 'Operations')
                         ]
                         [not(.//ClassOrInterfaceDeclaration/Comment/JavadocComment)]
                     ]]>
@@ -139,9 +136,9 @@
             <property name="xpath">
                 <value>
                     <![CDATA[
-                        //MethodDeclaration[contains(@Image, 'sort') or contains(@Image, 'search')]
+                        //MethodDeclaration[contains(@SimpleName, 'sort') or contains(@SimpleName, 'search')]
                         [not(.//TryStatement)]
-                        [count(.//AllocationExpression/ClassOrInterfaceType[@Image='Exception']) > 0]
+                        [count(.//AllocationExpression/ClassOrInterfaceType[@SimpleName='Exception']) > 0]
                     ]]>
                 </value>
             </property>
@@ -162,10 +159,10 @@
                 <value>
                     <![CDATA[
                         //MethodDeclaration[
-                            (contains(@Image, 'sort') or contains(@Image, 'search') or contains(@Image, 'process'))
+                            (contains(@SimpleName, 'sort') or contains(@SimpleName, 'search') or contains(@SimpleName, 'process'))
                             and count(FormalParameters/*) > 0
                         ]
-                        [not(.//IfStatement/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image='null'])]
+                        [not(.//IfStatement/Expression/PrimaryExpression/PrimaryPrefix/Name[@SimpleName='null'])]
                     ]]>
                 </value>
             </property>
@@ -185,10 +182,10 @@
             <property name="xpath">
                 <value>
                     <![CDATA[
-                        //ClassOrInterfaceDeclaration[ends-with(@Image, 'Algorithm')]
+                        //ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Algorithm')]
                         //AllocationExpression/ClassOrInterfaceType[
-                            @Image='ArrayList' and 
-                            ancestor::ForStatement//Expression/PrimaryExpression/PrimaryPrefix/Name[@Image='add']
+                            @SimpleName='ArrayList' and 
+                            ancestor::ForStatement//Expression/PrimaryExpression/PrimaryPrefix/Name[@SimpleName='add']
                         ]
                     ]]>
                 </value>
