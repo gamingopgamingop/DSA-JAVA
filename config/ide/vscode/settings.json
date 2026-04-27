@@ -1,0 +1,142 @@
+{
+  "java.project.sourcePaths": [
+    "src/main/java"
+  ],
+  "java.project.outputPath": "build/classes/java/main",
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "build/libs/*.jar"
+  ],
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.format.settings.url": "config/ide/intellij/code-style.xml",
+  "java.saveActions.organizeImports": true,
+  "java.completion.importOrder": [
+    "java",
+    "javax",
+    "org",
+    "com"
+  ],
+  "java.format.enabled": true,
+  "java.format.comments.enabled": true,
+  "java.codeGeneration.generateComments": true,
+  "java.debug.settings.onBuildExceptions": "Notify",
+  "java.test.editor.enableShortcuts": true,
+  "java.test.message.error": "Show All",
+  "java.test.message.info": "Show All",
+  "java.test.message.warn": "Show All",
+  "java.inlayHints.parameterNames.enabled": "all",
+  "java.signatureHelp.enabled": true,
+  "java.imports.gradle.wrapper.enabled": true,
+  "java.references.includeDecompiledSources": true,
+  "java.typeHierarchy.lazyLoad": false,
+  "java.maxConcurrentBuilds": 1,
+  "java.autobuild.enabled": true,
+  "java.sources.organizeImports.starThreshold": 99,
+  "java.sources.organizeImports.staticStarThreshold": 99,
+  "java.semanticHighlighting.enabled": true,
+  "java.codeAction.sortMembers.enable": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll": true
+  },
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.rulers": [120],
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 120,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/build": true,
+    "**/bin": true,
+    "**/out": true,
+    "**/target": true,
+    "**/.gradle": true,
+    "**/.idea": true,
+    "**/.vscode": true,
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/build": true,
+    "**/bin": true,
+    "**/out": true,
+    "**/target": true,
+    "**/.gradle": true,
+    "**/.idea": true,
+    "**/.vscode": true,
+    "**/node_modules": true
+  },
+  "files.associations": {
+    "*.java": "java",
+    "*.xml": "xml",
+    "*.properties": "properties",
+    "*.yml": "yaml",
+    "*.yaml": "yaml",
+    "*.md": "markdown"
+  },
+  "emmet.includeLanguages": {
+    "java": "html"
+  },
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.postCommitCommand": "none",
+  "git.showInlineOpenFileAction": false,
+  "git.suggestSmartCommit": false,
+  "problems.decorations.enabled": true,
+  "workbench.colorCustomizations": {
+    "editor.lineHighlightBackground": "#ffffff08",
+    "editor.selectionBackground": "#80808040",
+    "editor.inactiveSelectionBackground": "#80808020",
+    "editorWhitespace.foreground": "#ffffff20"
+  },
+  "extensions.ignoreRecommendations": false,
+  "extensions.autoUpdate": false,
+  "terminal.integrated.shell.windows": "cmd.exe",
+  "terminal.integrated.env.windows": {
+    "JAVA_HOME": "${env:JAVA_HOME}"
+  },
+  "debug.allowBreakpointsEverywhere": true,
+  "debug.inlineStack": true,
+  "debug.showBreakpointsInOverviewRuler": true,
+  "debug.terminal.clearBeforeReusing": true,
+  "debug.console.fontSize": 14,
+  "debug.console.wordWrap": true,
+  "debug.internalConsoleOptions": "openOnSessionStart",
+  "java.debug.settings.enableRunDebugCodeLens": true,
+  "java.debug.settings.forceBuildBeforeLaunch": false,
+  "java.debug.settings.showQualifiedNames": false,
+  "java.debug.settings.showStaticVariables": true,
+  "java.debug.settings.showHexValues": false,
+  "java.debug.settings.showLogicalStructure": true,
+  "java.debug.settings.maxStringLength": 0,
+  "java.debug.settings.numericPrecision": 0,
+  "java.debug.settings.showToString": true,
+  "java.debug.settings.stepFilters": [
+    "java.lang.*",
+    "java.util.*",
+    "javax.*",
+    "org.junit.*",
+    "org.mockito.*"
+  ],
+  "java.debug.settings.exceptionFilters": [
+    "java.lang.*",
+    "java.util.*",
+    "javax.*"
+  ],
+  "java.debug.settings.hotCodeReplace": "auto",
+  "java.debug.settings.onBuildFailureProceed": true
+}

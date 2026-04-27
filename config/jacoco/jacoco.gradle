@@ -1,0 +1,238 @@
+// JaCoCo Code Coverage Configuration for DSA Java Project
+
+apply plugin: 'jacoco'
+
+// JaCoCo configuration
+jacoco {
+    toolVersion = "0.8.11"
+    reportsDirectory = layout.buildDirectory.dir('reports/jacoco')
+}
+
+// Test coverage verification rules
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            // Overall coverage requirements
+            limit {
+                minimum = 0.70  // 70% minimum coverage
+            }
+        }
+        
+        rule {
+            // Algorithm-specific coverage requirements
+            element = 'CLASS'
+            includes = ['**/*Algorithm*', '**/*Sort*', '**/*Search*']
+            limit {
+                minimum = 0.80  // 80% coverage for algorithms
+            }
+        }
+        
+        rule {
+            // Test framework coverage requirements
+            element = 'CLASS'
+            includes = ['**/TestFramework*']
+            limit {
+                minimum = 0.85  // 85% coverage for test framework
+            }
+        }
+        
+        rule {
+            // Data structure coverage requirements
+            element = 'CLASS'
+            includes = ['**/*Queue*', '**/*Stack*', '**/*LinkedList*']
+            limit {
+                minimum = 0.75  // 75% coverage for data structures
+            }
+        }
+        
+        rule {
+            // Exclusions for classes with lower coverage requirements
+            element = 'CLASS'
+            excludes = [
+                '**/Main*',
+                '**/Demo*',
+                '**/Example*',
+                '**/*Documentation*',
+                '**/docs/**',
+                '**/generated/**'
+            ]
+            limit {
+                minimum = 0.50  // 50% coverage for excluded classes
+            }
+        }
+    }
+}
+
+// JaCoCo test report configuration
+jacocoTestReport {
+    dependsOn test
+    
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+        
+        // Custom report locations
+        xml.outputLocation = layout.buildDirectory.file('reports/jacoco/test/jacocoTestReport.xml')
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/test/html')
+    }
+    
+    // Additional configuration for report generation
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                // Exclude test classes from coverage
+                '**/TestFramework.class',
+                '**/*Test.class',
+                '**/*Tests.class',
+                
+                // Exclude documentation and demo classes
+                '**/*Documentation.class',
+                '**/Demo*.class',
+                '**/Example*.class',
+                
+                // Exclude generated classes
+                '**/generated/**',
+                '**/docs/**',
+                
+                // Exclude main classes that are just entry points
+                '**/Main.class',
+                '**/App.class'
+            ])
+        }))
+    }
+    
+    // Add source directories for better reporting
+    additionalSourceDirs.setFrom(files([
+        'src/main/java',
+        'src/test/java'
+    ]))
+    
+    // Add execution data from all test tasks
+    executionData.setFrom(files([
+        layout.buildDirectory.file('jacoco/test.exec'),
+        layout.buildDirectory.file('jacoco/integrationTest.exec')
+    ].findAll { it.asFile.exists() }))
+}
+
+// Custom task to generate coverage summary
+task coverageSummary {
+    description = 'Generate coverage summary for the project'
+    group = 'Verification'
+    
+    dependsOn jacocoTestReport
+    
+    doLast {
+        def xmlReport = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        if (xmlReport.exists()) {
+            def xml = new groovy.xml.XmlParser().parse(xmlReport)
+            def counter = xml.counter.find { it.'@type' == 'INSTRUCTION' }
+            
+            def missed = counter.'@missed' as Integer
+            def covered = counter.'@covered' as Integer
+            def total = missed + covered
+            def percentage = total > 0 ? (covered / total * 100).round(2) : 0
+            
+            println "📊 Coverage Summary:"
+            println "=================="
+            println "Total Instructions: ${total}"
+            println "Covered Instructions: ${covered}"
+            println "Missed Instructions: ${missed}"
+            println "Coverage Percentage: ${percentage}%"
+            println "=================="
+            
+            // Check if coverage meets requirements
+            if (percentage >= 70) {
+                println "✅ Coverage requirement met (≥70%)"
+            } else {
+                println "❌ Coverage requirement not met (<70%)"
+            }
+        } else {
+            println "❌ Coverage report not found at ${xmlReport.absolutePath}"
+        }
+    }
+}
+
+// Custom task to check coverage for specific algorithms
+task algorithmCoverageCheck {
+    description = 'Check coverage for algorithm classes specifically'
+    group = 'Verification'
+    
+    dependsOn jacocoTestReport
+    
+    doLast {
+        def htmlReport = file("${buildDir}/reports/jacoco/test/html/index.html")
+        if (htmlReport.exists()) {
+            println "🔍 Algorithm Coverage Analysis:"
+            println "============================"
+            
+            def algorithmClasses = fileTree(dir: 'src/main/java').include('**/*Algorithm*.java').collect {
+                it.name.replace('.java', '')
+            }
+            
+            algorithmClasses.each { className ->
+                println "📋 ${className}: Check HTML report for detailed coverage"
+            }
+            
+            println "============================"
+            println "📊 Full report available at: ${htmlReport.absolutePath}"
+        } else {
+            println "❌ HTML coverage report not found"
+        }
+    }
+}
+
+// Integration test coverage
+task jacocoIntegrationTestReport(type: JacocoReport) {
+    description = 'Generates code coverage report for integration tests.'
+    group = 'Reporting'
+    
+    executionData file("${buildDir}/jacoco/integrationTest.exec")
+    sourceSets sourceSets.main
+    
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+    
+    onlyIf { file("${buildDir}/jacoco/integrationTest.exec").exists() }
+}
+
+// Combine unit and integration test coverage
+task jacocoCombinedReport(type: JacocoReport) {
+    description = 'Generates combined code coverage report for all tests.'
+    group = 'Reporting'
+    
+    executionData fileTree(dir: "${buildDir}/jacoco", include: '*.exec')
+    sourceSets sourceSets.main
+    
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+    
+    onlyIf { 
+        file("${buildDir}/jacoco/test.exec").exists() || 
+        file("${buildDir}/jacoco/integrationTest.exec").exists() 
+    }
+}
+
+// Configure test tasks to generate JaCoCo data
+tasks.withType(Test).configureEach {
+    jacoco {
+        enabled = true
+        destinationFile = layout.buildDirectory.file("jacoco/${name}.exec").get().asFile
+        includes = ['**/*']
+        excludes = ['**/TestFramework.class', '**/*Test.class']
+    }
+}
+
+// Make sure coverage tasks run after tests
+test.finalizedBy jacocoTestReport
+jacocoTestReport.finalizedBy coverageSummary
+
+// Add coverage tasks to check task
+check.dependsOn jacocoTestCoverageVerification
+check.dependsOn coverageSummary

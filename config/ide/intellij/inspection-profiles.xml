@@ -1,0 +1,72 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="DSA Java Project"/>
+    <inspection_tool class="JavaDoc" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="TOP_LEVEL_CLASS_OPTIONS">
+        <value>
+          <option name="required" value="true"/>
+          <option name="description" value="true"/>
+        </value>
+      </option>
+      <option name="INNER_CLASS_OPTIONS">
+        <value>
+          <option name="required" value="false"/>
+          <option name="description" value="true"/>
+        </value>
+      </option>
+      <option name="FIELD_OPTIONS">
+        <value>
+          <option name="required" value="false"/>
+          <option name="description" value="true"/>
+        </value>
+      </option>
+      <option name="METHOD_OPTIONS">
+        <value>
+          <option name="required" value="true"/>
+          <option name="description" value="true"/>
+        </value>
+      </option>
+      <option name="CONSTRUCTOR_OPTIONS">
+        <value>
+          <option name="required" value="true"/>
+          <option name="description" value="true"/>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="AlgorithmComplexity" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="checkComplexityInComments" value="true"/>
+      <option name="checkTimeComplexity" value="true"/>
+      <option name="checkSpaceComplexity" value="true"/>
+    </inspection_tool>
+    <inspection_tool class="TestImplementation" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="checkTestMethods" value="true"/>
+      <option name="checkAssertions" value="true"/>
+      <option name="checkTestCoverage" value="true"/>
+    </inspection_tool>
+    <inspection_tool class="DocumentationQuality" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="checkAlgorithmDocs" value="true"/>
+      <option name="checkTestDocs" value="true"/>
+      <option name="checkComplexityAnalysis" value="true"/>
+    </inspection_tool>
+    <inspection_tool class="ExceptionHandling" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="checkInputValidation" value="true"/>
+      <option name="checkExceptionTypes" value="true"/>
+      <option name="checkFinallyBlocks" value="true"/>
+    </inspection_tool>
+    <inspection_tool class="NamingConventions" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="checkAlgorithmNaming" value="true"/>
+      <option name="checkTestNaming" value="true"/>
+      <option name="checkDataStructureNaming" value="true"/>
+    </inspection_tool>
+    <inspection_tool class="CodeStyle" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="checkLineLength" value="120"/>
+      <option name="checkIndentation" value="true"/>
+      <option name="checkSpacing" value="true"/>
+    </inspection_tool>
+    <inspection_tool class="Performance" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="checkDataStructureUsage" value="true"/>
+      <option name="checkAlgorithmEfficiency" value="true"/>
+      <option name="checkMemoryUsage" value="true"/>
+    </inspection_tool>
+  </profile>
+</component>

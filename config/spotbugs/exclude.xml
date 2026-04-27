@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter
+    xmlns="https://github.com/spotbugs/filter/3.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/master/spotbugs/etc/findbugsfilter.xsd">
+
+    <Project>
+        <!-- Exclude test classes from certain checks -->
+        <Match>
+            <Class name="~.*Test.*" />
+            <Bug pattern="DM_DEFAULT_ENCODING" />
+            <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+            <Bug pattern="SE_BAD_FIELD,SE_BAD_FIELD_INNER_CLASS" />
+        </Match>
+
+        <!-- Exclude main methods from certain checks -->
+        <Match>
+            <Method name="main" params="([Ljava/lang/String;)V" returns="void" />
+            <Bug pattern="DM_DEFAULT_ENCODING" />
+            <Bug pattern="REC_CATCH_EXCEPTION" />
+        </Match>
+
+        <!-- Exclude algorithm classes from some performance checks -->
+        <Match>
+            <Class name="~.*Algorithm.*" />
+            <Bug pattern="DM_STRING_CTOR" />
+            <Bug pattern="DM_STRING_VOID_CTOR" />
+        </Match>
+
+        <!-- Exclude documentation generation classes -->
+        <Match>
+            <Class name="~.*Documentation.*" />
+            <Bug pattern="DM_DEFAULT_ENCODING" />
+            <Bug pattern="OS_OPEN_STREAM" />
+        </Match>
+
+        <!-- Exclude specific patterns for educational purposes -->
+        <Match>
+            <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+            <Or>
+                <Class name="~.*Queue.*" />
+                <Class name="~.*Stack.*" />
+                <Class name="~.*LinkedList.*" />
+            </Or>
+        </Match>
+
+        <!-- Allow certain exceptions in algorithm implementations -->
+        <Match>
+            <Class name="~.*Algorithm.*" />
+            <Bug pattern="REC_CATCH_EXCEPTION" />
+            <Bug pattern="EXS_EXCEPTION_SOFTENING_NO_CHECKED" />
+        </Match>
+
+        <!-- Exclude serialization warnings for non-serializable classes -->
+        <Match>
+            <Bug pattern="SE_BAD_FIELD,SE_BAD_FIELD_INNER_CLASS" />
+            <Not>
+                <Class name="~.*Serializable.*" />
+            </Not>
+        </Match>
+
+        <!-- Allow System.out in test and demonstration classes -->
+        <Match>
+            <Or>
+                <Class name="~.*Test.*" />
+                <Class name="~.*Demo.*" />
+                <Class name="~.*Example.*" />
+            </Or>
+            <Bug pattern="DM_EXIT,DM_GC,DM_STRING_CTOR" />
+        </Match>
+
+        <!-- Exclude complexity warnings for algorithm classes -->
+        <Match>
+            <Class name="~.*Algorithm.*" />
+            <Bug pattern="CC_CYCLOMATIC_COMPLEXITY,CC_NPATH_COMPLEXITY" />
+        </Match>
+
+        <!-- Allow certain patterns in sorting algorithms -->
+        <Match>
+            <Class name="~.*Sort.*" />
+            <Bug pattern="DM_DEFAULT_ENCODING" />
+            <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+        </Match>
+
+        <!-- Allow certain patterns in search algorithms -->
+        <Match>
+            <Class name="~.*Search.*" />
+            <Bug pattern="DM_DEFAULT_ENCODING" />
+            <Bug pattern="REC_CATCH_EXCEPTION" />
+        </Match>
+
+        <!-- Exclude data structure implementations from certain checks -->
+        <Match>
+            <Or>
+                <Class name="~.*Queue.*" />
+                <Class name="~.*Stack.*" />
+                <Class name="~.*LinkedList.*" />
+                <Class name="~.*Array.*" />
+            </Or>
+            <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+            <Bug pattern="MS_SHOULD_BE_FINAL" />
+        </Match>
+
+        <!-- Allow certain patterns in test framework -->
+        <Match>
+            <Class name="TestFramework" />
+            <Bug pattern="DM_DEFAULT_ENCODING,DM_EXIT,DM_GC" />
+            <Bug pattern="REC_CATCH_EXCEPTION" />
+            <Bug pattern="EXS_EXCEPTION_SOFTENING_NO_CHECKED" />
+        </Match>
+
+        <!-- Exclude performance warnings in educational code -->
+        <Match>
+            <Bug pattern="SBSC_USE_STRINGBUFFER_CONCATENATION" />
+            <Class name="~.*Algorithm.*" />
+        </Match>
+
+        <!-- Allow certain patterns in matrix operations -->
+        <Match>
+            <Class name="~.*Matrix.*" />
+            <Bug pattern="DM_DEFAULT_ENCODING" />
+            <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+        </Match>
+
+        <!-- Exclude thread safety warnings for single-threaded algorithms -->
+        <Match>
+            <Class name="~.*Algorithm.*" />
+            <Bug pattern="IS2_INCONSISTENT_SYNC" />
+            <Bug pattern="IS_FIELD_NOT_GUARDED" />
+        </Match>
+
+        <!-- Allow certain patterns in mathematical operations -->
+        <Match>
+            <Class name="~.*Math.*" />
+            <Bug pattern="DM_DEFAULT_ENCODING" />
+            <Bug pattern="FL_FLOATS_AS_LOOP_COUNTERS" />
+        </Match>
+
+    </Project>
+</FindBugsFilter>

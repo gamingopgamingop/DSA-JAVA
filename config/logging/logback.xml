@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Properties for configuration -->
+    <property name="LOG_PATH" value="logs"/>
+    <property name="LOG_FILE" value="dsa-java"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="MAX_FILE_SIZE" value="10MB"/>
+    <property name="MAX_HISTORY" value="30"/>
+    <property name="TOTAL_SIZE_CAP" value="1GB"/>
+
+    <!-- Console Appender for development -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <!-- File Appender for production -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- Error File Appender -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE}-error.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- Algorithm-specific Appender -->
+    <appender name="ALGORITHM_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/algorithms.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/algorithms-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Test-specific Appender -->
+    <appender name="TEST_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/tests.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/tests-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Performance Appender -->
+    <appender name="PERFORMANCE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/performance.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/performance-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Logger configurations -->
+    
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+    <!-- Algorithm loggers -->
+    <logger name="com.dsa.algorithms" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ALGORITHM_FILE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="com.dsa.algorithms.sort" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ALGORITHM_FILE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="com.dsa.algorithms.search" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ALGORITHM_FILE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="com.dsa.algorithms.datastructures" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ALGORITHM_FILE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <!-- Test loggers -->
+    <logger name="com.dsa.tests" level="DEBUG" additivity="false">
+        <appender-ref ref="TEST_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="org.junit" level="WARN" additivity="false">
+        <appender-ref ref="TEST_FILE"/>
+    </logger>
+
+    <logger name="org.mockito" level="WARN" additivity="false">
+        <appender-ref ref="TEST_FILE"/>
+    </logger>
+
+    <!-- Performance loggers -->
+    <logger name="com.dsa.performance" level="INFO" additivity="false">
+        <appender-ref ref="PERFORMANCE_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Framework loggers -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="com.fasterxml.jackson" level="WARN"/>
+    <logger name="org.slf4j" level="WARN"/>
+    <logger name="ch.qos.logback" level="WARN"/>
+
+    <!-- Development environment -->
+    <springProfile name="dev">
+        <logger name="com.dsa" level="DEBUG"/>
+        <logger name="com.dsa.algorithms" level="TRACE"/>
+        <logger name="com.dsa.tests" level="DEBUG"/>
+    </springProfile>
+
+    <!-- Production environment -->
+    <springProfile name="prod">
+        <logger name="com.dsa" level="INFO"/>
+        <logger name="com.dsa.algorithms" level="INFO"/>
+        <logger name="com.dsa.tests" level="WARN"/>
+        <logger name="org.springframework" level="ERROR"/>
+        <logger name="org.hibernate" level="ERROR"/>
+    </springProfile>
+
+    <!-- Test environment -->
+    <springProfile name="test">
+        <logger name="com.dsa" level="DEBUG"/>
+        <logger name="com.dsa.algorithms" level="DEBUG"/>
+        <logger name="com.dsa.tests" level="DEBUG"/>
+        <logger name="org.junit" level="INFO"/>
+        <logger name="org.mockito" level="INFO"/>
+    </springProfile>
+
+    <!-- CI environment -->
+    <if condition='isDefined("CI")'>
+        <then>
+            <logger name="com.dsa" level="INFO"/>
+            <logger name="com.dsa.algorithms" level="INFO"/>
+            <logger name="com.dsa.tests" level="INFO"/>
+            <logger name="org.junit" level="WARN"/>
+            <logger name="org.mockito" level="WARN"/>
+        </then>
+    </if>
+
+</configuration>

@@ -1,0 +1,269 @@
+{
+  "title": "DSA Java Algorithms Documentation",
+  "description": "Comprehensive documentation for Data Structures and Algorithms in Java",
+  "version": "1.0.0",
+  "author": "DSA Java Project Team",
+  "language": "en",
+  "theme": "material",
+  "plugins": [
+    "search",
+    "navigation",
+    "toc",
+    "code-highlight",
+    "mermaid",
+    "mathjax",
+    "anchors",
+    "auto-toc",
+    "footnotes",
+    "tables",
+    "lists",
+    "links"
+  ],
+  "markdown": {
+    "breaks": true,
+    "linkify": true,
+    "typographer": true,
+    "quotes": "«»",
+    "highlight": {
+      "theme": "github",
+      "languages": ["java", "javascript", "json", "xml", "yaml", "bash", "python"]
+    },
+    "extensions": [
+      "markdown.extensions.codehilite",
+      "markdown.extensions.fenced_code",
+      "markdown.extensions.tables",
+      "markdown.extensions.toc",
+      "markdown.extensions.footnotes",
+      "markdown.extensions.attr_list",
+      "markdown.extensions.def_list",
+      "markdown.extensions.abbr",
+      "markdown.extensions.md_in_html"
+    ],
+    "extension_configs": {
+      "markdown.extensions.codehilite": {
+        "css_class": "highlight",
+        "use_pygments": true
+      },
+      "markdown.extensions.toc": {
+        "permalink": true,
+        "permalink_class": "headerlink",
+        "baselevel": 1,
+        "toc_depth": 3
+      },
+      "markdown.extensions.footnotes": {
+        "UNIQUE_IDS": true
+      }
+    }
+  },
+  "site": {
+    "site_name": "DSA Java Algorithms",
+    "site_description": "A comprehensive collection of Data Structures and Algorithms implemented in Java",
+    "site_author": "DSA Java Project Team",
+    "site_url": "https://your-username.github.io/DSA-JAVA",
+    "repo_url": "https://github.com/your-username/DSA-JAVA",
+    "repo_name": "DSA-JAVA",
+    "edit_uri": "edit/main/docs/"
+  },
+  "theme_config": {
+    "name": "material",
+    "palette": [
+      {
+        "media": "(prefers-color-scheme: light)",
+        "scheme": "default",
+        "primary": "blue",
+        "accent": "blue",
+        "toggle": {
+          "icon": "material/brightness-7",
+          "name": "Switch to dark mode"
+        }
+      },
+      {
+        "media": "(prefers-color-scheme: dark)",
+        "scheme": "slate",
+        "primary": "blue",
+        "accent": "blue",
+        "toggle": {
+          "icon": "material/brightness-4",
+          "name": "Switch to light mode"
+        }
+      }
+    ],
+    "font": {
+      "text": "Roboto",
+      "code": "Roboto Mono"
+    },
+    "features": [
+      "navigation.instant",
+      "navigation.tracking",
+      "navigation.tabs",
+      "navigation.tabs.sticky",
+      "navigation.sections",
+      "navigation.expand",
+      "navigation.indexes",
+      "navigation.top",
+      "search.highlight",
+      "search.share",
+      "search.suggest",
+      "toc.follow",
+      "toc.integrate",
+      "header.autohide"
+    ],
+    "icon": {
+      "repo": "fontawesome/brands/github",
+      "logo": "material/school"
+    }
+  },
+  "nav": [
+    {
+      "Home": "index.md"
+    },
+    {
+      "Getting Started": [
+        "getting-started/installation.md",
+        "getting-started/quick-start.md",
+        "getting-started/project-structure.md"
+      ]
+    },
+    {
+      "Algorithms": [
+        "algorithms/overview.md",
+        "algorithms/sorting-algorithms.md",
+        "algorithms/search-algorithms.md",
+        "algorithms/complexity-analysis.md"
+      ]
+    },
+    {
+      "Data Structures": [
+        "data-structures/overview.md",
+        "data-structures/arrays.md",
+        "data-structures/linked-lists.md",
+        "data-structures/stacks.md",
+        "data-structures/queues.md",
+        "data-structures/trees.md",
+        "data-structures/graphs.md"
+      ]
+    },
+    {
+      "Implementation Guide": [
+        "implementation/best-practices.md",
+        "implementation/testing.md",
+        "implementation/performance.md",
+        "implementation/documentation.md"
+      ]
+    },
+    {
+      "API Reference": [
+        "api/overview.md",
+        "api/algorithms.md",
+        "api/data-structures.md",
+        "api/utilities.md"
+      ]
+    },
+    {
+      "Contributing": [
+        "contributing/guidelines.md",
+        "contributing/coding-standards.md",
+        "contributing/testing.md",
+        "contributing/documentation.md"
+      ]
+    }
+  ],
+  "plugin_config": [
+    {
+      "search": {
+        "lang": "en",
+        "separator": "[\\s\\-]+"
+      }
+    },
+    {
+      "mermaid2": {
+        "version": "8.14.0",
+        "theme": "default"
+      }
+    },
+    {
+      "mkdocs-material-extensions": {}
+    },
+    {
+      "mkdocs-material": {
+        "instant_loading": true,
+        "navigation_index": true
+      }
+    }
+  ],
+  "markdown_extensions": [
+    "abbr",
+    "admonition",
+    "attr_list",
+    "def_list",
+    "footnotes",
+    "meta",
+    "md_in_html",
+    "pymdownx.arithmatex",
+    "pymdownx.betterem",
+    "pymdownx.caret",
+    "pymdownx.details",
+    "pymdownx.emoji",
+    {
+      "pymdownx.highlight": {
+        "anchor_linenums": true,
+        "line_spans": "__span",
+        "pygments_lang_class": true
+      }
+    },
+    "pymdownx.inlinehilite",
+    "pymdownx.keys",
+    "pymdownx.magiclink",
+    "pymdownx.mark",
+    "pymdownx.smartsymbols",
+    "pymdownx.superfences",
+    {
+      "pymdownx.superfences": {
+        "custom_fences": [
+          {
+            "name": "mermaid",
+            "class": "mermaid",
+            "format": "!!python identifier"
+          }
+        ]
+      }
+    },
+    "pymdownx.tabbed",
+    "pymdownx.tasklist",
+    {
+      "pymdownx.tasklist": {
+        "custom_checkbox": true
+      }
+    },
+    "pymdownx.tilde"
+  ],
+  "extra": {
+    "analytics": {
+      "provider": "google",
+      "property": "UA-XXXXXXXXX-X"
+    },
+    "social": [
+      {
+        "icon": "fontawesome/brands/github",
+        "link": "https://github.com/your-username/DSA-JAVA"
+      },
+      {
+        "icon": "fontawesome/brands/docker",
+        "link": "https://hub.docker.com/r/your-username/dsa-java"
+      }
+    ],
+    "version": {
+      "provider": "mike"
+    }
+  },
+  "extra_css": [
+    "config/documentation/extra.css"
+  ],
+  "extra_javascript": [
+    "config/documentation/extra.js",
+    "https://polyfill.io/v3/polyfill.min.js?features=es6",
+    "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ],
+  "copyright": "Copyright &copy; 2024 DSA Java Project Team",
+  "license": "MIT"
+}
