@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.dsa.javafx.controllers.MainController">
+    
+    <!-- Top: Menu Bar -->
+    <top>
+        <VBox>
+            <MenuBar fx:id="menuBar">
+                <!-- File Menu -->
+                <Menu fx:id="fileMenu" text="File">
+                    <MenuItem fx:id="newMenuItem" text="New" accelerator="Ctrl+N"/>
+                    <MenuItem fx:id="openMenuItem" text="Open" accelerator="Ctrl+O"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="saveMenuItem" text="Save" accelerator="Ctrl+S"/>
+                    <MenuItem fx:id="saveAsMenuItem" text="Save As" accelerator="Ctrl+Shift+S"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="exitMenuItem" text="Exit" accelerator="Ctrl+Q"/>
+                </Menu>
+                
+                <!-- Edit Menu -->
+                <Menu fx:id="editMenu" text="Edit">
+                    <MenuItem fx:id="undoMenuItem" text="Undo" accelerator="Ctrl+Z"/>
+                    <MenuItem fx:id="redoMenuItem" text="Redo" accelerator="Ctrl+Y"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="cutMenuItem" text="Cut" accelerator="Ctrl+X"/>
+                    <MenuItem fx:id="copyMenuItem" text="Copy" accelerator="Ctrl+C"/>
+                    <MenuItem fx:id="pasteMenuItem" text="Paste" accelerator="Ctrl+V"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="preferencesMenuItem" text="Preferences"/>
+                </Menu>
+                
+                <!-- View Menu -->
+                <Menu fx:id="viewMenu" text="View">
+                    <MenuItem fx:id="zoomInMenuItem" text="Zoom In" accelerator="Ctrl+Plus"/>
+                    <MenuItem fx:id="zoomOutMenuItem" text="Zoom Out" accelerator="Ctrl+Minus"/>
+                    <MenuItem fx:id="resetZoomMenuItem" text="Reset Zoom" accelerator="Ctrl+0"/>
+                    <SeparatorMenuItem/>
+                    <CheckMenuItem fx:id="fullscreenMenuItem" text="Fullscreen" accelerator="F11"/>
+                    <CheckMenuItem fx:id="showGridMenuItem" text="Show Grid" selected="true"/>
+                    <CheckMenuItem fx:id="showAnimationMenuItem" text="Show Animation" selected="true"/>
+                </Menu>
+                
+                <!-- Tools Menu -->
+                <Menu fx:id="toolsMenu" text="Tools">
+                    <MenuItem fx:id="algorithmAnalyzerMenuItem" text="Algorithm Analyzer"/>
+                    <MenuItem fx:id="performanceMonitorMenuItem" text="Performance Monitor"/>
+                    <MenuItem fx:id="dataGeneratorMenuItem" text="Data Generator"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="exportMenuItem" text="Export"/>
+                </Menu>
+                
+                <!-- Help Menu -->
+                <Menu fx:id="helpMenu" text="Help">
+                    <MenuItem fx:id="helpMenuItem" text="Help" accelerator="F1"/>
+                    <MenuItem fx:id="tutorialMenuItem" text="Tutorial"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="aboutMenuItem" text="About"/>
+                </Menu>
+            </MenuBar>
+            
+            <!-- Tool Bar -->
+            <ToolBar fx:id="toolBar">
+                <Button fx:id="newButton" text="New" styleClass="tool-button"/>
+                <Button fx:id="openButton" text="Open" styleClass="tool-button"/>
+                <Button fx:id="saveButton" text="Save" styleClass="tool-button"/>
+                <Separator/>
+                <Button fx:id="undoButton" text="Undo" styleClass="tool-button"/>
+                <Button fx:id="redoButton" text="Redo" styleClass="tool-button"/>
+                <Separator/>
+                <Button fx:id="zoomInButton" text="Zoom In" styleClass="tool-button"/>
+                <Button fx:id="zoomOutButton" text="Zoom Out" styleClass="tool-button"/>
+                <Button fx:id="resetZoomButton" text="Reset Zoom" styleClass="tool-button"/>
+                <Separator/>
+                <Button fx:id="playButton" text="Play" styleClass="tool-button, play-button"/>
+                <Button fx:id="pauseButton" text="Pause" styleClass="tool-button, pause-button"/>
+                <Button fx:id="stopButton" text="Stop" styleClass="tool-button, stop-button"/>
+                <Button fx:id="resetButton" text="Reset" styleClass="tool-button"/>
+            </ToolBar>
+        </VBox>
+    </top>
+    
+    <!-- Center: Main Content Area -->
+    <center>
+        <SplitPane fx:id="mainSplitPane" orientation="HORIZONTAL" dividerPositions="0.2">
+            <!-- Left: Sidebar -->
+            <VBox fx:id="sidebarVBox" styleClass="sidebar">
+                <Accordion fx:id="sidebarAccordion">
+                    <!-- Properties Panel -->
+                    <TitledPane fx:id="propertiesTitledPane" text="Properties" expanded="true">
+                        <VBox fx:id="propertiesVBox" spacing="10" padding="10">
+                            <GridPane fx:id="propertiesGridPane" hgap="10" vgap="10">
+                                <Label fx:id="algorithmNameLabel" text="Algorithm:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <TextField fx:id="algorithmNameTextField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                
+                                <Label fx:id="timeComplexityLabel" text="Time Complexity:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <TextField fx:id="timeComplexityTextField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                
+                                <Label fx:id="spaceComplexityLabel" text="Space Complexity:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <TextField fx:id="spaceComplexityTextField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                                
+                                <Label fx:id="dataSizeLabel" text="Data Size:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                <Slider fx:id="dataSizeSlider" min="10" max="1000" value="100" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                                <Label fx:id="dataSizeValueLabel" text="100" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                            </GridPane>
+                        </VBox>
+                    </TitledPane>
+                    
+                    <!-- Settings Panel -->
+                    <TitledPane fx:id="settingsTitledPane" text="Settings" expanded="false">
+                        <VBox fx:id="settingsVBox" spacing="10" padding="10">
+                            <GridPane fx:id="settingsGridPane" hgap="10" vgap="10">
+                                <Label fx:id="themeLabel" text="Theme:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <ComboBox fx:id="themeComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                                
+                                <Label fx:id="languageLabel" text="Language:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <ComboBox fx:id="languageComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                                
+                                <Label fx:id="animationSpeedLabel" text="Animation Speed:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <Slider fx:id="animationSpeedSlider" min="0.1" max="3.0" value="1.0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            </GridPane>
+                        </VBox>
+                    </TitledPane>
+                    
+                    <!-- Help Panel -->
+                    <TitledPane fx:id="helpTitledPane" text="Help" expanded="false">
+                        <VBox fx:id="helpVBox" spacing="10" padding="10">
+                            <WebView fx:id="helpWebView" prefHeight="300"/>
+                            <HBox spacing="10">
+                                <Button fx:id="previousHelpButton" text="Previous"/>
+                                <Button fx:id="nextHelpButton" text="Next"/>
+                                <Button fx:id="homeHelpButton" text="Home"/>
+                            </HBox>
+                        </VBox>
+                    </TitledPane>
+                </Accordion>
+            </VBox>
+            
+            <!-- Right: Main Content -->
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+                <!-- Algorithms Tab -->
+                <Tab fx:id="algorithmsTab" text="Algorithms">
+                    <VBox fx:id="algorithmsVBox" spacing="10" padding="10">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ComboBox fx:id="algorithmCategoryComboBox" prefWidth="150"/>
+                            <TextField fx:id="searchAlgorithmTextField" promptText="Search algorithms..." prefWidth="200"/>
+                            <Button fx:id="runAlgorithmButton" text="Run Algorithm" styleClass="primary-button"/>
+                            <Button fx:id="stepAlgorithmButton" text="Step" styleClass="secondary-button"/>
+                            <Button fx:id="resetAlgorithmButton" text="Reset" styleClass="secondary-button"/>
+                        </HBox>
+                        
+                        <SplitPane orientation="VERTICAL" dividerPositions="0.3">
+                            <ListView fx:id="algorithmListView" styleClass="algorithm-list"/>
+                            
+                            <VBox spacing="10">
+                                <Label text="Algorithm Description" styleClass="section-header"/>
+                                <TextArea fx:id="algorithmDescriptionTextArea" prefHeight="150" wrapText="true" editable="false"/>
+                            </VBox>
+                        </SplitPane>
+                    </VBox>
+                </Tab>
+                
+                <!-- Data Structures Tab -->
+                <Tab fx:id="dataStructuresTab" text="Data Structures">
+                    <VBox fx:id="dataStructuresVBox" spacing="10" padding="10">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ComboBox fx:id="dataStructureTypeComboBox" prefWidth="150"/>
+                            <TextField fx:id="searchDataStructureTextField" promptText="Search data structures..." prefWidth="200"/>
+                            <Button fx:id="createDataStructureButton" text="Create" styleClass="primary-button"/>
+                            <Button fx:id="clearDataStructureButton" text="Clear" styleClass="secondary-button"/>
+                        </HBox>
+                        
+                        <SplitPane orientation="VERTICAL" dividerPositions="0.3">
+                            <ListView fx:id="dataStructureListView" styleClass="data-structure-list"/>
+                            
+                            <VBox spacing="10">
+                                <Label text="Data Structure Description" styleClass="section-header"/>
+                                <TextArea fx:id="dataStructureDescriptionTextArea" prefHeight="150" wrapText="true" editable="false"/>
+                            </VBox>
+                        </SplitPane>
+                    </VBox>
+                </Tab>
+                
+                <!-- Visualization Tab -->
+                <Tab fx:id="visualizationTab" text="Visualization">
+                    <VBox fx:id="visualizationVBox" spacing="10" padding="10">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button fx:id="playAnimationButton" text="Play" styleClass="primary-button, play-button"/>
+                            <Button fx:id="pauseAnimationButton" text="Pause" styleClass="secondary-button, pause-button"/>
+                            <Button fx:id="stopAnimationButton" text="Stop" styleClass="secondary-button, stop-button"/>
+                            <Button fx:id="resetAnimationButton" text="Reset" styleClass="secondary-button"/>
+                            <Separator orientation="VERTICAL"/>
+                            <Label text="Animation Speed:"/>
+                            <Slider fx:id="animationSpeedSlider" min="0.1" max="3.0" value="1.0" prefWidth="150"/>
+                        </HBox>
+                        
+                        <ScrollPane fx:id="visualizationScrollPane" fitToWidth="true" fitToHeight="true">
+                            <Canvas fx:id="visualizationCanvas" width="800" height="600" styleClass="visualization-canvas"/>
+                        </ScrollPane>
+                    </VBox>
+                </Tab>
+                
+                <!-- Performance Tab -->
+                <Tab fx:id="performanceTab" text="Performance">
+                    <VBox fx:id="performanceVBox" spacing="10" padding="10">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button fx:id="runPerformanceTestButton" text="Run Performance Test" styleClass="primary-button"/>
+                            <Button fx:id="clearResultsButton" text="Clear Results" styleClass="secondary-button"/>
+                        </HBox>
+                        
+                        <SplitPane orientation="VERTICAL" dividerPositions="0.5">
+                            <HBox spacing="10">
+                                <!-- Performance Chart -->
+                                <VBox spacing="5" HBox.hgrow="1">
+                                    <Label text="Performance Over Time" styleClass="section-header"/>
+                                    <LineChart fx:id="performanceChart" prefHeight="300" HBox.hgrow="1">
+                                        <xAxis>
+                                            <CategoryAxis label="Time"/>
+                                        </xAxis>
+                                        <yAxis>
+                                            <NumberAxis label="Execution Time (ms)"/>
+                                        </yAxis>
+                                    </LineChart>
+                                </VBox>
+                                
+                                <!-- Algorithm Comparison Chart -->
+                                <VBox spacing="5" HBox.hgrow="1">
+                                    <Label text="Algorithm Comparison" styleClass="section-header"/>
+                                    <BarChart fx:id="algorithmComparisonChart" prefHeight="300" HBox.hgrow="1">
+                                        <xAxis>
+                                            <CategoryAxis label="Algorithm"/>
+                                        </xAxis>
+                                        <yAxis>
+                                            <NumberAxis label="Execution Time (ms)"/>
+                                        </yAxis>
+                                    </BarChart>
+                                </VBox>
+                            </HBox>
+                            
+                            <!-- Performance Table -->
+                            <VBox spacing="5">
+                                <Label text="Performance Results" styleClass="section-header"/>
+                                <TableView fx:id="performanceTableView" prefHeight="200">
+                                    <columns>
+                                        <TableColumn fx:id="algorithmColumn" text="Algorithm" prefWidth="200"/>
+                                        <TableColumn fx:id="timeColumn" text="Time (ms)" prefWidth="150"/>
+                                        <TableColumn fx:id="memoryColumn" text="Memory (MB)" prefWidth="150"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </SplitPane>
+                    </VBox>
+                </Tab>
+            </TabPane>
+        </SplitPane>
+    </center>
+    
+    <!-- Bottom: Status Bar -->
+    <bottom>
+        <VBox>
+            <StatusBar fx:id="statusBar" styleClass="status-bar">
+                <Label fx:id="statusLabel" text="Ready" maxWidth="Infinity" HBox.hgrow="1"/>
+                <Separator orientation="VERTICAL"/>
+                <Label fx:id="algorithmLabel" text="Algorithm: None"/>
+                <Separator orientation="VERTICAL"/>
+                <Label fx:id="performanceLabel" text="Performance: --"/>
+                <Separator orientation="VERTICAL"/>
+                <ProgressBar fx:id="progressBar" prefWidth="100" visible="false"/>
+                <ProgressIndicator fx:id="progressIndicator" prefWidth="20" visible="false"/>
+            </StatusBar>
+        </VBox>
+    </bottom>
+    
+    <!-- Padding and Margins -->
+    <padding>
+        <Insets top="0" right="0" bottom="0" left="0"/>
+    </padding>
+    
+</BorderPane>

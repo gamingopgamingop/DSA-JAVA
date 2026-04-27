@@ -1,0 +1,778 @@
+plugins {
+    // Core Maven Plugins
+    id 'java'
+    id 'maven-publish'
+    id 'signing'
+    
+    // Build and Packaging Plugins
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    
+    // Code Quality and Analysis Plugins
+    id 'checkstyle'
+    id 'pmd'
+    id 'com.github.spotbugs.snom' version '6.0.0'
+    id 'org.owasp.dependencycheck' version '9.0.7'
+    id 'org.sonarqube' version '4.3.0.3136'
+    id 'com.github.kt3k.coveralls' version '2.12.2'
+    
+    // Testing Plugins
+    id 'org.testcontainers' version '1.19.3'
+    id 'org.cycloneddx cyclonedx-bom' version '1.8.2'
+    id 'com.github.ben-manes.versions' version '0.50.0'
+    
+    // Documentation Plugins
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'org.beryx.jlink' version '2.26.1'
+    id 'org.beryx.jlink.jlinkbase' version '2.26.1'
+    
+    // Docker and Container Plugins
+    id 'com.palantir.docker' version '0.35.0'
+    id 'com.google.cloud.tools.jib' version '3.3.2'
+    
+    // Release and Distribution Plugins
+    id 'net.researchgate.release' version '2.8.1'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.3.0'
+    
+    // Performance and Profiling Plugins
+    id 'me.champeau.gradle.jmh' version '0.7.1'
+    id 'org.gradle.cachemodules' version '1.2.0'
+    
+    // Security and Compliance Plugins
+    id 'com.github.spotbugs.snom' version '6.0.0'
+    id 'org.liquibase.gradle' version '2.2.0'
+    
+    // Multi-language Support
+    id 'org.jetbrains.kotlin.jvm' version '1.9.10'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.9.10'
+    id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.10'
+    
+    // Native Image Support
+    id 'org.graalvm.buildtools.native' version '0.9.28'
+    
+    // Dependency Management
+    id 'com.github.ben-manes.cpd' version '3.3.0'
+    id 'com.github.ekryd.sortpom-gradle-plugin' version '3.0.0'
+    
+    // Build Optimization
+    id 'com.github.gradle-caching' version '0.7.2'
+    id 'org.gradle.build-reproducers' version '0.3.0'
+}
+
+// Java Configuration
+java {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+    
+    withSourcesJar()
+    withJavadocJar()
+}
+
+// Kotlin Configuration for Multi-language Support
+kotlin {
+    jvmToolchain(17)
+}
+
+// Dependency Management
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:3.2.0'
+        mavenBom 'org.testcontainers:testcontainers-bom:1.19.3'
+        mavenBom 'org.cyclonedx:cyclonedx-bom:1.8.2'
+        mavenBom 'org.jetbrains.kotlin:kotlin-bom:1.9.10'
+    }
+}
+
+// Checkstyle Configuration
+checkstyle {
+    toolVersion = '10.12.4'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    configProperties = file("${rootDir}/config/checkstyle/checkstyle.properties")
+    maxWarnings = 0
+    maxErrors = 0
+    ignoreFailures = false
+    showViolations = true
+    
+    checkstyleMain.exclude '**/generated/**'
+    checkstyleTest.exclude '**/generated/**'
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// PMD Configuration
+pmd {
+    toolVersion = '6.55.0'
+    ruleSetFiles = files("${rootDir}/config/pmd/ruleset.xml")
+    ruleSetConfig = files("${rootDir}/config/pmd/ruleset.xml")
+    ignoreFailures = false
+    consoleOutput = true
+    reportsDir = file("${buildDir}/reports/pmd")
+    
+    pmdMain.exclude '**/generated/**'
+    pmdTest.exclude '**/generated/**'
+}
+
+tasks.withType(Pmd).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// SpotBugs Configuration
+spotbugs {
+    toolVersion = '4.7.3'
+    ignoreFailures = false
+    reportLevel = 'low'
+    effort = 'max'
+    excludeFilter = file("${rootDir}/config/spotbugs/exclude.xml")
+    showProgress = true
+    
+    spotbugsMain.exclude '**/generated/**'
+    spotbugsTest.exclude '**/generated/**'
+}
+
+spotbugsMain {
+    reports {
+        html {
+            required = true
+            outputLocation = file("${buildDir}/reports/spotbugs/main.html")
+        }
+        xml {
+            required = true
+            outputLocation = file("${buildDir}/reports/spotbugs/main.xml")
+        }
+    }
+}
+
+spotbugsTest {
+    enabled = false
+}
+
+// CPD (Copy-Paste Detector) Configuration
+cpd {
+    toolVersion = '6.3.0'
+    language = 'java'
+    ignoreFailures = false
+    encoding = 'UTF-8'
+    
+    cpdCheck.exclude '**/generated/**'
+    cpdCheck.exclude '**/build/**'
+    
+    reportsDir = file("${buildDir}/reports/cpd")
+}
+
+tasks.withType(Cpd).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// SonarQube Configuration
+sonarqube {
+    properties {
+        property 'sonar.projectKey', 'dsa-java-project_DSA-JAVA'
+        property 'sonar.organization', 'dsa-java-project'
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.login', System.getenv('SONAR_TOKEN')
+        property 'sonar.java.binaries', 'build/classes/java/main'
+        property 'sonar.java.test.binaries', 'build/classes/java/test'
+        property 'sonar.java.coveragePlugin', 'jacoco'
+        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+        property 'sonar.java.source', 'src/main/java'
+        property 'sonar.java.test', 'src/test/java'
+        property 'sonar.exclusions', '**/config/**,**/docs/**,**/build/**,**/generated/**'
+        property 'sonar.cpd.exclusions', '**/generated/**'
+        property 'sonar.pmd.exclusions', '**/generated/**'
+        property 'sonar.spotbugs.exclusions', '**/generated/**'
+        property 'sonar.checkstyle.exclusions', '**/generated/**'
+    }
+}
+
+// OWASP Dependency Check
+dependencyCheck {
+    failBuildOnCVSS = 7
+    suppressionFile = 'config/dependency-check/suppressions.xml'
+    failOnError = true
+    scanSet = 'all'
+    skipConfigurations = ['compileOnly', 'testCompileOnly']
+    formats = ['HTML', 'XML', 'CSV', 'JSON']
+    outputDirectory = "${buildDir}/reports/dependency-check"
+}
+
+// JaCoCo Configuration
+jacoco {
+    toolVersion = '0.8.10'
+}
+
+test {
+    jacoco {
+        enabled = true
+        destinationFile = file("${buildDir}/jacoco/test.exec")
+        classDumpDir = file("${buildDir}/jacoco/classpathdumps")
+        includes = ['com/dsa/**']
+        excludes = ['**/generated/**', '**/config/**']
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.80
+            }
+        }
+    }
+}
+
+// JMH (Java Microbenchmark Harness) Configuration
+jmh {
+    iterations = 5
+    benchmarkMode = ['thrpt']
+    batchSize = 1
+    fork = 2
+    failOnError = true
+    forceGC = true
+    jvm = '-Xmx2G'
+    resultsFile = file("${buildDir}/reports/jmh/results.txt")
+    
+    include '**/benchmark/**'
+    exclude '**/generated/**'
+}
+
+// Docker Configuration
+docker {
+    name = 'dsa-java/spring-boot-app'
+    tag = 'latest'
+    dockerfile = file('Dockerfile')
+    files tasks.bootJar.outputs.files
+    buildArgs = ['JAVA_VERSION': '17']
+    labels = ['maintainer': 'DSA Java Project Team']
+}
+
+// JIB (Google Container Build) Configuration
+jib {
+    from {
+        image = 'openjdk:17-jre-slim'
+    }
+    to {
+        image = 'dsa-java/spring-boot-app'
+        tags = ['latest', version]
+    }
+    container {
+        creationTime = 'USE_CURRENT_TIMESTAMP'
+        entrypoint = ['java', '-jar', '/app/app.jar']
+        ports = ['8080']
+        environment = ['SPRING_PROFILES_ACTIVE': 'prod']
+    }
+}
+
+// Native Image Configuration (GraalVM)
+graalvmNative {
+    toolchainDetection = false
+    binaries {
+        main {
+            imageName = 'dsa-java-native'
+            mainClass = 'com.dsa.DsaJavaApplication'
+            buildArgs.add('--no-fallback')
+            buildArgs.add('--enable-url-protocols=http,https')
+            buildArgs.add('--enable-all-security-services')
+            buildArgs.add('--initialize-at-build-time')
+            buildArgs.add('--report-unsupported-elements-at-runtime')
+        }
+    }
+}
+
+// Liquibase Configuration
+liquibase {
+    activities {
+        main {
+            changeLogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
+            url 'jdbc:h2:mem:testdb'
+            username 'sa'
+            password ''
+        }
+    }
+}
+
+// Versions Plugin Configuration
+versions {
+    rejectReleaseIfCurrent {
+        allowReleaseChecks = false
+        rejectIfNotContaining = ['STABLE', 'FINAL']
+    }
+}
+
+// SortPOM Plugin Configuration
+sortpom {
+    sortDependencies = true
+    sortPlugins = true
+    keepBlankLines = true
+    expandEmptyElements = false
+    spaceBeforeClosingTag = true
+    encoding = 'UTF-8'
+    lineSeparator = '\n'
+    sortProperties = true
+    skip = false
+}
+
+// CycloneDX SBOM Configuration
+cyclonedxBom {
+    includeBuildInfo = true
+    includeConfigs = true
+    includeLicenseText = false
+    includeBomSerialNumber = true
+    projectType = 'library'
+    schemaVersion = '1.4'
+    destination = file("${buildDir}/reports/cyclonedx")
+}
+
+// TestContainers Configuration
+testcontainers {
+    useClasspathImplementation = true
+}
+
+// JLink Configuration
+jlink {
+    imageDir = file("${buildDir}/jlink-image")
+    moduleName = 'dsa.java.main'
+    mainClass = 'com.dsa.DsaJavaApplication'
+    addExtraDependencies('java.logging', 'java.sql')
+    addOptions('--strip-debug', '--compress=2', '--no-header-files', '--no-man-pages')
+    launcher {
+        name = 'dsa-java-launcher'
+    }
+}
+
+// Release Plugin Configuration
+release {
+    failOnCommitNeeded = false
+    failOnPublishNeeded = false
+    failOnUnversionedFiles = false
+    
+    git {
+        requireBranch = 'main'
+        pushToRemote = 'origin'
+    }
+    
+    tagTemplate = 'v${version}'
+}
+
+// Nexus Publishing Configuration
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            
+            pom {
+                name = 'DSA Java Application'
+                description = 'Data Structures and Algorithms Visualization Platform'
+                url = 'https://github.com/dsa-java-project/DSA-JAVA'
+                
+                developers {
+                    developer {
+                        id = 'dsa-team'
+                        name = 'DSA Java Project Team'
+                        email = 'team@dsa-java-project.com'
+                    }
+                }
+                
+                scm {
+                    connection = 'scm:git:git://github.com/dsa-java-project/DSA-JAVA.git'
+                    developerConnection = 'scm:git:ssh://github.com:dsa-java-project/DSA-JAVA.git'
+                    url = 'https://github.com/dsa-java-project/DSA-JAVA/tree/main'
+                }
+                
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
+        }
+    }
+    
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri('https://maven.pkg.github.com/dsa-java-project/DSA-JAVA')
+            credentials {
+                username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
+                password = project.findProperty('gpr.token') ?: System.getenv('TOKEN')
+            }
+        }
+    }
+}
+
+// Custom Tasks
+task allCodeQualityChecks {
+    description = 'Run all code quality checks'
+    group = 'verification'
+    
+    dependsOn checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, cpdCheck
+}
+
+task securityChecks {
+    description = 'Run all security checks'
+    group = 'verification'
+    
+    dependsOn dependencyCheckAnalyze, spotbugsMain
+}
+
+task performanceTests {
+    description = 'Run performance tests'
+    group = 'verification'
+    
+    dependsOn jmh
+}
+
+task generateAllReports {
+    description = 'Generate all project reports'
+    group = 'reporting'
+    
+    dependsOn jacocoTestReport, checkstyleMain, pmdMain, spotbugsMain, cpdCheck, cyclonedxBom
+}
+
+task buildNativeImage {
+    description = 'Build native image with GraalVM'
+    group = 'build'
+    
+    dependsOn build
+    dependsOn graalvmNativeNativeCompile
+}
+
+task createDockerImages {
+    description = 'Create Docker images'
+    group = 'build'
+    
+    dependsOn docker, jibDockerBuild
+}
+
+task publishToMavenCentral {
+    description = 'Publish to Maven Central'
+    group = 'publishing'
+    
+    dependsOn publishToNexus
+}
+
+task runAllTests {
+    description = 'Run all tests including integration and performance tests'
+    group = 'verification'
+    
+    dependsOn test, integrationTest, performanceTests
+}
+
+// Build Optimization
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xlint:unchecked', '-Xlint:deprecation']
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    
+    jvmArgs = [
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED',
+        '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED'
+    ]
+    
+    systemProperty 'java.awt.headless', 'true'
+    systemProperty 'spring.profiles.active', 'test'
+}
+
+// Source Sets
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+    
+    integrationTest {
+        java {
+            srcDirs = ['src/integrationTest/java']
+        }
+        resources {
+            srcDirs = ['src/integrationTest/resources']
+        }
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+    
+    benchmark {
+        java {
+            srcDirs = ['src/benchmark/java']
+        }
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += compileClasspath
+    }
+}
+
+// Integration Test Configuration
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+    
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    
+    useJUnitPlatform()
+    
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    
+    jvmArgs = [
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED'
+    ]
+    
+    systemProperty 'spring.profiles.active', 'integration-test'
+    
+    maxHeapSize = '1g'
+}
+
+check.dependsOn integrationTest
+
+// Benchmark Test Configuration
+task benchmarkTest(type: JavaExec) {
+    description = 'Runs JMH benchmarks.'
+    group = 'benchmark'
+    
+    classpath = sourceSets.benchmark.runtimeClasspath
+    mainClass = 'org.openjdk.jmh.Main'
+    
+    args = ['.*']
+    
+    jvmArgs = [
+        '-Xmx2g',
+        '-XX:+UseG1GC',
+        '-XX:G1HeapRegionSize=16m'
+    ]
+}
+
+// Gradle Wrapper Configuration
+wrapper {
+    gradleVersion = '8.5'
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+// Project Information
+project.ext {
+    description = 'DSA Java Application - A comprehensive platform for Data Structures and Algorithms visualization and management'
+    url = 'https://github.com/dsa-java-project/DSA-JAVA'
+    inceptionYear = '2024'
+    developers = ['DSA Java Project Team']
+    license = 'MIT'
+}
+
+// Custom Properties
+ext {
+    springBootVersion = '3.2.0'
+    javaVersion = '17'
+    kotlinVersion = '1.9.10'
+    graalvmVersion = '22.3.1'
+    
+    // Code Quality Versions
+    checkstyleVersion = '10.12.4'
+    pmdVersion = '6.55.0'
+    spotbugsVersion = '4.7.3'
+    cpdVersion = '6.3.0'
+    
+    // Testing Versions
+    testcontainersVersion = '1.19.3'
+    junitVersion = '5.10.0'
+    mockitoVersion = '5.6.0'
+    
+    // Documentation Versions
+    asciidoctorVersion = '3.3.2'
+    
+    // Security Versions
+    dependencyCheckVersion = '9.0.7'
+    sonarqubeVersion = '4.3.0.3136'
+    
+    // Performance Versions
+    jmhVersion = '1.36'
+    
+    // Container Versions
+    dockerVersion = '0.35.0'
+    jibVersion = '3.3.2'
+}
+
+// Build Information
+tasks.named('jar') {
+    archiveBaseName = 'dsa-java'
+    archiveVersion = project.version
+    archiveClassifier = ''
+}
+
+// Disable bootJar for multi-module projects if needed
+bootJar {
+    enabled = true
+    archiveFileName = 'dsa-java-spring-boot.jar'
+}
+
+// Configure shadowJar to work with Spring Boot
+shadowJar {
+    enabled = false
+    mergeServiceFiles()
+    archiveFileName = 'dsa-java-shadow.jar'
+}
+
+// Configure bootJar for layered JAR
+bootJar {
+    archiveFileName = 'dsa-java-spring-boot.jar'
+    layered {
+        enabled = true
+    }
+}
+
+// Docker Build Image Configuration
+bootBuildImage {
+    imageName = 'dsa-java/spring-boot-app'
+    builder = 'paketobuildpacks/builder-jammy-base'
+    
+    environment = [
+        'BP_JVM_VERSION': '17',
+        'BP_RUN_IMAGE': 'paketobuildpacks/run-jammy-base'
+    ]
+}
+
+// Custom Gradle Tasks for DSA-specific operations
+task validateAllAlgorithms {
+    description = 'Validate all algorithm implementations'
+    group = 'verification'
+    
+    doLast {
+        def algorithmsDir = file('src/main/java/com/dsa/algorithms')
+        if (algorithmsDir.exists()) {
+            algorithmsDir.eachFileRecurse { file ->
+                if (file.name.endsWith('.java')) {
+                    println "Validating algorithm: ${file.name}"
+                    // Add validation logic here
+                }
+            }
+        }
+    }
+}
+
+task generateAlgorithmDocumentation {
+    description = 'Generate documentation for all algorithms'
+    group = 'documentation'
+    
+    doLast {
+        def algorithmsDir = file('src/main/java/com/dsa/algorithms')
+        def docsDir = file('build/docs/algorithms')
+        
+        if (!docsDir.exists()) {
+            docsDir.mkdirs()
+        }
+        
+        if (algorithmsDir.exists()) {
+            algorithmsDir.eachFileRecurse { file ->
+                if (file.name.endsWith('.java')) {
+                    def docFile = new File(docsDir, file.name.replace('.java', '.md'))
+                    docFile.text = "# ${file.name}\n\nAlgorithm documentation for ${file.name}\n"
+                    println "Generated documentation for ${file.name}"
+                }
+            }
+        }
+    }
+}
+
+task performanceAnalysis {
+    description = 'Run performance analysis on algorithms'
+    group = 'analysis'
+    
+    dependsOn benchmarkTest
+    
+    doLast {
+        println "Performance analysis completed"
+        println "Results available in: ${buildDir}/reports/jmh/"
+    }
+}
+
+task securityScan {
+    description = 'Run comprehensive security scan'
+    group = 'security'
+    
+    dependsOn dependencyCheckAnalyze, spotbugsMain
+    
+    doLast {
+        println "Security scan completed"
+        println "Dependency check results: ${buildDir}/reports/dependency-check/"
+        println "SpotBugs results: ${buildDir}/reports/spotbugs/"
+    }
+}
+
+task codeQualityReport {
+    description = 'Generate comprehensive code quality report'
+    group = 'reporting'
+    
+    dependsOn allCodeQualityChecks, jacocoTestReport
+    
+    doLast {
+        println "Code quality report generated"
+        println "Checkstyle: ${buildDir}/reports/checkstyle/"
+        println "PMD: ${buildDir}/reports/pmd/"
+        println "SpotBugs: ${buildDir}/reports/spotbugs/"
+        println "CPD: ${buildDir}/reports/cpd/"
+        println "JaCoCo: ${buildDir}/reports/jacoco/"
+    }
+}
+
+// Clean Task
+clean {
+    doLast {
+        delete fileTree(dir: 'build') {
+            exclude '**/.gitkeep'
+        }
+        delete fileTree(dir: 'target') {
+            exclude '**/.gitkeep'
+        }
+        delete fileTree(dir: 'out') {
+            exclude '**/.gitkeep'
+        }
+    }
+}
+
+// Task Dependencies
+check.dependsOn allCodeQualityChecks, securityChecks, runAllTests
+build.dependsOn bootJar
+publish.dependsOn publishToMavenCentral

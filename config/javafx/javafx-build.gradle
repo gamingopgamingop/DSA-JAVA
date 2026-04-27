@@ -1,0 +1,303 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+// JavaFX Plugin Configuration
+javafx {
+    version = '21'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.base']
+    
+    // Configuration for different platforms
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        configuration = 'win'
+    } else if (System.getProperty('os.name').toLowerCase().contains('mac')) {
+        configuration = 'mac'
+    } else if (System.getProperty('os.name').toLowerCase().contains('linux')) {
+        configuration = 'linux'
+    }
+}
+
+// JavaFX Dependencies
+dependencies {
+    // Core JavaFX
+    implementation 'org.openjfx:javafx-controls:21'
+    implementation 'org.openjfx:javafx-fxml:21'
+    implementation 'org.openjfx:javafx-graphics:21'
+    implementation 'org.openjfx:javafx-base:21'
+    
+    // Additional JavaFX libraries
+    implementation 'org.openjfx:javafx-swing:21'
+    implementation 'org.openjfx:javafx-media:21'
+    implementation 'org.openjfx:javafx-web:21'
+    
+    // ControlsFX for enhanced controls
+    implementation 'org.controlsfx:controlsfx:11.2.0'
+    
+    // JFoenix for Material Design
+    implementation 'com.jfoenix:jfoenix:9.0.10'
+    
+    // Charts and data visualization
+    implementation 'org.openjfx:javafx-swing:21'
+    
+    // Testing JavaFX
+    testImplementation 'org.testfx:testfx-core:4.3.1'
+    testImplementation 'org.testfx:testfx-junit5:4.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    
+    // Mockito for testing
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
+}
+
+// Application Configuration
+application {
+    mainClass = 'com.dsa.javafx.DSAJavaFXApplication'
+}
+
+// Java Compiler Options
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// JVM Options for JavaFX
+application {
+    applicationDefaultJvmArgs = [
+        '--add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED',
+        '--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED',
+        '--add-exports=javafx.fxml/com.sun.javafx.fxml=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED',
+        '--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED',
+        '--add-opens=javafx.controls/javafx.scene.control=ALL-UNNAMED',
+        '--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED',
+        '--add-opens=javafx.base/javafx.beans=ALL-UNNAMED',
+        '--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
+        '--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED'
+    ]
+}
+
+// Test Configuration
+test {
+    useJUnitPlatform()
+    
+    jvmArgs = [
+        '--add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED',
+        '--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED',
+        '--add-exports=javafx.fxml/com.sun.javafx.fxml=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED',
+        '--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED',
+        '--add-opens=javafx.controls/javafx.scene.control=ALL-UNNAMED',
+        '--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED',
+        '--add-opens=javafx.base/javafx.beans=ALL-UNNAMED',
+        '--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
+        '--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED',
+        '--headless'  // Run tests in headless mode
+    ]
+    
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
+
+// Task for running JavaFX application
+task runJavaFX(type: JavaExec) {
+    group = 'application'
+    description = 'Run the JavaFX DSA Application'
+    
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.dsa.javafx.DSAJavaFXApplication'
+    
+    jvmArgs = [
+        '--add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED',
+        '--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED',
+        '--add-exports=javafx.fxml/com.sun.javafx.fxml=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED',
+        '--add-opens=javafx.graphics/javafx.scene=ALL-UNNAMED',
+        '--add-opens=javafx.controls/javafx.scene.control=ALL-UNNAMED',
+        '--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED',
+        '--add-opens=javafx.base/javafx.beans=ALL-UNNAMED',
+        '--add-opens=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
+        '--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED'
+    ]
+}
+
+// Task for creating JavaFX JAR
+task createJavaFXJar(type: Jar) {
+    group = 'build'
+    description = 'Create executable JAR for JavaFX application'
+    
+    manifest {
+        attributes(
+            'Main-Class': 'com.dsa.javafx.DSAJavaFXApplication',
+            'Implementation-Title': 'DSA JavaFX Application',
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': 'DSA Java Project Team'
+        )
+    }
+    
+    from sourceSets.main.output
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Task for packaging JavaFX application
+task packageJavaFX(type: Copy) {
+    group = 'build'
+    description = 'Package JavaFX application with dependencies'
+    
+    into "$buildDir/javafx-app"
+    from createJavaFXJar
+    from 'src/main/resources'
+    
+    // Copy JavaFX runtime if available
+    def javafxRuntime = System.getProperty('java.home')
+    if (javafxRuntime) {
+        from javafxRuntime
+    }
+}
+
+// Clean task for JavaFX
+task cleanJavaFX(type: Delete) {
+    group = 'build'
+    description = 'Clean JavaFX build artifacts'
+    
+    delete "$buildDir/javafx-app"
+    delete "$buildDir/libs/javafx"
+}
+
+// JavaFX specific source sets
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/main/javafx']
+        }
+        resources {
+            srcDirs = ['src/main/resources', 'src/main/javafx']
+        }
+    }
+    
+    test {
+        java {
+            srcDirs = ['src/test/java', 'src/test/javafx']
+        }
+        resources {
+            srcDirs = ['src/test/resources', 'src/test/javafx']
+        }
+    }
+}
+
+// JavaFX specific tasks
+task compileJavaFX(type: JavaCompile) {
+    group = 'build'
+    description = 'Compile JavaFX specific source files'
+    
+    source = fileTree('src/main/javafx').include('**/*.java')
+    classpath = sourceSets.main.compileClasspath
+    destinationDirectory = file("$buildDir/classes/java/main")
+    
+    options.encoding = 'UTF-8'
+    options.compilerArgs = [
+        '--add-exports=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED',
+        '--add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED',
+        '--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED',
+        '--add-exports=javafx.fxml/com.sun.javafx.fxml=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.binding=ALL-UNNAMED',
+        '--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED'
+    ]
+}
+
+// Task for validating FXML files
+task validateFXML {
+    group = 'verification'
+    description = 'Validate FXML files for syntax errors'
+    
+    doLast {
+        fileTree('src/main/resources').include('**/*.fxml').each { fxmlFile ->
+            try {
+                def xml = new XmlParser().parse(fxmlFile)
+                println "✅ Valid FXML: ${fxmlFile.name}"
+            } catch (Exception e) {
+                println "❌ Invalid FXML: ${fxmlFile.name} - ${e.message}"
+                throw new GradleException("FXML validation failed for ${fxmlFile.name}")
+            }
+        }
+    }
+}
+
+// Task for generating JavaFX documentation
+task generateJavaFXDoc(type: Javadoc) {
+    group = 'documentation'
+    description = 'Generate JavaFX API documentation'
+    
+    source = sourceSets.main.java
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = file("$buildDir/docs/javafx")
+    
+    options.addStringOption('doclet', 'com.dsa.doclet.DSADoclet')
+    options.addStringOption('docletpath', 'config/documentation')
+    
+    title 'DSA JavaFX Application API Documentation'
+    options.encoding = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+}
+
+// Configure checkstyle for JavaFX
+checkstyle {
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    toolVersion = '10.12.4'
+    
+    // Include JavaFX source files
+    sourceSets = [sourceSets.main, sourceSets.test]
+}
+
+// Configure PMD for JavaFX
+pmd {
+    toolVersion = '6.55.0'
+    ruleSetFiles = files("${rootDir}/config/pmd/ruleset.xml")
+    
+    // Include JavaFX source files
+    sourceSets = [sourceSets.main, sourceSets.test]
+}
+
+// Configure JaCoCo for JavaFX
+jacoco {
+    toolVersion = '0.8.10'
+}
+
+test {
+    jacoco {
+        enabled = true
+        destinationFile = file("$buildDir/jacoco/test.exec")
+        classDumpDir = file("$buildDir/jacoco/classpathdumps")
+    }
+}
+
+// Make JavaFX tasks depend on validation
+compileJavaFX.dependsOn validateFXML
+runJavaFX.dependsOn compileJavaFX
+createJavaFXJar.dependsOn compileJavaFX
+
+// Add JavaFX tasks to build lifecycle
+build.dependsOn compileJavaFX
+build.dependsOn validateFXML
+check.dependsOn validateFXML

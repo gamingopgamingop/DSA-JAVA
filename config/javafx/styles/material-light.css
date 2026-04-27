@@ -1,0 +1,998 @@
+/*
+ * Material Design Light Theme for DSA JavaFX Application
+ * 
+ * This stylesheet implements Google's Material Design light theme
+ * with comprehensive component styling and animations.
+ * 
+ * @Complexity Time: O(1) - CSS loading
+ * @Complexity Space: O(n) - Where n is the number of style rules
+ * @Performance Optimized for Material Design components
+ * @Stability Stable - Production ready
+ * @Algorithm Material Design theme system
+ * @Implementation Material Design 3.0 guidelines
+ * @Optimization CSS variable usage and component optimization
+ * @Reference Material Design Documentation
+ */
+
+/* ========================================
+   MATERIAL DESIGN COLOR PALETTE
+   ======================================== */
+
+.root {
+    /* Material Design 3.0 Color System */
+    --md-sys-color-primary: #1976d2;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-primary-container: #e3f2fd;
+    --md-sys-color-on-primary-container: #0d47a1;
+    
+    --md-sys-color-secondary: #dc004e;
+    --md-sys-color-on-secondary: #ffffff;
+    --md-sys-color-secondary-container: #ffebee;
+    --md-sys-color-on-secondary-container: #880e4f;
+    
+    --md-sys-color-tertiary: #7b1fa2;
+    --md-sys-color-on-tertiary: #ffffff;
+    --md-sys-color-tertiary-container: #f3e5f5;
+    --md-sys-color-on-tertiary-container: #4a148c;
+    
+    --md-sys-color-surface: #ffffff;
+    --md-sys-color-on-surface: #1c1b1f;
+    --md-sys-color-surface-variant: #e7e0ec;
+    --md-sys-color-on-surface-variant: #49454f;
+    
+    --md-sys-color-background: #fefbff;
+    --md-sys-color-on-background: #1c1b1f;
+    
+    --md-sys-color-error: #ba1a1a;
+    --md-sys-color-on-error: #ffffff;
+    --md-sys-color-error-container: #ffdad6;
+    --md-sys-color-on-error-container: #410002;
+    
+    --md-sys-color-outline: #79747e;
+    --md-sys-color-outline-variant: #cac4d0;
+    
+    /* Extended Colors */
+    --md-sys-color-surface-tint: #1976d2;
+    --md-sys-color-surface-bright: #ffffff;
+    --md-sys-color-surface-dim: #dcdde0;
+    --md-sys-color-surface-container-lowest: #ffffff;
+    --md-sys-color-surface-container-low: #f5f5f5;
+    --md-sys-color-surface-container: #efeff1;
+    --md-sys-color-surface-container-high: #e8e8ea;
+    --md-sys-color-surface-container-highest: #e2e2e5;
+    
+    /* Apply Material Design Colors */
+    -fx-primary: var(--md-sys-color-primary);
+    -fx-primary-light: #63a4ff;
+    -fx-primary-dark: #004ba0;
+    -fx-secondary: var(--md-sys-color-secondary);
+    -fx-tertiary: var(--md-sys-color-tertiary);
+    
+    -fx-surface: var(--md-sys-color-surface);
+    -fx-surface-variant: var(--md-sys-color-surface-variant);
+    -fx-surface-container: var(--md-sys-color-surface-container);
+    -fx-surface-container-low: var(--md-sys-color-surface-container-low);
+    -fx-surface-container-high: var(--md-sys-color-surface-container-high);
+    
+    -fx-background: var(--md-sys-color-background);
+    -fx-on-surface: var(--md-sys-color-on-surface);
+    -fx-on-surface-variant: var(--md-sys-color-on-surface-variant);
+    -fx-on-primary: var(--md-sys-color-on-primary);
+    -fx-on-secondary: var(--md-sys-color-on-secondary);
+    -fx-on-tertiary: var(--md-sys-color-on-tertiary);
+    
+    -fx-error: var(--md-sys-color-error);
+    -fx-on-error: var(--md-sys-color-on-error);
+    -fx-error-container: var(--md-sys-color-error-container);
+    
+    -fx-outline: var(--md-sys-color-outline);
+    -fx-outline-variant: var(--md-sys-color-outline-variant);
+    
+    /* Material Design Typography */
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    
+    /* Material Design Elevation */
+    -fx-elevation-level0: 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+    -fx-elevation-level1: 0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.24);
+    -fx-elevation-level2: 0px 3px 6px 0px rgba(0, 0, 0, 0.16), 0px 3px 6px 0px rgba(0, 0, 0, 0.23);
+    -fx-elevation-level3: 0px 10px 20px 0px rgba(0, 0, 0, 0.19), 0px 6px 6px 0px rgba(0, 0, 0, 0.23);
+    -fx-elevation-level4: 0px 14px 28px 0px rgba(0, 0, 0, 0.25), 0px 10px 10px 0px rgba(0, 0, 0, 0.22);
+    -fx-elevation-level5: 0px 19px 38px 0px rgba(0, 0, 0, 0.30), 0px 15px 12px 0px rgba(0, 0, 0, 0.22);
+    
+    /* Material Design Animation */
+    -fx-standard-motion: cubic-bezier(0.2, 0, 0, 1);
+    -fx-emphasized-motion: cubic-bezier(0.2, 0, 0, 1);
+    -fx-decelerated-motion: cubic-bezier(0, 0, 0, 1);
+    -fx-accelerated-motion: cubic-bezier(0.4, 0, 1, 1);
+    
+    /* Material Design Shape */
+    -fx-shape-corner-extra-small: 4px;
+    -fx-shape-corner-small: 8px;
+    -fx-shape-corner-medium: 12px;
+    -fx-shape-corner-large: 16px;
+    -fx-shape-corner-extra-large: 28px;
+}
+
+/* ========================================
+   MATERIAL DESIGN BUTTONS
+   ======================================== */
+
+/* Filled Button (Primary) */
+.button {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-text-fill: var(--md-sys-color-on-primary);
+    -fx-background-radius: var(--fx-shape-corner-small);
+    -fx-border-radius: var(--fx-shape-corner-small);
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-padding: 10px 24px;
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 2, 0, 0, 1);
+    -fx-transition: all 0.2s var(--fx-standard-motion);
+}
+
+.button:hover {
+    -fx-background-color: derive(var(--md-sys-color-primary), -10%);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0, 0, 2);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button:pressed {
+    -fx-background-color: derive(var(--md-sys-color-primary), -20%);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 1, 0, 0, 0);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.button:focused {
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 2px;
+    -fx-border-insets: -2px;
+}
+
+.button:disabled {
+    -fx-opacity: 0.38;
+    -fx-cursor: default;
+    -fx-effect: null;
+}
+
+/* Outlined Button */
+.button.outlined {
+    -fx-background-color: transparent;
+    -fx-text-fill: var(--md-sys-color-primary);
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-small);
+    -fx-effect: null;
+}
+
+.button.outlined:hover {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-text-fill: var(--md-sys-color-on-primary);
+}
+
+/* Text Button */
+.button.text {
+    -fx-background-color: transparent;
+    -fx-text-fill: var(--md-sys-color-primary);
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: null;
+    -fx-padding: 10px 12px;
+}
+
+.button.text:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+/* Tonal Button */
+.button.tonal {
+    -fx-background-color: var(--md-sys-color-secondary-container);
+    -fx-text-fill: var(--md-sys-color-on-secondary-container);
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: null;
+}
+
+.button.tonal:hover {
+    -fx-background-color: derive(var(--md-sys-color-secondary-container), -10%);
+}
+
+/* ========================================
+   MATERIAL DESIGN CONTAINERS
+   ======================================== */
+
+/* Card */
+.card {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-background-radius: var(--fx-shape-corner-medium);
+    -fx-border-radius: var(--fx-shape-corner-medium);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 2, 0, 0, 1);
+    -fx-padding: 16px;
+    -fx-spacing: 8px;
+}
+
+.card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.16), 4, 0, 0, 2);
+}
+
+/* Elevated Card */
+.card.elevated {
+    -fx-effect: var(--fx-elevation-level1);
+}
+
+.card.elevated:hover {
+    -fx-effect: var(--fx-elevation-level2);
+}
+
+/* Surface Container */
+.surface-container {
+    -fx-background-color: var(--md-sys-color-surface-container);
+    -fx-background-radius: var(--fx-shape-corner-small);
+    -fx-border-radius: var(--fx-shape-corner-small);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-padding: 12px;
+}
+
+/* ========================================
+   MATERIAL DESIGN TEXT FIELDS
+   ======================================== */
+
+.text-field {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-small);
+    -fx-background-radius: var(--fx-shape-corner-small);
+    -fx-padding: 16px;
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+    -fx-prompt-text-fill: var(--md-sys-color-on-surface-variant);
+}
+
+.text-field:focused {
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 2px;
+    -fx-border-insets: -1px;
+    -fx-background-color: var(--md-sys-color-surface);
+}
+
+.text-field:error {
+    -fx-border-color: var(--md-sys-color-error);
+}
+
+.text-field:disabled {
+    -fx-opacity: 0.38;
+    -fx-background-color: var(--md-sys-color-surface-variant);
+}
+
+/* Text Area */
+.text-area {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-small);
+    -fx-background-radius: var(--fx-shape-corner-small);
+    -fx-padding: 16px;
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.text-area .content {
+    -fx-background-color: transparent;
+}
+
+.text-area:focused {
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 2px;
+    -fx-border-insets: -1px;
+    -fx-background-color: var(--md-sys-color-surface);
+}
+
+/* ========================================
+   MATERIAL DESIGN COMBO BOX
+   ======================================== */
+
+.combo-box {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-small);
+    -fx-background-radius: var(--fx-shape-corner-small);
+    -fx-padding: 16px;
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+}
+
+.combo-box:focused {
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 2px;
+    -fx-border-insets: -1px;
+    -fx-background-color: var(--md-sys-color-surface);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-text-fill: var(--md-sys-color-on-surface);
+    -fx-padding: 16px;
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-medium);
+    -fx-effect: var(--fx-elevation-level2);
+}
+
+/* ========================================
+   MATERIAL DESIGN CHECK BOX & RADIO
+   ======================================== */
+
+.check-box {
+    -fx-text-fill: var(--md-sys-color-on-surface);
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-spacing: 12px;
+    -fx-padding: 8px;
+}
+
+.check-box .box {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 2px;
+    -fx-border-radius: 2px;
+    -fx-padding: 4px;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-max-width: 20px;
+    -fx-max-height: 20px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-border-color: var(--md-sys-color-primary);
+}
+
+.check-box:focused .box {
+    -fx-border-color: var(--md-sys-color-primary);
+}
+
+.radio-button {
+    -fx-text-fill: var(--md-sys-color-on-surface);
+    -fx-font-size: 16px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-spacing: 12px;
+    -fx-padding: 8px;
+}
+
+.radio-button .radio {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+    -fx-padding: 4px;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-max-width: 20px;
+    -fx-max-height: 20px;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-border-color: var(--md-sys-color-primary);
+}
+
+.radio-button:focused .radio {
+    -fx-border-color: var(--md-sys-color-primary);
+}
+
+/* ========================================
+   MATERIAL DESIGN SLIDER
+   ======================================== */
+
+.slider {
+    -fx-background-color: transparent;
+    -fx-padding: 8px 0;
+}
+
+.slider .track {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-background-radius: 2px;
+    -fx-pref-height: 4px;
+}
+
+.slider .thumb {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-background-radius: 50%;
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 2px;
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 2, 0, 0, 1);
+}
+
+.slider:focused .thumb {
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0, 0, 2);
+}
+
+.slider .value {
+    -fx-text-fill: var(--md-sys-color-on-surface);
+    -fx-font-size: 14px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+}
+
+/* ========================================
+   MATERIAL DESIGN TABS
+   ======================================== */
+
+.tab-pane {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-padding: 0;
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 0 0 1px 0;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: var(--fx-shape-corner-small) var(--fx-shape-corner-small) 0 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 12px 16px;
+    -fx-text-fill: var(--md-sys-color-on-surface-variant);
+    -fx-font-weight: 500;
+    -fx-font-size: 14px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+    -fx-text-fill: var(--md-sys-color-primary);
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: var(--md-sys-color-primary-container);
+    -fx-text-fill: var(--md-sys-color-on-primary-container);
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 0 0 2px 0;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: var(--md-sys-color-on-primary-container);
+}
+
+/* ========================================
+   MATERIAL DESIGN TABLES
+   ======================================== */
+
+.table-view {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-medium);
+    -fx-background-radius: var(--fx-shape-corner-medium);
+    -fx-effect: var(--fx-elevation-level1);
+}
+
+.table-view .column-header {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 16px;
+    -fx-font-weight: 500;
+    -fx-font-size: 14px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-text-fill: var(--md-sys-color-on-surface-variant);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+}
+
+.table-view .table-cell {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 16px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: var(--md-sys-color-primary-container);
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 1px;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: var(--md-sys-color-on-primary-container);
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+/* ========================================
+   MATERIAL DESIGN LISTS
+   ======================================== */
+
+.list-view {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-medium);
+    -fx-background-radius: var(--fx-shape-corner-medium);
+    -fx-effect: var(--fx-elevation-level1);
+}
+
+.list-view .list-cell {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 16px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: var(--md-sys-color-primary-container);
+    -fx-border-color: var(--md-sys-color-primary);
+    -fx-border-width: 1px;
+    -fx-text-fill: var(--md-sys-color-on-primary-container);
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+/* ========================================
+   MATERIAL DESIGN PROGRESS
+   ======================================== */
+
+.progress-bar {
+    -fx-background-color: var(--md-sys-color-surface-variant);
+    -fx-background-radius: var(--fx-shape-corner-small);
+    -fx-border-radius: var(--fx-shape-corner-small);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-padding: 0;
+    -fx-pref-height: 4px;
+}
+
+.progress-bar .bar {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-background-radius: var(--fx-shape-corner-small);
+    -fx-background-insets: 0;
+}
+
+.progress-indicator {
+    -fx-progress-color: var(--md-sys-color-primary);
+    -fx-background-color: transparent;
+}
+
+/* ========================================
+   MATERIAL DESIGN DIALOGS
+   ======================================== */
+
+.dialog-pane {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px;
+    -fx-border-radius: var(--fx-shape-corner-large);
+    -fx-background-radius: var(--fx-shape-corner-large);
+    -fx-padding: 24px;
+    -fx-effect: var(--fx-elevation-level3);
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: var(--md-sys-color-primary);
+    -fx-background-radius: var(--fx-shape-corner-large) var(--fx-shape-corner-large) 0 0;
+    -fx-padding: 24px;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: var(--md-sys-color-on-primary);
+    -fx-font-size: 24px;
+    -fx-font-weight: 400;
+    -fx-font-family: "Roboto", "Arial", sans-serif;
+}
+
+.dialog-pane .content {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-padding: 24px;
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: var(--md-sys-color-surface);
+    -fx-border-color: var(--md-sys-color-outline);
+    -fx-border-width: 1px 0 0 0;
+    -fx-padding: 16px 24px;
+    -fx-spacing: 8px;
+}
+
+/* ========================================
+   MATERIAL DESIGN TYPOGRAPHY
+   ======================================== */
+
+.display-large {
+    -fx-font-size: 57px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 64px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.display-medium {
+    -fx-font-size: 45px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 52px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.display-small {
+    -fx-font-size: 36px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 44px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.headline-large {
+    -fx-font-size: 32px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 40px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.headline-medium {
+    -fx-font-size: 28px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 36px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.headline-small {
+    -fx-font-size: 24px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 32px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.title-large {
+    -fx-font-size: 22px;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 28px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.title-medium {
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 24px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.title-small {
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 20px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.body-large {
+    -fx-font-size: 16px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 24px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.body-medium {
+    -fx-font-size: 14px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 20px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.body-small {
+    -fx-font-size: 12px;
+    -fx-font-weight: 400;
+    -fx-line-spacing: 16px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.label-large {
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 20px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.label-medium {
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 16px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+.label-small {
+    -fx-font-size: 11px;
+    -fx-font-weight: 500;
+    -fx-line-spacing: 16px;
+    -fx-text-fill: var(--md-sys-color-on-surface);
+}
+
+/* ========================================
+   MATERIAL DESIGN STATES
+   ======================================== */
+
+.state-layer {
+    -fx-background-color: transparent;
+    -fx-background-radius: inherit;
+}
+
+.state-layer:hover {
+    -fx-background-color: rgba(25, 118, 210, 0.08);
+}
+
+.state-layer:pressed {
+    -fx-background-color: rgba(25, 118, 210, 0.12);
+}
+
+.state-layer:focus {
+    -fx-background-color: rgba(25, 118, 210, 0.12);
+}
+
+/* ========================================
+   MATERIAL DESIGN RIPPLE EFFECT
+   ======================================== */
+
+.ripple {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 50%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+    -fx-background-radius: 50%;
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+    -fx-opacity: 0;
+}
+
+.ripple:active {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-opacity: 1;
+    -fx-animation: ripple 0.6s var(--fx-standard-motion);
+}
+
+/* ========================================
+   MATERIAL DESIGN ANIMATIONS
+   ======================================== */
+
+@keyframes fadeIn {
+    from {
+        -fx-opacity: 0;
+    }
+    to {
+        -fx-opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        -fx-opacity: 1;
+    }
+    to {
+        -fx-opacity: 0;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        -fx-translate-x: 100%;
+        -fx-opacity: 0;
+    }
+    to {
+        -fx-translate-x: 0;
+        -fx-opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        -fx-translate-x: 0;
+        -fx-opacity: 1;
+    }
+    to {
+        -fx-translate-x: 100%;
+        -fx-opacity: 0;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        -fx-translate-y: 100%;
+        -fx-opacity: 0;
+    }
+    to {
+        -fx-translate-y: 0;
+        -fx-opacity: 1;
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        -fx-translate-y: 0;
+        -fx-opacity: 1;
+    }
+    to {
+        -fx-translate-y: 100%;
+        -fx-opacity: 0;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        -fx-scale-x: 0.8;
+        -fx-scale-y: 0.8;
+        -fx-opacity: 0;
+    }
+    to {
+        -fx-scale-x: 1;
+        -fx-scale-y: 1;
+        -fx-opacity: 1;
+    }
+}
+
+@keyframes scaleOut {
+    from {
+        -fx-scale-x: 1;
+        -fx-scale-y: 1;
+        -fx-opacity: 1;
+    }
+    to {
+        -fx-scale-x: 0.8;
+        -fx-scale-y: 0.8;
+        -fx-opacity: 0;
+    }
+}
+
+@keyframes ripple {
+    0% {
+        -fx-scale-x: 0;
+        -fx-scale-y: 0;
+        -fx-opacity: 1;
+    }
+    100% {
+        -fx-scale-x: 2;
+        -fx-scale-y: 2;
+        -fx-opacity: 0;
+    }
+}
+
+/* ========================================
+   MATERIAL DESIGN RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1200px) {
+    .display-large {
+        -fx-font-size: 45px;
+        -fx-line-spacing: 52px;
+    }
+    
+    .display-medium {
+        -fx-font-size: 36px;
+        -fx-line-spacing: 44px;
+    }
+    
+    .display-small {
+        -fx-font-size: 32px;
+        -fx-line-spacing: 40px;
+    }
+}
+
+@media (max-width: 800px) {
+    .display-large {
+        -fx-font-size: 36px;
+        -fx-line-spacing: 44px;
+    }
+    
+    .display-medium {
+        -fx-font-size: 32px;
+        -fx-line-spacing: 40px;
+    }
+    
+    .display-small {
+        -fx-font-size: 28px;
+        -fx-line-spacing: 36px;
+    }
+    
+    .headline-large {
+        -fx-font-size: 28px;
+        -fx-line-spacing: 36px;
+    }
+    
+    .headline-medium {
+        -fx-font-size: 24px;
+        -fx-line-spacing: 32px;
+    }
+    
+    .headline-small {
+        -fx-font-size: 22px;
+        -fx-line-spacing: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    .display-large {
+        -fx-font-size: 32px;
+        -fx-line-spacing: 40px;
+    }
+    
+    .display-medium {
+        -fx-font-size: 28px;
+        -fx-line-spacing: 36px;
+    }
+    
+    .display-small {
+        -fx-font-size: 24px;
+        -fx-line-spacing: 32px;
+    }
+    
+    .headline-large {
+        -fx-font-size: 24px;
+        -fx-line-spacing: 32px;
+    }
+    
+    .headline-medium {
+        -fx-font-size: 22px;
+        -fx-line-spacing: 28px;
+    }
+    
+    .headline-small {
+        -fx-font-size: 20px;
+        -fx-line-spacing: 26px;
+    }
+    
+    .title-large {
+        -fx-font-size: 20px;
+        -fx-line-spacing: 26px;
+    }
+    
+    .title-medium {
+        -fx-font-size: 16px;
+        -fx-line-spacing: 24px;
+    }
+    
+    .title-small {
+        -fx-font-size: 14px;
+        -fx-line-spacing: 20px;
+    }
+}

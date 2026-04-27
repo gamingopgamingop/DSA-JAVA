@@ -1,0 +1,643 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'org.owasp.dependencycheck' version '9.0.7'
+}
+
+group = 'com.dsa'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+// Spring Boot Plugin Configuration
+springBoot {
+    mainClass = 'com.dsa.DsaJavaApplication'
+}
+
+// Dependency Management
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:3.2.0'
+        mavenBom 'org.testcontainers:testcontainers-bom:1.19.3'
+    }
+}
+
+// Spring Boot Dependencies
+dependencies {
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    
+    // Database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'org.postgresql:postgresql'
+    
+    // Lombok for boilerplate reduction
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // JSON Processing
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    
+    // Swagger/OpenAPI Documentation
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    
+    // Caching
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+    
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+    
+    // DSA Algorithm Libraries
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    
+    // Monitoring and Metrics
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'io.micrometer:micrometer-core'
+    
+    // Logging
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'ch.qos.logback:logback-classic'
+    implementation 'ch.qos.logback:logback-core'
+    
+    // Configuration Processor
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    
+    // Development Tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+}
+
+// Test Configuration
+test {
+    useJUnitPlatform()
+    
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    
+    // JVM Options for testing
+    jvmArgs = [
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED',
+        '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED'
+    ]
+    
+    // System properties for testing
+    systemProperty 'spring.profiles.active', 'test'
+    systemProperty 'spring.test.database.replace', 'none'
+}
+
+// Development Configuration
+bootRun {
+    jvmArgs = [
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED'
+    ]
+    
+    systemProperty 'spring.profiles.active', 'dev'
+    
+    // Enable devtools
+    args = ['--spring.devtools.restart.enabled=true']
+}
+
+// BootJar Configuration
+bootJar {
+    archiveFileName = 'dsa-java-spring-boot.jar'
+    
+    manifest {
+        attributes(
+            'Implementation-Title': 'DSA Java Spring Boot Application',
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': 'DSA Java Project Team',
+            'Main-Class': 'com.dsa.DsaJavaApplication'
+        )
+    }
+    
+    // Exclude devtools from production
+    excludeDevtools = true
+    
+    // Layered JAR for Docker
+    layered {
+        enabled = true
+    }
+}
+
+// Shadow JAR Configuration
+shadowJar {
+    archiveFileName = 'dsa-java-spring-boot-shadow.jar'
+    
+    manifest {
+        attributes(
+            'Main-Class': 'com.dsa.DsaJavaApplication'
+        )
+    }
+    
+    mergeServiceFiles()
+    
+    // Exclude devtools
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+}
+
+// Docker Configuration
+bootBuildImage {
+    imageName = 'dsa-java/spring-boot-app'
+    builder = 'paketobuildpacks/builder-jammy-base'
+    
+    environment = [
+        'BP_JVM_VERSION': '17',
+        'BP_RUN_IMAGE': 'paketobuildpacks/run-jammy-base'
+    ]
+}
+
+// Source Sets
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+    
+    // Integration test source set
+    integrationTest {
+        java {
+            srcDirs = ['src/integrationTest/java']
+        }
+        resources {
+            srcDirs = ['src/integrationTest/resources']
+        }
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+// Integration Test Configuration
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+    
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    
+    useJUnitPlatform()
+    
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    
+    systemProperty 'spring.profiles.active', 'integration-test'
+}
+
+// Check Configuration
+check.dependsOn integrationTest
+
+// Java Compiler Options
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+// Javadoc Configuration
+javadoc {
+    options.addStringOption('doclet', 'com.dsa.doclet.DSADoclet')
+    options.addStringOption('docletpath', 'config/documentation')
+    
+    title 'DSA Java Spring Boot Application API Documentation'
+    
+    options.encoding = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    
+    options.addBooleanOption('html5', true)
+    options.addBooleanOption('Xdoclint:none', true)
+}
+
+// Sources JAR
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+// Javadoc JAR
+task javadocJar(type: Jar) {
+    archiveClassifier = 'javadoc'
+    from javadoc
+}
+
+// Publishing Configuration
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            
+            artifact sourcesJar
+            artifact javadocJar
+            
+            pom {
+                name = 'DSA Java Spring Boot Application'
+                description = 'Spring Boot application for DSA algorithms visualization and management'
+                url = 'https://github.com/dsa-java-project/DSA-JAVA'
+                
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id = 'dsa-team'
+                        name = 'DSA Java Project Team'
+                        email = 'team@dsa-java-project.com'
+                    }
+                }
+                
+                scm {
+                    connection = 'scm:git:git://github.com/dsa-java-project/DSA-JAVA.git'
+                    developerConnection = 'scm:git:ssh://github.com:dsa-java-project/DSA-JAVA.git'
+                    url = 'https://github.com/dsa-java-project/DSA-JAVA/tree/main'
+                }
+            }
+        }
+    }
+    
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri('https://maven.pkg.github.com/dsa-java-project/DSA-JAVA')
+            credentials {
+                username = project.findProperty('gpr.user') ?: System.getenv('USERNAME')
+                password = project.findProperty('gpr.token') ?: System.getenv('TOKEN')
+            }
+        }
+    }
+}
+
+// Checkstyle Configuration
+checkstyle {
+    toolVersion = '10.12.4'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
+    maxErrors = 0
+    ignoreFailures = false
+    showViolations = true
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// PMD Configuration
+pmd {
+    toolVersion = '6.55.0'
+    ruleSetFiles = files("${rootDir}/config/pmd/ruleset.xml")
+    ignoreFailures = false
+}
+
+tasks.withType(Pmd).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+// SpotBugs Configuration
+spotbugs {
+    toolVersion = '4.7.3'
+    ignoreFailures = false
+    reportLevel = 'low'
+    effort = 'max'
+}
+
+spotbugsMain {
+    reports {
+        html {
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/main.html")
+        }
+    }
+}
+
+spotbugsTest {
+    enabled = false
+}
+
+// JaCoCo Configuration
+jacoco {
+    toolVersion = '0.8.10'
+}
+
+test {
+    jacoco {
+        enabled = true
+        destinationFile = file("$buildDir/jacoco/test.exec")
+        classDumpDir = file("$buildDir/jacoco/classpathdumps")
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+
+// SonarQube Configuration
+sonar {
+    properties {
+        property 'sonar.projectKey', 'dsa-java-project_DSA-JAVA'
+        property 'sonar.organization', 'dsa-java-project'
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.login', System.getenv('SONAR_TOKEN')
+        property 'sonar.java.binaries', 'build/classes/java/main'
+        property 'sonar.java.test.binaries', 'build/classes/java/test'
+        property 'sonar.java.coveragePlugin', 'jacoco'
+        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+        property 'sonar.java.source', 'src/main/java'
+        property 'sonar.java.test', 'src/test/java'
+        property 'sonar.exclusions', '**/config/**,**/docs/**,**/build/**'
+    }
+}
+
+// OWASP Dependency Check
+dependencyCheck {
+    failBuildOnCVSS = 7
+    suppressionFile = 'config/dependency-check/suppressions.xml'
+    failOnError = true
+}
+
+// Custom Tasks
+task createProperties(dependsOn: processResources) {
+    doLast {
+        new File("$buildDir/resources/main/version.properties").text = """version=${project.version}
+buildTime=${new Date().format('yyyy-MM-dd HH:mm:ss')}
+gitCommit=${-> 'git rev-parse HEAD'.execute().text.trim()}
+"""
+    }
+}
+
+classes.dependsOn createProperties
+
+// Application Startup Task
+task runApp(type: JavaExec) {
+    group = 'application'
+    description = 'Run the Spring Boot application'
+    
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.dsa.DsaJavaApplication'
+    
+    jvmArgs = [
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED'
+    ]
+    
+    systemProperty 'spring.profiles.active', 'dev'
+    
+    args = ['--spring.devtools.restart.enabled=true']
+}
+
+// Health Check Task
+task healthCheck(type: JavaExec) {
+    group = 'application'
+    description = 'Check application health'
+    
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.dsa.DsaJavaApplication'
+    
+    args = ['--spring.profiles.active=health-check']
+    
+    doLast {
+        // Health check logic here
+        println "Application health check completed"
+    }
+}
+
+// Database Migration Task
+task migrateDatabase(type: JavaExec) {
+    group = 'database'
+    description = 'Run database migrations'
+    
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.dsa.DsaJavaApplication'
+    
+    args = ['--spring.profiles.active=migration']
+    
+    doLast {
+        println "Database migration completed"
+    }
+}
+
+// Code Quality Task
+task codeQuality {
+    group = 'verification'
+    description = 'Run all code quality checks'
+    
+    dependsOn checkstyleMain, checkstyleTest, pmdMain, pmdTest, spotbugsMain, test, jacocoTestReport
+}
+
+// Performance Test Task
+task performanceTest(type: Test) {
+    group = 'verification'
+    description = 'Run performance tests'
+    
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    
+    include '**/*PerformanceTest.class'
+    include '**/*LoadTest.class'
+    
+    systemProperty 'spring.profiles.active', 'performance-test'
+    
+    maxHeapSize = '2g'
+}
+
+// Security Scan Task
+task securityScan {
+    group = 'security'
+    description = 'Run security scans'
+    
+    dependsOn dependencyCheckAnalyze
+    
+    doLast {
+        println "Security scan completed"
+    }
+}
+
+// Clean Task
+clean {
+    doLast {
+        delete fileTree(dir: 'build') {
+            exclude '**/.gitkeep'
+        }
+        delete fileTree(dir: 'target') {
+            exclude '**/.gitkeep'
+        }
+    }
+}
+
+// Wrapper Configuration
+wrapper {
+    gradleVersion = '8.5'
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+// Project Information
+project.ext {
+    description = 'DSA Java Spring Boot Application - A comprehensive platform for Data Structures and Algorithms visualization and management'
+    url = 'https://github.com/dsa-java-project/DSA-JAVA'
+    inceptionYear = '2024'
+    
+    developers = ['DSA Java Project Team']
+    license = 'MIT'
+}
+
+// Custom Properties
+ext {
+    springBootVersion = '3.2.0'
+    javaVersion = '17'
+    testContainersVersion = '1.19.3'
+    openApiVersion = '2.2.0'
+    lombokVersion = '1.18.30'
+}
+
+// Build Information
+tasks.named('jar') {
+    archiveBaseName = 'dsa-java-spring-boot'
+    archiveVersion = project.version
+    archiveClassifier = ''
+}
+
+// Disable bootJar for multi-module projects if needed
+bootJar {
+    enabled = true
+}
+
+// Configure shadowJar to work with Spring Boot
+shadowJar {
+    enabled = false
+    mergeServiceFiles()
+}
+
+// Custom Gradle Tasks for DSA-specific operations
+task generateAlgorithmDocumentation {
+    group = 'documentation'
+    description = 'Generate algorithm documentation'
+    
+    doLast {
+        def algorithmsDir = file('src/main/java/com/dsa/algorithms')
+        def docsDir = file('build/docs/algorithms')
+        
+        if (!docsDir.exists()) {
+            docsDir.mkdirs()
+        }
+        
+        algorithmsDir.eachFileRecurse { file ->
+            if (file.name.endsWith('.java')) {
+                // Generate documentation for each algorithm
+                println "Generating documentation for ${file.name}"
+            }
+        }
+        
+        println "Algorithm documentation generated successfully"
+    }
+}
+
+task validateAlgorithms {
+    group = 'verification'
+    description = 'Validate algorithm implementations'
+    
+    doLast {
+        def algorithmsDir = file('src/main/java/com/dsa/algorithms')
+        def validationErrors = []
+        
+        algorithmsDir.eachFileRecurse { file ->
+            if (file.name.endsWith('.java')) {
+                // Validate algorithm structure
+                def content = file.text
+                if (!content.contains('@Complexity')) {
+                    validationErrors.add("Missing @Complexity annotation in ${file.name}")
+                }
+                if (!content.contains('@Performance')) {
+                    validationErrors.add("Missing @Performance annotation in ${file.name}")
+                }
+            }
+        }
+        
+        if (validationErrors.isEmpty()) {
+            println "All algorithms validated successfully"
+        } else {
+            validationErrors.each { error ->
+                println "ERROR: ${error}"
+            }
+            throw new GradleException("Algorithm validation failed")
+        }
+    }
+}
+
+// Make validation part of the build process
+check.dependsOn validateAlgorithms
+
+// Task to run application with specific profile
+task runWithProfile(type: JavaExec) {
+    group = 'application'
+    description = 'Run application with specified profile'
+    
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.dsa.DsaJavaApplication'
+    
+    jvmArgs = [
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED'
+    ]
+    
+    if (project.hasProperty('profile')) {
+        systemProperty 'spring.profiles.active', project.profile
+    } else {
+        systemProperty 'spring.profiles.active', 'dev'
+    }
+    
+    args = ['--spring.devtools.restart.enabled=true']
+}

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.dsa.javafx.controllers.AlgorithmDialogController">
+    
+    <headerText>
+        <Text text="Algorithm Properties" styleClass="dialog-header"/>
+    </headerText>
+    
+    <content>
+        <VBox spacing="15" padding="20">
+            <!-- Basic Information -->
+            <GridPane hgap="10" vgap="10">
+                <Label text="Algorithm Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextField fx:id="algorithmNameField" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="300"/>
+                
+                <Label text="Category:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                <ComboBox fx:id="categoryComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="300"/>
+                
+                <Label text="Description:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextArea fx:id="descriptionArea" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="300" prefHeight="80" wrapText="true"/>
+            </GridPane>
+            
+            <!-- Complexity Analysis -->
+            <VBox spacing="10">
+                <Label text="Complexity Analysis" styleClass="section-header"/>
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Time Complexity:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="timeComplexityField" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="200"/>
+                    
+                    <Label text="Space Complexity:" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <TextField fx:id="spaceComplexityField" GridPane.rowIndex="0" GridPane.columnIndex="3" prefWidth="200"/>
+                    
+                    <Label text="Best Case:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="bestCaseField" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="200"/>
+                    
+                    <Label text="Worst Case:" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <TextField fx:id="worstCaseField" GridPane.rowIndex="1" GridPane.columnIndex="3" prefWidth="200"/>
+                    
+                    <Label text="Average Case:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="averageCaseField" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="200"/>
+                    
+                    <Label text="Stability:" GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <ComboBox fx:id="stabilityComboBox" GridPane.rowIndex="2" GridPane.columnIndex="3" prefWidth="200"/>
+                </GridPane>
+            </VBox>
+            
+            <!-- Implementation Details -->
+            <VBox spacing="10">
+                <Label text="Implementation Details" styleClass="section-header"/>
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Language:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="languageComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="200"/>
+                    
+                    <Label text="Author:" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <TextField fx:id="authorField" GridPane.rowIndex="0" GridPane.columnIndex="3" prefWidth="200"/>
+                    
+                    <Label text="Created Date:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <DatePicker fx:id="createdDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="200"/>
+                    
+                    <Label text="Last Modified:" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <DatePicker fx:id="modifiedDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="3" prefWidth="200"/>
+                    
+                    <Label text="Version:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="versionField" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="200"/>
+                    
+                    <Label text="Status:" GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <ComboBox fx:id="statusComboBox" GridPane.rowIndex="2" GridPane.columnIndex="3" prefWidth="200"/>
+                </GridPane>
+            </VBox>
+            
+            <!-- Test Cases -->
+            <VBox spacing="10">
+                <Label text="Test Cases" styleClass="section-header"/>
+                <TableView fx:id="testCaseTableView" prefHeight="150" prefWidth="600">
+                    <columns>
+                        <TableColumn fx:id="testCaseNameColumn" text="Test Case" prefWidth="150"/>
+                        <TableColumn fx:id="testCaseInputColumn" text="Input" prefWidth="200"/>
+                        <TableColumn fx:id="testCaseExpectedColumn" text="Expected Output" prefWidth="200"/>
+                        <TableColumn fx:id="testCaseStatusColumn" text="Status" prefWidth="100"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10">
+                    <Button fx:id="addTestCaseButton" text="Add Test Case" styleClass="secondary-button"/>
+                    <Button fx:id="removeTestCaseButton" text="Remove Test Case" styleClass="secondary-button"/>
+                    <Button fx:id="runTestCaseButton" text="Run Tests" styleClass="primary-button"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Performance Metrics -->
+            <VBox spacing="10">
+                <Label text="Performance Metrics" styleClass="section-header"/>
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Execution Time (ms):" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="executionTimeField" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="150"/>
+                    
+                    <Label text="Memory Usage (MB):" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <TextField fx:id="memoryUsageField" GridPane.rowIndex="0" GridPane.columnIndex="3" prefWidth="150"/>
+                    
+                    <Label text="CPU Usage (%):" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <TextField fx:id="cpuUsageField" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="150"/>
+                    
+                    <Label text="Throughput (ops/sec):" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="form-label"/>
+                    <TextField fx:id="throughputField" GridPane.rowIndex="1" GridPane.columnIndex="3" prefWidth="150"/>
+                </GridPane>
+            </VBox>
+            
+            <!-- Notes and Comments -->
+            <VBox spacing="10">
+                <Label text="Notes and Comments" styleClass="section-header"/>
+                <TextArea fx:id="notesArea" prefWidth="600" prefHeight="100" wrapText="true" promptText="Add any additional notes or comments about this algorithm..."/>
+            </VBox>
+        </VBox>
+    </content>
+    
+    <expandableContent>
+        <VBox spacing="10" padding="20">
+            <Label text="Advanced Settings" styleClass="section-header"/>
+            <GridPane hgap="10" vgap="10">
+                <Label text="Optimization Level:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                <Slider fx:id="optimizationLevelSlider" min="0" max="3" value="1" showTickLabels="true" showTickMarks="true" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="200"/>
+                
+                <Label text="Parallel Processing:" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
+                <CheckBox fx:id="parallelProcessingCheckBox" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                
+                <Label text="Cache Optimization:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                <CheckBox fx:id="cacheOptimizationCheckBox" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                
+                <Label text="Memory Optimization:" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="form-label"/>
+                <CheckBox fx:id="memoryOptimizationCheckBox" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+            </GridPane>
+        </VBox>
+    </expandableContent>
+    
+    <ButtonType fx:constant="OK"/>
+    <ButtonType fx:constant="CANCEL"/>
+    
+</DialogPane>
