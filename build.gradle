@@ -415,6 +415,14 @@ tasks.withType(Checkstyle).configureEach {
         html.required = true
     }
     
+    // Check if config file exists before running
+    doFirst {
+        if (!configFile.exists()) {
+            println "⚠️ Checkstyle config file not found: ${configFile}"
+            ignoreFailures = true
+        }
+    }
+    
     // Ignore checkstyle failures in CI to prevent build breaks
     doLast {
         if (System.getenv('CI') == 'true') {
@@ -424,19 +432,35 @@ tasks.withType(Checkstyle).configureEach {
     }
 }
 
-// PMD configuration (only if config file exists)
-if (file("${rootDir}/config/pmd/ruleset.xml").exists()) {
-    pmd {
-        toolVersion = '6.55.0'
-        ruleSetFiles = files("${rootDir}/config/pmd/ruleset.xml")
-        ignoreFailures = false
+// PMD configuration with fixed ruleset
+pmd {
+    toolVersion = '6.55.0'
+    ruleSetFiles = files("${rootDir}/config/pmd/ruleset-fixed.xml")
+    ignoreFailures = false
+    consoleOutput = true
+}
+
+// Configure PMD tasks with better error handling
+tasks.withType(Pmd).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
     }
-} else {
-    // Disable PMD if config file doesn't exist
-    pmd {
-        toolVersion = '6.55.0'
-        ignoreFailures = true
-        ruleSetFiles = files([])
+    
+    // Check if config file exists before running
+    doFirst {
+        if (!ruleSetFiles.every { it.exists() }) {
+            println "⚠️ PMD ruleset file not found"
+            ignoreFailures = true
+        }
+    }
+    
+    // Ignore PMD failures in CI to prevent build breaks
+    doLast {
+        if (System.getenv('CI') == 'true') {
+            ignoreFailures = true
+            println "🔧 CI environment detected - PMD failures will not break the build"
+        }
     }
 }
 

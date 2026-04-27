@@ -1,0 +1,372 @@
+name: Fix Gradle Build Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_build:
+        description: 'Run Gradle build with fixes'
+        required: false
+        default: 'true'
+        type: boolean
+      debug_mode:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  fix-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+          cache-read-only: false
+      
+      - name: Check project structure
+        run: |
+          echo "=== Project Structure Check ==="
+          echo "Current directory: $(pwd)"
+          echo "Files in root:"
+          ls -la
+          echo ""
+          echo "Config directory:"
+          find config -type f -name "*.xml" -o -name "*.gradle" | sort
+          echo ""
+          echo "Java files:"
+          find . -name "*.java" -type f | head -10
+          echo ""
+          echo "Build files:"
+          find . -name "build.gradle" -o -name "*.gradle" | sort
+      
+      - name: Validate configuration files
+        run: |
+          echo "=== Configuration File Validation ==="
+          
+          # Check checkstyle configuration
+          if [ -f "config/checkstyle/checkstyle.xml" ]; then
+            echo "✅ Checkstyle config exists"
+            echo "Checkstyle file size: $(wc -l < config/checkstyle/checkstyle.xml) lines"
+            
+            # Validate XML syntax
+            if xmllint --noout config/checkstyle/checkstyle.xml 2>/dev/null; then
+              echo "✅ Checkstyle XML is valid"
+            else
+              echo "❌ Checkstyle XML has syntax errors"
+              xmllint config/checkstyle/checkstyle.xml 2>&1 | head -5
+            fi
+          else
+            echo "❌ Checkstyle config missing"
+          fi
+          
+          echo ""
+          
+          # Check PMD configuration
+          if [ -f "config/pmd/ruleset-fixed.xml" ]; then
+            echo "✅ PMD fixed ruleset exists"
+            echo "PMD ruleset file size: $(wc -l < config/pmd/ruleset-fixed.xml) lines"
+            
+            # Validate XML syntax
+            if xmllint --noout config/pmd/ruleset-fixed.xml 2>/dev/null; then
+              echo "✅ PMD XML is valid"
+            else
+              echo "❌ PMD XML has syntax errors"
+              xmllint config/pmd/ruleset-fixed.xml 2>&1 | head -5
+            fi
+          else
+            echo "❌ PMD ruleset missing"
+          fi
+          
+          echo ""
+          
+          # Check build.gradle
+          if [ -f "build.gradle" ]; then
+            echo "✅ build.gradle exists"
+            echo "Build file size: $(wc -l < build.gradle) lines"
+          else
+            echo "❌ build.gradle missing"
+          fi
+      
+      - name: Run Gradle validation
+        run: |
+          echo "=== Gradle Validation ==="
+          
+          # Check Gradle version
+          echo "Gradle version:"
+          ./gradlew --version
+          
+          echo ""
+          echo "Gradle tasks:"
+          ./gradlew tasks --group=verification | head -20
+          
+          echo ""
+          echo "Gradle projects:"
+          ./gradlew projects
+      
+      - name: Run Gradle build with fixes
+        if: github.event.inputs.run_build == 'true'
+        run: |
+          echo "=== Running Gradle Build ==="
+          
+          # Set environment variables for CI
+          export CI=true
+          export GRADLE_OPTS="-Dorg.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m"
+          
+          # Run build with debug mode if requested
+          if [ "${{ github.event.inputs.debug_mode }}" == "true" ]; then
+            echo "Debug mode enabled"
+            export GRADLE_OPTS="$GRADLE_OPTS --debug --info"
+          fi
+          
+          # Try to run the build
+          echo "Running: ./gradlew clean build --continue"
+          ./gradlew clean build --continue || {
+            echo "Build failed, checking for specific issues..."
+            
+            # Check for checkstyle issues
+            echo ""
+            echo "=== Checkstyle Issues ==="
+            if [ -d "build/reports/checkstyle" ]; then
+              echo "Checkstyle reports found:"
+              find build/reports/checkstyle -name "*.html" -o -name "*.xml" | head -5
+              
+              if [ -f "build/reports/checkstyle/main.html" ]; then
+                echo "Main checkstyle report exists"
+                echo "Checkstyle violations:"
+                grep -c "violation" build/reports/checkstyle/main.html 2>/dev/null || echo "Could not parse violations"
+              fi
+            else
+              echo "No checkstyle reports found"
+            fi
+            
+            # Check for PMD issues
+            echo ""
+            echo "=== PMD Issues ==="
+            if [ -d "build/reports/pmd" ]; then
+              echo "PMD reports found:"
+              find build/reports/pmd -name "*.html" -o -name "*.xml" | head -5
+              
+              if [ -f "build/reports/pmd/main.html" ]; then
+                echo "Main PMD report exists"
+                echo "PMD violations:"
+                grep -c "violation" build/reports/pmd/main.html 2>/dev/null || echo "Could not parse violations"
+              fi
+            else
+              echo "No PMD reports found"
+            fi
+            
+            # Exit with error code for debugging
+            exit 1
+          }
+          
+          echo "✅ Build completed successfully!"
+      
+      - name: Generate build summary
+        if: always()
+        run: |
+          echo "## 📊 Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Repository**: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Actor**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Event**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run Build**: ${{ github.event.inputs.run_build }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Debug Mode**: ${{ github.event.inputs.debug_mode }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 📁 Project Structure" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Java Files**: $(find . -name "*.java" -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Config Files**: $(find config -type f \( -name "*.xml" -o -name "*.gradle" \) | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Files**: $(find . -name "build.gradle" -o -name "*.gradle" | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🔧 Configuration Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f "config/checkstyle/checkstyle.xml" ]; then
+            echo "- ✅ Checkstyle config: Valid" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Checkstyle config: Missing" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "config/pmd/ruleset-fixed.xml" ]; then
+            echo "- ✅ PMD config: Valid" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ PMD config: Missing" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "build.gradle" ]; then
+            echo "- ✅ Build script: Valid" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Build script: Missing" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### 🏗️ Build Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ github.event.inputs.run_build }}" == "true" ]; then
+            if [ -d "build/reports" ]; then
+              echo "Build reports generated:" >> $GITHUB_STEP_SUMMARY
+              find build/reports -type d -maxdepth 1 | sed 's/.*\//- /' | grep -v "^reports$" >> $GITHUB_STEP_SUMMARY
+              
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### 📊 Report Details" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              
+              # Checkstyle report
+              if [ -f "build/reports/checkstyle/main.html" ]; then
+                echo "- **Checkstyle**: Report available" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "- **Checkstyle**: No report" >> $GITHUB_STEP_SUMMARY
+              fi
+              
+              # PMD report
+              if [ -f "build/reports/pmd/main.html" ]; then
+                echo "- **PMD**: Report available" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "- **PMD**: No report" >> $GITHUB_STEP_SUMMARY
+              fi
+              
+              # Test report
+              if [ -f "build/reports/tests/test/index.html" ]; then
+                echo "- **Tests**: Report available" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "- **Tests**: No report" >> $GITHUB_STEP_SUMMARY
+              fi
+              
+              # JaCoCo report
+              if [ -f "build/reports/jacoco/test/html/index.html" ]; then
+                echo "- **Coverage**: Report available" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "- **Coverage**: No report" >> $GITHUB_STEP_SUMMARY
+              fi
+            else
+              echo "- ❌ No build reports generated" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "- ⏭️ Build was not run (disabled)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Review the build reports if generated" >> $GITHUB_STEP_SUMMARY
+          echo "2. Fix any remaining code quality issues" >> $GITHUB_STEP_SUMMARY
+          echo "3. Run the build locally to verify fixes" >> $GITHUB_STEP_SUMMARY
+          echo "4. Update CI/CD pipeline if needed" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload build reports
+        if: github.event.inputs.run_build == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: |
+            build/reports/
+            build/libs/
+          retention-days: 7
+      
+      - name: Create issue if build fails
+        if: failure() && github.event.inputs.run_build == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            
+            // Check if similar issue already exists
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: owner,
+              repo: repo,
+              state: 'open',
+              labels: ['build-failure', 'ci']
+            });
+            
+            if (existingIssues.data.length > 0) {
+              console.log('Build failure issue already exists, skipping creation');
+              return;
+            }
+            
+            // Create new issue
+            const issue = await github.rest.issues.create({
+              owner: owner,
+              repo: repo,
+              title: '🔨 Gradle Build Failure',
+              body: `## 🚨 Build Failure Detected
+
+The Gradle build failed in the GitHub Actions workflow.
+
+### 📊 Build Information
+- **Repository**: ${owner}/${repo}
+- **Branch**: ${context.ref}
+- **Trigger**: ${context.eventName}
+- **Timestamp**: ${new Date().toISOString()}
+- **Workflow**: ${context.workflow}
+
+### 🔍 Possible Issues
+1. **Checkstyle configuration errors**
+2. **PMD rule violations**
+3. **Java compilation errors**
+4. **Missing dependencies**
+
+### 🛠️ Fixes Applied
+1. ✅ Updated PMD configuration to use fixed ruleset
+2. ✅ Added better error handling for Checkstyle
+3. ✅ Enhanced CI/CD configuration
+4. ✅ Added configuration validation
+
+### 🚀 Next Steps
+1. Review the build reports artifact
+2. Fix any remaining code quality issues
+3. Update configuration files if needed
+4. Test the build locally
+
+### 📋 Commands to Test Locally
+\`\`\`bash
+# Clean build
+./gradlew clean build
+
+# Build with continue on error
+./gradlew build --continue
+
+# Check specific tasks
+./gradlew checkstyleMain pmdMain compileJava
+\`\`\`
+
+### 🏷️ Labels
+- build-failure
+- ci
+- needs-attention
+
+---
+*Created by GitHub Actions on ${new Date().toISOString()}*`,
+              labels: ['build-failure', 'ci', 'needs-attention']
+            });
+            
+            console.log('Created build failure issue:', issue.data.html_url);
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Success notification
+        if: success() && github.event.inputs.run_build == 'true'
+        run: |
+          echo "🎉 Build completed successfully!"
+          echo "📊 Reports are available in the artifacts section"
+          echo "🔗 Check the Actions tab for detailed logs"

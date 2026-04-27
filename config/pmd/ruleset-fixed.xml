@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<ruleset name="DSA Java Project Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        PMD ruleset for DSA Java project focusing on code quality, performance, and best practices
+    </description>
+
+    <!-- Best Practices Rules -->
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+    </rule>
+
+    <!-- Code Style Rules -->
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="CommentDefaultAccessModifier"/>
+        <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="OnlyOneReturn"/>
+        <exclude name="ShortVariable"/>
+    </rule>
+
+    <!-- Design Rules -->
+    <rule ref="category/java/design.xml">
+        <exclude name="LawOfDemeter"/>
+        <exclude name="TooManyMethods"/>
+        <exclude name="NPathComplexity"/>
+    </rule>
+
+    <!-- Error Prone Rules -->
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="MissingSerialVersionUID"/>
+    </rule>
+
+    <!-- Performance Rules -->
+    <rule ref="category/java/performance.xml">
+        <exclude name="InefficientStringBuffering"/>
+        <exclude name="TooFewBranchesForASwitchStatement"/>
+    </rule>
+
+    <!-- Security Rules -->
+    <rule ref="category/java/security.xml"/>
+
+    <!-- Simplified Custom Rules for DSA Project -->
+    
+    <!-- Algorithm-specific rules - Simplified -->
+    <rule name="AlgorithmComplexityCheck"
+          language="java"
+          message="Algorithm should have proper complexity analysis in documentation"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Check that algorithm classes include complexity analysis in their documentation
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Algorithm') or 
+                        ends-with(@SimpleName, 'Sort') or 
+                        ends-with(@SimpleName, 'Search')]
+                        [not(.//ClassOrInterfaceDeclaration/Annotation/MarkerAnnotation/Name[@SimpleName='Complexity'])]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+                public class QuickSortAlgorithm {  // Missing @Complexity annotation
+                    // implementation
+                }
+            ]]>
+        </example>
+    </rule>
+
+    <!-- Test-specific rules - Simplified -->
+    <rule name="TestCoverageCheck"
+          language="java"
+          message="Test class should cover main algorithm scenarios"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Ensure test classes have adequate test methods for algorithm scenarios
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Test')]
+                        [count(.//MethodDeclaration[@Public='true' and 
+                        (contains(@SimpleName, 'test') or contains(@SimpleName, 'Test'))]) < 3]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+    </rule>
+
+    <!-- Documentation rules - Simplified -->
+    <rule name="MissingAlgorithmDocumentation"
+          language="java"
+          message="Algorithm classes should have comprehensive documentation"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Check that algorithm classes have proper JavaDoc documentation
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //ClassOrInterfaceDeclaration[
+                            ends-with(@SimpleName, 'Algorithm') or 
+                            ends-with(@SimpleName, 'Sort') or 
+                            ends-with(@SimpleName, 'Search') or
+                            ends-with(@SimpleName, 'Operations')
+                        ]
+                        [not(.//ClassOrInterfaceDeclaration/Comment/JavadocComment)]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <priority>2</priority>
+    </rule>
+
+    <!-- Exception handling rules - Simplified -->
+    <rule name="ProperExceptionHandling"
+          language="java"
+          message="Methods should handle exceptions appropriately"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Ensure proper exception handling in algorithm implementations
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //MethodDeclaration[contains(@SimpleName, 'sort') or contains(@SimpleName, 'search')]
+                        [not(.//TryStatement)]
+                        [count(.//AllocationExpression/ClassOrInterfaceType[@SimpleName='Exception']) > 0]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+    </rule>
+
+    <!-- Input validation rules - Simplified -->
+    <rule name="InputValidationCheck"
+          language="java"
+          message="Algorithm methods should validate input parameters"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Check that algorithm methods validate their input parameters
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //MethodDeclaration[
+                            (contains(@SimpleName, 'sort') or contains(@SimpleName, 'search') or contains(@SimpleName, 'process'))
+                            and count(FormalParameters/*) > 0
+                        ]
+                        [not(.//IfStatement/Expression/PrimaryExpression/PrimaryPrefix/Name[@SimpleName='null'])]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <priority>3</priority>
+    </rule>
+
+    <!-- Performance-specific rules - Simplified -->
+    <rule name="EfficientDataStructureUsage"
+          language="java"
+          message="Use appropriate data structures for algorithms"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            Ensure efficient data structure usage in algorithm implementations
+        </description>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //ClassOrInterfaceDeclaration[ends-with(@SimpleName, 'Algorithm')]
+                        //AllocationExpression/ClassOrInterfaceType[
+                            @SimpleName='ArrayList' and 
+                            ancestor::ForStatement//Expression/PrimaryExpression/PrimaryPrefix/Name[@SimpleName='add']
+                        ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <priority>2</priority>
+    </rule>
+
+</ruleset>
