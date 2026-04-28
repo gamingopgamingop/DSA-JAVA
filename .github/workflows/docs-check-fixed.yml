@@ -433,7 +433,7 @@ jobs:
         
     - name: Create issue for index update
       if: steps.check-index.outputs.needs-update == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           try {
