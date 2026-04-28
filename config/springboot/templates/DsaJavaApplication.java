@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableJpaAuditing
 @EnableAsync
 @EnableScheduling
-public class DsaJavaApplication {
+public class DsaJavaSpringBootApplication {
 
     /**
      * Main method to start the Spring Boot application.
@@ -53,7 +53,7 @@ public class DsaJavaApplication {
             System.setProperty("javafx.platform", "desktop");
             
             // Create and run Spring Boot application
-            SpringApplication app = new SpringApplication(DsaJavaApplication.class);
+            SpringApplication app = new SpringApplication(DsaJavaSpringBootApplication.class);
             
             // Configure application properties
             configureApplication(app, args);
