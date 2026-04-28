@@ -81,3 +81,10 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+.gradle-task-cache/
