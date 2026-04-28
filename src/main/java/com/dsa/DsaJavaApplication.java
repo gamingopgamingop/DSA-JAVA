@@ -13,7 +13,7 @@ import java.util.logging.Level;
  * JavaFX Application Starter
  * DSA Java Algorithms - GUI Application
  */
-class DsaJavaApplication extends Application {
+public class DsaJavaApplication extends Application {
     
     private static final Logger LOGGER = Logger.getLogger(DsaJavaApplication.class.getName());
     
@@ -72,7 +72,7 @@ class DsaJavaApplication extends Application {
      * 
      * @param args command line arguments
      */
-    static void main(final String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
 }

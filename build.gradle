@@ -67,7 +67,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.dsa.App'
+    mainClass = 'com.dsa.DsaJavaApplication'
     mainModule = 'com.dsa'
 }
 
@@ -177,7 +177,7 @@ task runAllAlgorithms {
     group = 'Execution'
     
     doLast {
-        def algorithmFiles = fileTree(dir: '.').include('*.java')
+        def algorithmFiles = fileTree('.').include('*.java')
             .exclude('*_Test.java')
             .exclude('TestFramework.java')
             .exclude('sample.java')
