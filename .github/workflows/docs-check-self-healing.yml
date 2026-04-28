@@ -73,7 +73,7 @@ jobs:
         git push
         
     - name: Upload documentation structure
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: documentation-structure
         path: docs/
@@ -462,7 +462,7 @@ jobs:
           }
           
     - name: Upload generated documentation
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: generated-documentation
         path: docs/

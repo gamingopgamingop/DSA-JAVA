@@ -167,7 +167,7 @@ jobs:
         cat docs-summary.md
         
     - name: Upload documentation summary
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: documentation-summary
         path: docs-summary.md
