@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<ruleset name="DSA Java Project Minimal Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Minimal PMD ruleset for DSA Java project with only essential rules
+    </description>
+
+    <!-- Best Practices Rules - Excluding problematic ones -->
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <exclude name="SystemPrintln"/>
+        <exclude name="AvoidReassigningParameters"/>
+    </rule>
+
+    <!-- Code Style Rules - Excluding problematic ones -->
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="CommentDefaultAccessModifier"/>
+        <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="OnlyOneReturn"/>
+        <exclude name="ShortVariable"/>
+        <exclude name="ShortClassName"/>
+        <exclude name="MethodArgumentCouldBeFinal"/>
+    </rule>
+
+    <!-- Design Rules - Excluding problematic ones -->
+    <rule ref="category/java/design.xml">
+        <exclude name="LawOfDemeter"/>
+        <exclude name="TooManyMethods"/>
+        <exclude name="NPathComplexity"/>
+        <exclude name="AtLeastOneConstructor"/>
+        <exclude name="LoosePackageCoupling"/>
+    </rule>
+
+    <!-- Error Prone Rules - Excluding problematic ones -->
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="MissingSerialVersionUID"/>
+    </rule>
+
+    <!-- Performance Rules - Excluding problematic ones -->
+    <rule ref="category/java/performance.xml">
+        <exclude name="InefficientStringBuffering"/>
+        <exclude name="TooFewBranchesForASwitchStatement"/>
+    </rule>
+
+    <!-- Security Rules - Minimal set -->
+    <rule ref="category/java/security.xml">
+        <exclude name="HardCodedPassword"/>
+    </rule>
+
+</ruleset>

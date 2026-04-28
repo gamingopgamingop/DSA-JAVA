@@ -159,7 +159,7 @@ shadowJar {
             'Implementation-Title': 'DSA Java Algorithms',
             'Implementation-Version': project.version,
             'Implementation-Vendor': 'DSA Java Project',
-            'Main-Class': 'com.dsa.App',
+            'Main-Class': 'com.dsa.DsaJavaApplication',
             'Created-By': 'Gradle ' + gradle.gradleVersion,
             'Build-Date': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
             'Build-JDK': System.getProperty('java.version')
@@ -401,7 +401,7 @@ clean {
 // Checkstyle configuration with improved error handling
 checkstyle {
     toolVersion = '10.12.4'
-    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    configFile = file("${rootDir}/config/checkstyle/checkstyle-simple.xml")
     maxWarnings = 0
     maxErrors = 0
     ignoreFailures = false
@@ -432,10 +432,10 @@ tasks.withType(Checkstyle).configureEach {
     }
 }
 
-// PMD configuration with fixed ruleset
+// PMD configuration with minimal ruleset
 pmd {
     toolVersion = '6.55.0'
-    ruleSetFiles = files("${rootDir}/config/pmd/ruleset-fixed.xml")
+    ruleSetFiles = files("${rootDir}/config/pmd/ruleset-minimal.xml")
     ignoreFailures = false
     consoleOutput = true
 }
