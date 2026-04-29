@@ -13,14 +13,14 @@ import java.util.logging.Level;
  * JavaFX Application Starter
  * DSA Java Algorithms - GUI Application
  */
-class DsaJavaApplication extends Application {
+class App extends Application {
     
-    private static final Logger LOGGER = Logger.getLogger(DsaJavaApplication.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
     
     /**
      * Default constructor for DSA Java Application
      */
-    public DsaJavaApplication() {
+    public App() {
         // Default constructor
     }
     
