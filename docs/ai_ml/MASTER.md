@@ -5,22 +5,22 @@ From intelligent agents to Large Language Models (LLMs).
 ## 📌 Core Taxonomy
 
 ### 1. Artificial Intelligence (AI)
-- **Fundamentals**: Search (BFS, DFS, A*), Knowledge Representation, Planning.
+- **Fundamentals**: Search (BFS, DFS, A*), Knowledge Representation, Planning. (48-100+ Graph/Search algorithms).
 - **Reasoning**: Fuzzy Logic, Expert Systems, Bayesian Networks.
-- **Agents**: Multi-Agent Systems, Agentic AI, MCP (Model Context Protocol).
+- **Agents**: Multi-Agent Systems, Agentic AI, MCP (Model Context Protocol). (2.5M+ Public AI models).
 
 ### 2. Machine Learning (ML)
-- **Supervised**: Linear/Logistic Regression, SVMs, Decision Trees, Ensembles (XGBoost).
+- **Supervised**: Linear/Logistic Regression, SVMs, Decision Trees, Ensembles (XGBoost). (50-100 core algorithms).
 - **Unsupervised**: Clustering (K-Means), Dimensionality Reduction (PCA, t-SNE).
-- **Reinforcement Learning**: Q-Learning, PPO, Actor-Critic.
+- **Reinforcement Learning**: Q-Learning, PPO, Actor-Critic. (30-50 major algorithms).
 
 ### 3. Deep Learning (DL)
-- **Architectures**: CNN (Vision), RNN/LSTM (Sequences), Transformers (The standard).
+- **Architectures**: CNN (Vision), RNN/LSTM (Sequences), Transformers (The standard). (79+ major architectures).
 - **Mechanisms**: Attention, Self-Attention, Multi-head Attention.
 - **Generative AI**: GANs, Diffusion Models, VAEs.
 
 ### 4. Modern NLP & LLMs
-- **LLMs**: GPT, Llama, BERT.
+- **LLMs**: GPT, Llama, BERT. (10,000+ models on Hugging Face).
 - **Techniques**: RAG (Retrieval Augmented Generation), Fine-Tuning (LoRA), Quantization.
 - **Frameworks**: LangChain, LangGraph, CrewAI.
 

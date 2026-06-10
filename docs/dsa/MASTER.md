@@ -5,16 +5,16 @@ This module covers the science of data organization and algorithmic efficiency.
 ## 📌 Core Taxonomy
 
 ### 1. Data Structures
-- **Linear**: [Arrays](#arrays), [Strings](#strings), [Linked Lists](#linked-lists), [Stacks](#stacks), [Queues](#queues), [Deques](#deques).
-- **Hashing**: [Hash Tables](#hash-tables), [Hash Maps](#hash-maps), [Bloom Filters](#bloom-filters).
-- **Hierarchical**: [Trees](#trees), [Binary Search Trees](#binary-search-trees), [Heaps](#heaps).
+- **Linear**: [Arrays](#arrays), [Strings](#strings), [Linked Lists](#linked-lists), [Stacks](#stacks), [Queues](#queues), [Deques](#deques). (100+ types cataloged).
+- **Hashing**: [Hash Tables](#hash-tables), [Hash Maps](#hash-maps), [Bloom Filters](#bloom-filters). (25+ search/table algorithms).
+- **Hierarchical**: [Trees](#trees), [Binary Search Trees](#binary-search-trees), [Heaps](#heaps). (35+ indexed search types).
 - **Advanced Trees**: [AVL](#avl-trees), [Red-Black](#red-black-trees), [Segment Trees](#segment-trees), [Fenwick Trees](#fenwick-trees), [Tries](#tries).
-- **Graphs**: [Directed](#directed-graphs), [Weighted](#weighted-graphs), [Sparse/Dense](#sparse-graphs).
+- **Graphs**: [Directed](#directed-graphs), [Weighted](#weighted-graphs), [Sparse/Dense](#sparse-graphs). (100+ algorithms cataloged).
 
 ### 2. Algorithms
-- **Searching**: [Linear](#linear-search), [Binary](#binary-search), [Jump](#jump-search), [A*](#a-search).
-- **Sorting**: [Merge Sort](#merge-sort), [Quick Sort](#quick-sort), [Tim Sort](#tim-sort).
-- **Paradigms**: [DP](#dynamic-programming), [Greedy](#greedy-algorithms), [Backtracking](#backtracking).
+- **Searching**: [Linear](#linear-search), [Binary](#binary-search), [Jump](#jump-search), [A*](#a-search). (50+ well-known; 350 total procedural entries).
+- **Sorting**: [Merge Sort](#merge-sort), [Quick Sort](#quick-sort), [Tim Sort](#tim-sort). (47+ implementations; 180+ elementary & distribution types).
+- **Paradigms**: [DP](#dynamic-programming), [Greedy](#greedy-algorithms), [Backtracking](#backtracking). (100-200+ DP patterns cataloged).
 
 ---
 

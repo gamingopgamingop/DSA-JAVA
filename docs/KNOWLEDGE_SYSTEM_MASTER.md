@@ -65,6 +65,21 @@ graph TD
 *The future of technology.*
 - **Quantum Computing**, **Blockchain**, **Robotics**, **Edge Computing**.
 
+### 6. [📜 Research Library](./RESEARCH_LIBRARY.md)
+*Seminal papers that defined the industry.*
+- Foundational papers in **AI, ML, Systems, and DSA**.
+- State-of-the-art research (SOTA) in **LLMs and Generative AI**.
+
+### 7. [🗃️ Algorithm Inventory](./ALGORITHM_INVENTORY.md)
+*Exhaustive catalog of 200,000+ algorithms.*
+- Categorical counts for **Sorting, Searching, and Graphs**.
+- Statistical overview of the **CS landscape**.
+
+### 8. [📂 Codebase Resources](./CODEBASE_RESOURCES.md)
+*Where to find implementations.*
+- Links to **Rosetta Code, The Algorithms, and Hugging Face**.
+- Multi-language implementation hubs.
+
 ---
 
 ## 📖 How to Use This System
